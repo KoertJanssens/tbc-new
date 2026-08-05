@@ -451,6 +451,204 @@ multi-target damage. Aside from Hunter's one small kept tweak, no other spec's A
 re-tuned for an AOE priority list, so these numbers should be read as a floor, not a
 ceiling, on realistic 2-target cleave performance.
 
+## 4-target scenario (4 targets, 20,000 iterations, seed 101)
+
+Same 14 spec/gear configurations and same 4 Trinket2 candidates as above, but the encounter
+was extended to 4 targets instead of 1 or 2 (`Encounter.Targets` set to four
+`NewDefaultTarget()` dummies, same 180s ±5s duration/buffs/debuffs). As with the 2-target
+cleave scenario, each spec runs its existing single-target-tuned APL as-is — including
+Hunter's one small kept cleave-specific tweak (see [Cleave-tuned APL
+experiment](#cleave-tuned-apl-experiment) below), so the Hunter BM/SV rows already include
+it — so gains reflect passive/incidental cleave benefit at a higher target count, not a
+dedicated 4-target-optimized rotation.
+
+### Full results table (4 targets)
+
+| Spec | Trinket2 | DPS | Hit Rating |
+|---|---|---:|---:|
+| Warrior Fury | Abacus of Violent Odds | 4702.2 | 225.0 |
+| Warrior Fury | Madness of the Betrayer | 4790.7 | 245.0 |
+| Warrior Fury | Dragonspine Trophy | 4847.8 | 225.0 |
+| Warrior Fury | Tsunami Talisman | 4764.9 | 235.0 |
+| Warrior Fury (Glaives) | Abacus of Violent Odds | 4776.0 | 230.0 |
+| Warrior Fury (Glaives) | Madness of the Betrayer | 4869.6 | 250.0 |
+| Warrior Fury (Glaives) | Dragonspine Trophy | 4918.5 | 230.0 |
+| Warrior Fury (Glaives) | Tsunami Talisman | 4849.6 | 240.0 |
+| Warrior Arms | Abacus of Violent Odds | 4325.1 | 121.0 |
+| Warrior Arms | Madness of the Betrayer | 4380.5 | 141.0 |
+| Warrior Arms | Dragonspine Trophy | 4439.6 | 121.0 |
+| Warrior Arms | Tsunami Talisman | 4362.0 | 131.0 |
+| Warrior Arms (Glaives) | Abacus of Violent Odds | 4211.1 | 142.0 |
+| Warrior Arms (Glaives) | Madness of the Betrayer | 4288.8 | 162.0 |
+| Warrior Arms (Glaives) | Dragonspine Trophy | 4339.0 | 142.0 |
+| Warrior Arms (Glaives) | Tsunami Talisman | 4269.5 | 152.0 |
+| Warrior Arms (Kebab) | Abacus of Violent Odds | 3901.6 | 144.0 |
+| Warrior Arms (Kebab) | Madness of the Betrayer | 3981.3 | 164.0 |
+| Warrior Arms (Kebab) | Dragonspine Trophy | 4027.6 | 144.0 |
+| Warrior Arms (Kebab) | Tsunami Talisman | 3966.0 | 154.0 |
+| Rogue | Abacus of Violent Odds | 3013.2 | 348.0 |
+| Rogue | Madness of the Betrayer | 2971.4 | 368.0 |
+| Rogue | Dragonspine Trophy | 3065.5 | 348.0 |
+| Rogue | Tsunami Talisman | 2971.9 | 358.0 |
+| Rogue (Glaives) | Abacus of Violent Odds | 3261.9 | 346.0 |
+| Rogue (Glaives) | Madness of the Betrayer | 3221.4 | 366.0 |
+| Rogue (Glaives) | Dragonspine Trophy | 3315.3 | 346.0 |
+| Rogue (Glaives) | Tsunami Talisman | 3220.5 | 356.0 |
+| Hunter BM | Abacus of Violent Odds | 3870.2 | 109.0 |
+| Hunter BM | Madness of the Betrayer | 3888.7 | 129.0 |
+| Hunter BM | Dragonspine Trophy | 3913.2 | 109.0 |
+| Hunter BM | Tsunami Talisman | 3887.9 | 119.0 |
+| Hunter BM (Weave) | Abacus of Violent Odds | 4323.1 | 109.0 |
+| Hunter BM (Weave) | Madness of the Betrayer | 4340.6 | 129.0 |
+| Hunter BM (Weave) | Dragonspine Trophy | 4399.6 | 109.0 |
+| Hunter BM (Weave) | Tsunami Talisman | 4339.0 | 119.0 |
+| Hunter SV | Abacus of Violent Odds | 3514.1 | 58.0 |
+| Hunter SV | Madness of the Betrayer | 3526.0 | 78.0 |
+| Hunter SV | Dragonspine Trophy | 3546.9 | 58.0 |
+| Hunter SV | Tsunami Talisman | 3527.2 | 68.0 |
+| Hunter SV (Weave) | Abacus of Violent Odds | 4053.1 | 58.0 |
+| Hunter SV (Weave) | Madness of the Betrayer | 4064.9 | 78.0 |
+| Hunter SV (Weave) | Dragonspine Trophy | 4123.7 | 58.0 |
+| Hunter SV (Weave) | Tsunami Talisman | 4063.5 | 68.0 |
+| Enhancement Shaman | Abacus of Violent Odds | 2708.3 | 183.0 |
+| Enhancement Shaman | Madness of the Betrayer | 2722.8 | 203.0 |
+| Enhancement Shaman | Dragonspine Trophy | 2757.3 | 183.0 |
+| Enhancement Shaman | Tsunami Talisman | 2712.1 | 193.0 |
+| Feral Druid | Abacus of Violent Odds | 2870.3 | 116.0 |
+| Feral Druid | Madness of the Betrayer | 2872.2 | 136.0 |
+| Feral Druid | Dragonspine Trophy | 2875.6 | 116.0 |
+| Feral Druid | Tsunami Talisman | 2887.4 | 126.0 |
+| Retribution Paladin | Abacus of Violent Odds | 2253.6 | 80.0 |
+| Retribution Paladin | Madness of the Betrayer | 2235.0 | 100.0 |
+| Retribution Paladin | Dragonspine Trophy | 2295.2 | 80.0 |
+| Retribution Paladin | Tsunami Talisman | 2236.4 | 90.0 |
+
+### Trinket rankings per spec, 4-target scenario (best to worst, with DPS delta to next rank)
+
+**Warrior Fury**
+1. Dragonspine Trophy — 4847.8
+2. Madness of the Betrayer — 4790.7 (-57.1)
+3. Tsunami Talisman — 4764.9 (-25.8)
+4. Abacus of Violent Odds — 4702.2 (-62.7)
+
+**Warrior Fury (Glaives)**
+1. Dragonspine Trophy — 4918.5
+2. Madness of the Betrayer — 4869.6 (-48.9)
+3. Tsunami Talisman — 4849.6 (-20.0)
+4. Abacus of Violent Odds — 4776.0 (-73.6)
+
+**Warrior Arms**
+1. Dragonspine Trophy — 4439.6
+2. Madness of the Betrayer — 4380.5 (-59.1)
+3. Tsunami Talisman — 4362.0 (-18.5)
+4. Abacus of Violent Odds — 4325.1 (-36.9)
+
+**Warrior Arms (Glaives)**
+1. Dragonspine Trophy — 4339.0
+2. Madness of the Betrayer — 4288.8 (-50.2)
+3. Tsunami Talisman — 4269.5 (-19.3)
+4. Abacus of Violent Odds — 4211.1 (-58.4)
+
+**Warrior Arms (Kebab)**
+1. Dragonspine Trophy — 4027.6
+2. Madness of the Betrayer — 3981.3 (-46.3)
+3. Tsunami Talisman — 3966.0 (-15.3)
+4. Abacus of Violent Odds — 3901.6 (-64.4)
+
+**Rogue**
+1. Dragonspine Trophy — 3065.5
+2. Abacus of Violent Odds — 3013.2 (-52.3)
+3. Tsunami Talisman — 2971.9 (-41.3)
+4. Madness of the Betrayer — 2971.4 (-0.5)
+
+**Rogue (Glaives)**
+1. Dragonspine Trophy — 3315.3
+2. Abacus of Violent Odds — 3261.9 (-53.4)
+3. Madness of the Betrayer — 3221.4 (-40.5)
+4. Tsunami Talisman — 3220.5 (-0.9)
+
+**Hunter BM**
+1. Dragonspine Trophy — 3913.2
+2. Madness of the Betrayer — 3888.7 (-24.5)
+3. Tsunami Talisman — 3887.9 (-0.8)
+4. Abacus of Violent Odds — 3870.2 (-17.7)
+
+**Hunter BM (Weave)**
+1. Dragonspine Trophy — 4399.6
+2. Madness of the Betrayer — 4340.6 (-59.0)
+3. Tsunami Talisman — 4339.0 (-1.6)
+4. Abacus of Violent Odds — 4323.1 (-15.9)
+
+**Hunter SV**
+1. Dragonspine Trophy — 3546.9
+2. Tsunami Talisman — 3527.2 (-19.7)
+3. Madness of the Betrayer — 3526.0 (-1.2)
+4. Abacus of Violent Odds — 3514.1 (-11.9)
+
+**Hunter SV (Weave)**
+1. Dragonspine Trophy — 4123.7
+2. Madness of the Betrayer — 4064.9 (-58.8)
+3. Tsunami Talisman — 4063.5 (-1.4)
+4. Abacus of Violent Odds — 4053.1 (-10.4)
+
+**Enhancement Shaman**
+1. Dragonspine Trophy — 2757.3
+2. Madness of the Betrayer — 2722.8 (-34.5)
+3. Tsunami Talisman — 2712.1 (-10.7)
+4. Abacus of Violent Odds — 2708.3 (-3.8)
+
+**Feral Druid**
+1. Tsunami Talisman — 2887.4
+2. Dragonspine Trophy — 2875.6 (-11.8)
+3. Madness of the Betrayer — 2872.2 (-3.4)
+4. Abacus of Violent Odds — 2870.3 (-1.9)
+
+**Retribution Paladin**
+1. Dragonspine Trophy — 2295.2
+2. Abacus of Violent Odds — 2253.6 (-41.6)
+3. Tsunami Talisman — 2236.4 (-17.2)
+4. Madness of the Betrayer — 2235.0 (-1.4)
+
+### 4-target summary
+
+The trinket ranking is unchanged yet again at 4 targets: Dragonspine Trophy wins 13 of 14
+categories, and Feral Druid remains the sole exception favoring Tsunami Talisman (by ~11.8
+DPS — essentially the same small margin as the other two scenarios). Absolute DPS
+(Dragonspine Trophy row, across all three target counts):
+
+| Spec | Single-target DPS | Cleave (2T) DPS | 4-target DPS | Change (1T→4T) |
+|---|---:|---:|---:|---:|
+| Warrior Arms | 2356.2 | 3782.0 | 4439.6 | +88.4% |
+| Warrior Fury | 2633.4 | 4082.9 | 4847.8 | +84.1% |
+| Warrior Arms (Glaives) | 2358.9 | 3691.4 | 4339.0 | +83.9% |
+| Warrior Arms (Kebab) | 2215.8 | 3405.7 | 4027.6 | +81.8% |
+| Warrior Fury (Glaives) | 2763.0 | 4169.4 | 4918.5 | +78.0% |
+| Hunter SV | 2871.5 | 3075.1 | 3546.9 | +23.5% |
+| Rogue (Glaives) | 2757.6 | 3315.6 | 3315.3 | +20.2% |
+| Hunter SV (Weave) | 3430.8 | 3649.0 | 4123.7 | +20.2% |
+| Rogue | 2563.8 | 3066.7 | 3065.5 | +19.6% |
+| Hunter BM | 3283.6 | 3478.5 | 3913.2 | +19.2% |
+| Hunter BM (Weave) | 3766.9 | 3965.3 | 4399.6 | +16.8% |
+| Enhancement Shaman | 2417.4 | 2532.0 | 2757.3 | +14.1% |
+| Retribution Paladin | 2216.5 | 2243.6 | 2295.2 | +3.6% |
+| Feral Druid | 2828.0 | 2843.1 | 2875.6 | +1.7% |
+
+Warrior Fury/Arms keep scaling almost linearly with target count (~78-88% over
+single-target, a further ~17-18% on top of their already-large 2-target cleave gain),
+since Whirlwind/Cleave hit every nearby enemy and now have three extra targets instead of
+one to cleave onto. Hunter also keeps climbing meaningfully (BM ~17-19%, SV ~21-24% over
+single-target — a further ~11-15% past the 2-target cleave numbers), consistent with
+Multi-Shot hitting all nearby targets. Rogue is the clearest counter-example: its 1T→4T
+gain (~20%) is almost identical to its 1T→2T gain, because Blade Flurry cleaves to exactly
+one extra nearby target in TBC no matter how many total enemies are present — the jump
+from 2 to 4 targets adds essentially nothing (Rogue: -0.04%, Rogue (Glaives): -0.01%, pure
+noise). Enhancement Shaman keeps climbing steadily (~14% over single-target) via its
+unconditional Magma Totem/Fire Nova Totem twist. Retribution Paladin and Feral Druid remain
+the flattest (~2-4% over single-target) since neither has a passive AOE effect active by
+default at this target count — see the 4-target follow-up in the next section, where
+manually enabling Retribution's Consecrate flips from a loss at 2 targets to a clear ~3-4%
+gain here.
+
 ## Cleave-tuned APL experiment
 
 *Note: this experiment was originally run at 20,000 iterations before the `IndividualBuffs`

@@ -323,6 +323,21 @@ func TestTrinketBenchmarkCleave(t *testing.T) {
 	runTrinketBenchmark(t, encounter)
 }
 
+// 4-target scenario: same 14 specs x 4 trinkets grid, but against 4 targets
+// instead of 1 or 2, to see how cleave/AOE effects scale further with more
+// enemies present (e.g. radius-based abilities benefit more at higher target
+// counts than single-extra-target cleaves).
+func TestTrinketBenchmarkCleave4(t *testing.T) {
+	encounter := core.MakeSingleTargetEncounter(5)
+	encounter.Targets = []*proto.Target{
+		core.NewDefaultTarget(),
+		core.NewDefaultTarget(),
+		core.NewDefaultTarget(),
+		core.NewDefaultTarget(),
+	}
+	runTrinketBenchmark(t, encounter)
+}
+
 func runTrinketBenchmark(t *testing.T, encounter *proto.Encounter) {
 	RegisterAll()
 
