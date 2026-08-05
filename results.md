@@ -453,13 +453,11 @@ ceiling, on realistic 2-target cleave performance.
 
 ## Cleave-tuned APL experiment
 
-*Note: the absolute DPS figures quoted in this section (both the experiment table below and
-the "Findings" callbacks) predate the `IndividualBuffs` fix (bug #5 above) and, for
-Retribution Paladin, also predate the later gear re-sync (bug #4). They reflect the
-buff/gear state at the time each experiment was actually run, kept as a historical record —
-not the final numbers in the tables above. The qualitative conclusions (keep/revert
-decisions) are unaffected, since `IndividualBuffs` is a uniform buff applied identically
-regardless of APL logic.*
+*Note: this experiment was originally run at 20,000 iterations before the `IndividualBuffs`
+fix (bug #5) and, for Retribution Paladin, before the later gear re-sync (bug #4). It has
+since been redone at 5,000 iterations (seed 101) on the current, fully-fixed benchmark
+state, so the numbers below are now consistent with the rest of this document — no stale
+pre-fix figures remain.*
 
 Starting from the passive baseline above, three specs had genuine, already-implemented
 cleave/AOE abilities that looked under-utilized in their default APL, so their rotation
@@ -477,56 +475,60 @@ additive to it):
   cast attempt gated on `numberTargets > 1` with a simple auto-attack-clipping safety
   check, supplementing the existing melee-weave-gated Multi-Shot logic.
 
-Each change was re-benchmarked with the same 2-target cleave harness (20,000 iterations,
+Each change was re-benchmarked with the same 2-target cleave harness (5,000 iterations,
 seed 101) and compared against the passive baseline above:
 
 | Spec | Trinket2 | Baseline cleave DPS | Tuned cleave DPS | Change |
 |---|---|---:|---:|---:|
-| Rogue | Abacus of Violent Odds | 2624.8 | 2576.2 | -1.85% |
-| Rogue | Madness of the Betrayer | 2589.5 | 2555.6 | -1.31% |
-| Rogue | Dragonspine Trophy | 2670.7 | 2633.5 | -1.39% |
-| Rogue | Tsunami Talisman | 2588.7 | 2557.9 | -1.19% |
-| Retribution Paladin | Abacus of Violent Odds | 1895.6 | 1800.1 | -5.04% |
-| Retribution Paladin | Madness of the Betrayer | 1881.0 | 1787.7 | -4.96% |
-| Retribution Paladin | Dragonspine Trophy | 1932.1 | 1823.1 | -5.64% |
-| Retribution Paladin | Tsunami Talisman | 1885.5 | 1789.8 | -5.08% |
-| Hunter BM | Abacus of Violent Odds | 3070.3 | 3080.2 | +0.32% |
-| Hunter BM | Madness of the Betrayer | 3075.9 | 3091.9 | +0.52% |
-| Hunter BM | Dragonspine Trophy | 3091.8 | 3115.8 | +0.78% |
-| Hunter BM | Tsunami Talisman | 3077.0 | 3093.2 | +0.53% |
-| Hunter BM (Weave) | Abacus of Violent Odds | 3445.1 | 3463.2 | +0.53% |
-| Hunter BM (Weave) | Madness of the Betrayer | 3454.2 | 3474.3 | +0.58% |
-| Hunter BM (Weave) | Dragonspine Trophy | 3506.8 | 3525.9 | +0.54% |
-| Hunter BM (Weave) | Tsunami Talisman | 3453.3 | 3471.5 | +0.53% |
-| Hunter SV | Abacus of Violent Odds | 2754.9 | 2750.7 | -0.15% |
-| Hunter SV | Madness of the Betrayer | 2765.2 | 2755.1 | -0.37% |
-| Hunter SV | Dragonspine Trophy | 2779.5 | 2778.9 | -0.02% |
-| Hunter SV | Tsunami Talisman | 2766.7 | 2756.7 | -0.36% |
-| Hunter SV (Weave) | Abacus of Violent Odds | 3199.8 | 3202.3 | +0.08% |
-| Hunter SV (Weave) | Madness of the Betrayer | 3200.6 | 3206.5 | +0.18% |
-| Hunter SV (Weave) | Dragonspine Trophy | 3252.1 | 3260.3 | +0.25% |
-| Hunter SV (Weave) | Tsunami Talisman | 3198.2 | 3206.2 | +0.25% |
+| Rogue | Abacus of Violent Odds | 3011.6 | 2954.0 | -1.91% |
+| Rogue | Madness of the Betrayer | 2974.0 | 2931.3 | -1.44% |
+| Rogue | Dragonspine Trophy | 3067.0 | 3022.0 | -1.47% |
+| Rogue | Tsunami Talisman | 2969.3 | 2936.1 | -1.12% |
+| Retribution Paladin | Abacus of Violent Odds | 2200.6 | 2163.7 | -1.68% |
+| Retribution Paladin | Madness of the Betrayer | 2183.6 | 2149.8 | -1.55% |
+| Retribution Paladin | Dragonspine Trophy | 2243.3 | 2194.6 | -2.17% |
+| Retribution Paladin | Tsunami Talisman | 2188.9 | 2150.9 | -1.74% |
+| Hunter BM | Abacus of Violent Odds | 3427.8 | 3440.2 | +0.36% |
+| Hunter BM | Madness of the Betrayer | 3436.0 | 3452.1 | +0.47% |
+| Hunter BM | Dragonspine Trophy | 3454.5 | 3477.2 | +0.66% |
+| Hunter BM | Tsunami Talisman | 3436.1 | 3453.6 | +0.51% |
+| Hunter BM (Weave) | Abacus of Violent Odds | 3875.7 | 3896.2 | +0.53% |
+| Hunter BM (Weave) | Madness of the Betrayer | 3888.2 | 3907.3 | +0.49% |
+| Hunter BM (Weave) | Dragonspine Trophy | 3943.4 | 3965.5 | +0.56% |
+| Hunter BM (Weave) | Tsunami Talisman | 3882.9 | 3906.6 | +0.61% |
+| Hunter SV | Abacus of Violent Odds | 3049.6 | 3044.9 | -0.15% |
+| Hunter SV | Madness of the Betrayer | 3057.3 | 3049.8 | -0.25% |
+| Hunter SV | Dragonspine Trophy | 3075.1 | 3074.8 | -0.01% |
+| Hunter SV | Tsunami Talisman | 3059.6 | 3050.0 | -0.31% |
+| Hunter SV (Weave) | Abacus of Violent Odds | 3581.6 | 3584.2 | +0.07% |
+| Hunter SV (Weave) | Madness of the Betrayer | 3584.0 | 3587.0 | +0.08% |
+| Hunter SV (Weave) | Dragonspine Trophy | 3641.5 | 3648.6 | +0.19% |
+| Hunter SV (Weave) | Tsunami Talisman | 3580.7 | 3587.4 | +0.19% |
 
 **Findings:**
 
 - **Rogue: reverted.** Widening Blade Flurry's condition made DPS consistently *worse*
-  (~1.2-2.0%) instead of better. The original Slice-and-Dice + Expose-Armor-gated condition
+  (~1.1-1.9%) instead of better. The original Slice-and-Dice + Expose-Armor-gated condition
   apparently times Blade Flurry into an already-convenient GCD window; forcing it the
   instant it comes off cooldown (regardless of buff state) instead displaces a combo-point
   finisher at a worse moment. `swords.apl.json` reverted to its original condition.
-- **Retribution Paladin: reverted.** Turning on Consecration during cleave made DPS
-  consistently *worse* by ~5.0-5.6% — a clear regression, not a small one. Consecration's
-  GCD-length cast plus mana cost crowds out higher-value melee actions/Judgement in this
-  rotation's priority list; the ability's low base damage doesn't make up for the lost
-  tempo. `default.apl.json` (Paladin) reverted to `"Use Consecrate": false`.
+- **Retribution Paladin: reverted (at 2 targets only — see 4-target follow-up below).**
+  Turning on Consecration during cleave made DPS consistently *worse* by ~1.5-2.2% at 2
+  targets — smaller in magnitude than the original pre-fix run's ~5% regression (the
+  current, stronger buff/gear baseline makes Consecrate's fixed GCD/mana tax proportionally
+  cheaper, but it's still a clear, consistent loss at this target count, not a gain).
+  Consecration's GCD-length cast plus mana cost crowds out higher-value melee
+  actions/Judgement in this rotation's priority list at only 2 targets; the ability's low
+  base damage doesn't make up for the lost tempo until more enemies are in its radius (see
+  below). `default.apl.json` (Paladin) reverted to `"Use Consecrate": false`.
 - **Hunter: kept.** The extra top-priority Multi-Shot attempt is a small, consistent, real
-  gain for Beast Mastery (+0.3 to +0.8% across all trinkets and both weave variants) and
-  roughly flat/noise-level for Survival (-0.4% to +0.25%). Since BM's gain outweighs SV's
-  negligible change and neither regresses meaningfully, the change was kept in
-  `default.apl.json` (Hunter). Single-target DPS is provably unaffected — the full
-  single-target benchmark reproduces the exact original Hunter numbers (e.g. Hunter
-  BM/Dragonspine Trophy: 2931.8, Hunter BM (Weave): 3338.1, Hunter SV: 2587.7, Hunter SV
-  (Weave): 3051.0), since the new action is gated behind `numberTargets > 1`.
+  gain for Beast Mastery (+0.36 to +0.66% across all trinkets and both weave variants) and
+  essentially flat/noise-level for Survival (-0.31% to +0.19% across both variants). Since
+  BM's gain outweighs SV's negligible change and neither regresses meaningfully, the change
+  was kept in `default.apl.json` (Hunter). Single-target DPS is provably unaffected — the
+  full single-target benchmark reproduces the current single-target Hunter numbers (e.g.
+  Hunter BM/Dragonspine Trophy: 3283.6, Hunter BM (Weave): 3766.9, Hunter SV: 2871.5, Hunter
+  SV (Weave): 3430.8), since the new action is gated behind `numberTargets > 1`.
 - **Enhancement Shaman: no change made.** Its APL already unconditionally uses Magma Totem
   and twists Fire Nova Totem regardless of target count, so it already gets full cleave
   benefit with no APL edit needed.
@@ -537,6 +539,62 @@ seed 101) and compared against the passive baseline above:
 - **Warrior: no change needed.** Its APL already branches on `numberTargets` (Whirlwind/
   Bloodthirst prioritized at 2+ targets, single-target-only logic like Execute/Sunder gated
   to 1 target).
+
+### 4-target follow-up
+
+To check whether these conclusions hold at a higher target count — and specifically
+whether Consecrate's radius-based AOE finally becomes worthwhile with more nearby enemies —
+the same three tweaks were re-benchmarked against a 4-target encounter instead of 2, using a
+temporary, not-committed test scenario (still 5,000 iterations, seed 101):
+
+| Spec | Trinket2 | Baseline cleave DPS | Tuned cleave DPS | Change |
+|---|---|---:|---:|---:|
+| Rogue | Abacus of Violent Odds | 3013.5 | 2954.2 | -1.97% |
+| Rogue | Madness of the Betrayer | 2971.3 | 2932.5 | -1.31% |
+| Rogue | Dragonspine Trophy | 3065.5 | 3020.3 | -1.47% |
+| Rogue | Tsunami Talisman | 2970.7 | 2934.8 | -1.21% |
+| Retribution Paladin | Abacus of Violent Odds | 2255.6 | 2330.2 | +3.31% |
+| Retribution Paladin | Madness of the Betrayer | 2237.9 | 2318.7 | +3.61% |
+| Retribution Paladin | Dragonspine Trophy | 2296.1 | 2357.5 | +2.67% |
+| Retribution Paladin | Tsunami Talisman | 2233.8 | 2323.8 | +4.03% |
+| Hunter BM | Abacus of Violent Odds | 3786.9 | 3870.3 | +2.20% |
+| Hunter BM | Madness of the Betrayer | 3789.7 | 3889.5 | +2.63% |
+| Hunter BM | Dragonspine Trophy | 3792.4 | 3913.4 | +3.19% |
+| Hunter BM | Tsunami Talisman | 3789.5 | 3888.1 | +2.60% |
+| Hunter BM (Weave) | Abacus of Violent Odds | 4217.1 | 4322.9 | +2.51% |
+| Hunter BM (Weave) | Madness of the Betrayer | 4228.3 | 4341.9 | +2.69% |
+| Hunter BM (Weave) | Dragonspine Trophy | 4303.1 | 4400.7 | +2.27% |
+| Hunter BM (Weave) | Tsunami Talisman | 4226.4 | 4339.7 | +2.68% |
+| Hunter SV | Abacus of Violent Odds | 3458.7 | 3514.4 | +1.61% |
+| Hunter SV | Madness of the Betrayer | 3482.8 | 3523.9 | +1.18% |
+| Hunter SV | Dragonspine Trophy | 3484.5 | 3547.0 | +1.79% |
+| Hunter SV | Tsunami Talisman | 3483.6 | 3528.8 | +1.30% |
+| Hunter SV (Weave) | Abacus of Violent Odds | 4005.9 | 4052.1 | +1.15% |
+| Hunter SV (Weave) | Madness of the Betrayer | 4010.4 | 4065.6 | +1.38% |
+| Hunter SV (Weave) | Dragonspine Trophy | 4062.9 | 4122.8 | +1.47% |
+| Hunter SV (Weave) | Tsunami Talisman | 4006.8 | 4064.3 | +1.44% |
+
+- **Rogue: conclusion unchanged (reverted).** Blade Flurry cleaves to only one extra nearby
+  target in TBC regardless of total enemy count, so widening its condition is essentially
+  the same tweak at 2 or 4 targets — DPS is still consistently *worse* (~1.2-2.0%, matching
+  the 2-target result almost exactly).
+- **Retribution Paladin: conclusion flips (favors keeping the tweak at 4 targets).** Unlike
+  at 2 targets (a consistent ~1.5-2.2% loss), enabling Consecrate during cleave at 4 targets
+  is a consistent ~2.7-4.0% *gain*. Consecrate damages all enemies in an 8-yard radius, so
+  its value scales with nearby target count in a way Blade Flurry's fixed one-extra-target
+  cleave doesn't; 2 targets isn't enough to offset its GCD/mana cost, but 4 clearly is. The
+  right condition is likely target-count-dependent (e.g. `numberTargets > 2`) rather than a
+  flat keep/revert verdict — worth tuning further rather than treating either 2-target or
+  4-target result as final.
+- **Hunter: conclusion unchanged (kept), and the gain grows with target count.** The extra
+  Multi-Shot attempt is a clearly larger win at 4 targets than at 2: Beast Mastery
+  +2.2-3.2% (vs. +0.36-0.66% at 2 targets) and Survival +1.2-1.8% (vs. essentially flat at 2
+  targets). Multi-Shot hits all nearby enemies, so like Consecrate its value scales with
+  target count.
+
+This follow-up used a temporary, uncommitted 4-target test scenario and temporary APL edits
+only for the duration of the experiment — no permanent test file or APL changes resulted
+from it, and the main cleave benchmark above remains 2 targets.
 
 The full results table, trinket rankings, and cleave summary above already reflect the kept
 Hunter change — every other spec there is byte-for-byte the same APL as the single-target
