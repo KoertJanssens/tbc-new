@@ -150,13 +150,25 @@ func benchSpecs() []benchSpecConfig {
 		},
 		{
 			name: "Warrior Arms (Glaives)", class: proto.Class_ClassWarrior, race: proto.Race_RaceOrc,
-			spec: warriorOptions, talents: "32005011352010500221-0550000500521203",
+			// Dual-wielding Warglaives needs the dual-wield "Kebab" talent build (has Dual Wield
+			// Specialization), not the plain 2H Arms build - see ui/warrior/dps/presets.ts ArmsKebabTalents.
+			spec: warriorOptions, talents: "34005021302010510321-0550000520501203",
 			consumables: warriorConsumables, profession1: proto.Profession_Engineering, profession2: proto.Profession_Blacksmithing,
 			distance: 25,
 			gearDir:  "../ui/warrior/dps/gear_sets", gearFile: "p3_arms",
 			rotationDir: "../ui/warrior/dps/apls", rotationFile: "arms",
-			// Experimental: dual-wield Warglaives on the Arms build instead of the normal 2H weapon.
 			weaponMH: itemWarglaiveMH, weaponOH: itemWarglaiveOH,
+		},
+		{
+			name: "Warrior Arms (Kebab)", class: proto.Class_ClassWarrior, race: proto.Race_RaceOrc,
+			// Affordable dual-wield Arms variant: same Kebab talents as "Warrior Arms (Glaives)"
+			// above, but with cheaper S3 swords instead of legendary Warglaives.
+			spec: warriorOptions, talents: "34005021302010510321-0550000520501203",
+			consumables: warriorConsumables, profession1: proto.Profession_Engineering, profession2: proto.Profession_Blacksmithing,
+			distance: 25,
+			gearDir:  "../ui/warrior/dps/gear_sets", gearFile: "p3_arms",
+			rotationDir: "../ui/warrior/dps/apls", rotationFile: "arms",
+			weaponMH: itemVengefulGladiatorsSlicer, weaponOH: itemBladeOfSavagery,
 		},
 		{
 			name: "Rogue", class: proto.Class_ClassRogue, race: proto.Race_RaceHuman,

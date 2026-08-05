@@ -1,6 +1,6 @@
 # Phase 3 Trinket Benchmark Results
 
-20,000-iteration simulation comparing 4 candidate Trinket2 options across 13 physical-DPS
+20,000-iteration simulation comparing 4 candidate Trinket2 options across 14 physical-DPS
 spec/gear configurations. Trinket1 is held fixed (Bloodlust Brooch, or Warp-Spring Coil for
 Rogue). A flat +30 melee hit rating bonus is applied to every configuration.
 
@@ -25,7 +25,8 @@ Rogue). A flat +30 melee hit rating bonus is applied to every configuration.
   - Feral Druid: `ui/druid/feralcat/gear_sets/p3_6p.gear.json` ("BiS 6%" hit variant)
   - Retribution Paladin: `ui/paladin/retribution/gear_sets/p3.gear.json` (hand-built this
     session from a Wowhead P3 BiS guide, since no P3 preset previously existed in-repo;
-    fixed during this project — see "Bugs found & fixed" below)
+    fixed during this project, then later re-synced to a corrected BiS export — see "Bugs
+    found & fixed" below for both)
 - **Weapons**: the legendary Warglaives of Azzinoth (32837/32838) are excluded from the
   primary Warrior Fury / Rogue rows per project constraint; a non-Warglaive substitute is
   used instead (S3 Vengeful Gladiator weapons). A second "(Glaives)" row is also included
@@ -35,8 +36,15 @@ Rogue). A flat +30 melee hit rating bonus is applied to every configuration.
     Gladiator's Chopper (34015)
   - Rogue (non-Glaive): MH Vengeful Gladiator's Slicer (33762), OH Blade of Savagery (32369)
   - "(Glaives)" rows: MH/OH Warglaives of Azzinoth (32837/32838)
-  - Warrior Arms uses a two-hander (Cataclysm's Edge, 30902) regardless — no Glaive
-    variant applies.
+  - Warrior Arms (base row) uses a two-hander (Cataclysm's Edge, 30902) with standard Arms
+    talents. Warrior Arms (Glaives) and Warrior Arms (Kebab) are both dual-wield instead,
+    and both use the dual-wield "Kebab" talent build
+    (`34005021302010510321-0550000520501203`, invests in Dual Wield Specialization) rather
+    than the 2H Arms talents — Glaives pairs those talents with actual Warglaives of
+    Azzinoth, Kebab pairs them with the same affordable S3 swords as the Rogue non-Glaive
+    row (Vengeful Gladiator's Slicer 33762 / Blade of Savagery 32369), for a cheap-dual-
+    wield vs. legendary-dual-wield vs. 2H comparison. (The Glaives talent mismatch was a
+    bug found & fixed during this project — see below.)
 - **Talents/consumables/rotations**: each spec uses its default/standard Phase 3
   talent build, consumables, and APL rotation as found in that spec's existing test suite
   (`sim/<class>/<spec>/*_test.go`) — see `/memories/session/trinket-benchmark-project.md`
@@ -65,6 +73,22 @@ Rogue). A flat +30 melee hit rating bonus is applied to every configuration.
    `p1.gear.json`) and filling all empty gem sockets (hybrid gems to satisfy the Relentless
    Earthstorm Diamond meta gem's color requirement, pure Strength gems elsewhere). Final
    DPS: ~1853-1905, now sensibly above the P1 baseline.
+3. **`Warrior Arms (Glaives)` used the plain 2H Arms talent string despite dual-wielding
+   Warglaives.** That meant 0 points in Dual Wield Specialization while wielding two
+   one-handers — a genuine build/gear mismatch, most likely explaining why it (1932.1 DPS
+   on Dragonspine Trophy) underperformed the plain 2H `Warrior Arms` row (2048.9 DPS)
+   despite equipping top-tier legendary weapons. Fixed by switching it to the dual-wield
+   "Kebab" talent build (`34005021302010510321-0550000520501203`, already defined in
+   `ui/warrior/dps/presets.ts` as `ArmsKebabTalents`). DPS rose to 1984.2-2048.1
+   (single-target) / 3024.6-3128.7 (cleave), now correctly at parity with the 2H row
+   instead of below it. A new `Warrior Arms (Kebab)` row was also added using the same
+   talent build with affordable S3 swords instead of Warglaives, for a 3-way comparison.
+4. **Retribution Paladin gear further refined mid-project.** The gems used to fill the
+   empty sockets in fix #2 were Phase 1 quality (a default pick at the time); a corrected
+   BiS export supplied later in the project upgraded all 3 gem types to Phase 3 quality
+   and swapped the chest piece (Lightbringer Breastplate → Midnight Chestguard). DPS rose
+   again, by a consistent +25 to +26 across every trinket and scenario (1895-1931
+   single-target, 1921-1958 cleave).
 
 ## Full results table (20,000 iterations, seed 101)
 
@@ -82,10 +106,14 @@ Rogue). A flat +30 melee hit rating bonus is applied to every configuration.
 | Warrior Arms | Madness of the Betrayer | 2013.8 | 141.0 |
 | Warrior Arms | Dragonspine Trophy | 2048.9 | 121.0 |
 | Warrior Arms | Tsunami Talisman | 2011.9 | 131.0 |
-| Warrior Arms (Glaives) | Abacus of Violent Odds | 1932.1 | 142.0 |
-| Warrior Arms (Glaives) | Madness of the Betrayer | 1959.5 | 162.0 |
-| Warrior Arms (Glaives) | Dragonspine Trophy | 1989.4 | 142.0 |
-| Warrior Arms (Glaives) | Tsunami Talisman | 1955.4 | 152.0 |
+| Warrior Arms (Glaives) | Abacus of Violent Odds | 1984.2 | 142.0 |
+| Warrior Arms (Glaives) | Madness of the Betrayer | 2013.7 | 162.0 |
+| Warrior Arms (Glaives) | Dragonspine Trophy | 2048.1 | 142.0 |
+| Warrior Arms (Glaives) | Tsunami Talisman | 2010.3 | 152.0 |
+| Warrior Arms (Kebab) | Abacus of Violent Odds | 1859.4 | 144.0 |
+| Warrior Arms (Kebab) | Madness of the Betrayer | 1888.3 | 164.0 |
+| Warrior Arms (Kebab) | Dragonspine Trophy | 1920.1 | 144.0 |
+| Warrior Arms (Kebab) | Tsunami Talisman | 1885.1 | 154.0 |
 | Rogue | Abacus of Violent Odds | 2176.4 | 348.0 |
 | Rogue | Madness of the Betrayer | 2170.0 | 368.0 |
 | Rogue | Dragonspine Trophy | 2235.4 | 348.0 |
@@ -118,10 +146,10 @@ Rogue). A flat +30 melee hit rating bonus is applied to every configuration.
 | Feral Druid | Madness of the Betrayer | 2452.5 | 136.0 |
 | Feral Druid | Dragonspine Trophy | 2458.8 | 116.0 |
 | Feral Druid | Tsunami Talisman | 2465.8 | 126.0 |
-| Retribution Paladin | Abacus of Violent Odds | 1869.2 | 88.0 |
-| Retribution Paladin | Madness of the Betrayer | 1853.4 | 108.0 |
-| Retribution Paladin | Dragonspine Trophy | 1904.9 | 88.0 |
-| Retribution Paladin | Tsunami Talisman | 1858.5 | 98.0 |
+| Retribution Paladin | Abacus of Violent Odds | 1895.0 | 80.0 |
+| Retribution Paladin | Madness of the Betrayer | 1878.9 | 100.0 |
+| Retribution Paladin | Dragonspine Trophy | 1931.3 | 80.0 |
+| Retribution Paladin | Tsunami Talisman | 1884.0 | 90.0 |
 
 ## Trinket rankings per spec (best to worst, with DPS delta to next rank)
 
@@ -144,10 +172,16 @@ Rogue). A flat +30 melee hit rating bonus is applied to every configuration.
 4. Abacus of Violent Odds — 2000.6 (-11.3)
 
 **Warrior Arms (Glaives)**
-1. Dragonspine Trophy — 1989.4
-2. Madness of the Betrayer — 1959.5 (-29.9)
-3. Tsunami Talisman — 1955.4 (-4.1)
-4. Abacus of Violent Odds — 1932.1 (-23.3)
+1. Dragonspine Trophy — 2048.1
+2. Madness of the Betrayer — 2013.7 (-34.4)
+3. Tsunami Talisman — 2010.3 (-3.4)
+4. Abacus of Violent Odds — 1984.2 (-26.1)
+
+**Warrior Arms (Kebab)**
+1. Dragonspine Trophy — 1920.1
+2. Madness of the Betrayer — 1888.3 (-31.8)
+3. Tsunami Talisman — 1885.1 (-3.2)
+4. Abacus of Violent Odds — 1859.4 (-25.7)
 
 **Rogue**
 1. Dragonspine Trophy — 2235.4
@@ -198,21 +232,21 @@ Rogue). A flat +30 melee hit rating bonus is applied to every configuration.
 4. Madness of the Betrayer — 2452.5 (-0.7)
 
 **Retribution Paladin**
-1. Dragonspine Trophy — 1904.9
-2. Abacus of Violent Odds — 1869.2 (-35.7)
-3. Tsunami Talisman — 1858.5 (-10.7)
-4. Madness of the Betrayer — 1853.4 (-5.1)
+1. Dragonspine Trophy — 1931.3
+2. Abacus of Violent Odds — 1895.0 (-36.3)
+3. Tsunami Talisman — 1884.0 (-11.0)
+4. Madness of the Betrayer — 1878.9 (-5.1)
 
 ## Summary
 
-Dragonspine Trophy is the best Trinket2 choice in 12 of 13 spec categories, typically by a
+Dragonspine Trophy is the best Trinket2 choice in 13 of 14 spec categories, typically by a
 clear 20-60 DPS margin over the runner-up. Feral Druid is the sole exception, where Tsunami
 Talisman edges out Dragonspine Trophy by a small ~7 DPS — effectively a toss-up within
 simulation noise.
 
 ## Cleave scenario (2 targets, 20,000 iterations, seed 101)
 
-Same 13 spec/gear configurations and same 4 Trinket2 candidates as above, but the encounter
+Same 14 spec/gear configurations and same 4 Trinket2 candidates as above, but the encounter
 was changed to 2 targets instead of 1 (`Encounter.Targets` extended to
 `[NewDefaultTarget(), NewDefaultTarget()]`, both full-health dummies, same 180s ±5s
 duration/buffs/debuffs). Each spec runs its existing single-target-tuned APL as-is, so any
@@ -240,10 +274,14 @@ below already include it.
 | Warrior Arms | Madness of the Betrayer | 3154.8 | 141.0 |
 | Warrior Arms | Dragonspine Trophy | 3218.0 | 121.0 |
 | Warrior Arms | Tsunami Talisman | 3144.6 | 131.0 |
-| Warrior Arms (Glaives) | Abacus of Violent Odds | 2883.2 | 142.0 |
-| Warrior Arms (Glaives) | Madness of the Betrayer | 2940.6 | 162.0 |
-| Warrior Arms (Glaives) | Dragonspine Trophy | 2982.0 | 142.0 |
-| Warrior Arms (Glaives) | Tsunami Talisman | 2929.6 | 152.0 |
+| Warrior Arms (Glaives) | Abacus of Violent Odds | 3024.6 | 142.0 |
+| Warrior Arms (Glaives) | Madness of the Betrayer | 3081.7 | 162.0 |
+| Warrior Arms (Glaives) | Dragonspine Trophy | 3128.7 | 142.0 |
+| Warrior Arms (Glaives) | Tsunami Talisman | 3067.8 | 152.0 |
+| Warrior Arms (Kebab) | Abacus of Violent Odds | 2784.1 | 144.0 |
+| Warrior Arms (Kebab) | Madness of the Betrayer | 2840.5 | 164.0 |
+| Warrior Arms (Kebab) | Dragonspine Trophy | 2884.5 | 144.0 |
+| Warrior Arms (Kebab) | Tsunami Talisman | 2829.5 | 154.0 |
 | Rogue | Abacus of Violent Odds | 2624.8 | 348.0 |
 | Rogue | Madness of the Betrayer | 2589.5 | 368.0 |
 | Rogue | Dragonspine Trophy | 2670.7 | 348.0 |
@@ -276,10 +314,10 @@ below already include it.
 | Feral Druid | Madness of the Betrayer | 2467.7 | 136.0 |
 | Feral Druid | Dragonspine Trophy | 2474.0 | 116.0 |
 | Feral Druid | Tsunami Talisman | 2480.9 | 126.0 |
-| Retribution Paladin | Abacus of Violent Odds | 1895.6 | 88.0 |
-| Retribution Paladin | Madness of the Betrayer | 1881.0 | 108.0 |
-| Retribution Paladin | Dragonspine Trophy | 1932.1 | 88.0 |
-| Retribution Paladin | Tsunami Talisman | 1885.5 | 98.0 |
+| Retribution Paladin | Abacus of Violent Odds | 1921.4 | 80.0 |
+| Retribution Paladin | Madness of the Betrayer | 1906.4 | 100.0 |
+| Retribution Paladin | Dragonspine Trophy | 1958.3 | 80.0 |
+| Retribution Paladin | Tsunami Talisman | 1911.1 | 90.0 |
 
 ### Trinket rankings per spec, cleave scenario (best to worst, with DPS delta to next rank)
 
@@ -302,10 +340,16 @@ below already include it.
 4. Abacus of Violent Odds — 3115.6 (-29.0)
 
 **Warrior Arms (Glaives)**
-1. Dragonspine Trophy — 2982.0
-2. Madness of the Betrayer — 2940.6 (-41.4)
-3. Tsunami Talisman — 2929.6 (-11.0)
-4. Abacus of Violent Odds — 2883.2 (-46.4)
+1. Dragonspine Trophy — 3128.7
+2. Madness of the Betrayer — 3081.7 (-47.0)
+3. Tsunami Talisman — 3067.8 (-13.9)
+4. Abacus of Violent Odds — 3024.6 (-43.2)
+
+**Warrior Arms (Kebab)**
+1. Dragonspine Trophy — 2884.5
+2. Madness of the Betrayer — 2840.5 (-44.0)
+3. Tsunami Talisman — 2829.5 (-11.0)
+4. Abacus of Violent Odds — 2784.1 (-45.4)
 
 **Rogue**
 1. Dragonspine Trophy — 2670.7
@@ -356,23 +400,24 @@ below already include it.
 4. Madness of the Betrayer — 2467.7 (-1.5)
 
 **Retribution Paladin**
-1. Dragonspine Trophy — 1932.1
-2. Abacus of Violent Odds — 1895.6 (-36.5)
-3. Tsunami Talisman — 1885.5 (-10.1)
-4. Madness of the Betrayer — 1881.0 (-4.5)
+1. Dragonspine Trophy — 1958.3
+2. Abacus of Violent Odds — 1921.4 (-36.9)
+3. Tsunami Talisman — 1911.1 (-10.3)
+4. Madness of the Betrayer — 1906.4 (-4.7)
 
 ### Cleave summary
 
 The trinket ranking is unchanged from the single-target scenario: Dragonspine Trophy still
-wins 12 of 13 categories, with Feral Druid again the sole exception favoring Tsunami
+wins 13 of 14 categories, with Feral Druid again the sole exception favoring Tsunami
 Talisman (by ~7 DPS, same as single-target — Feral melee abilities here don't cleave, so
 its numbers barely move). Absolute DPS (Dragonspine Trophy row, single-target → cleave):
 
 | Spec | Single-target DPS | Cleave DPS | Change |
 |---|---:|---:|---:|
 | Warrior Arms | 2048.9 | 3218.0 | +57.1% |
+| Warrior Arms (Glaives) | 2048.1 | 3128.7 | +52.8% |
 | Warrior Fury | 2246.8 | 3431.7 | +52.7% |
-| Warrior Arms (Glaives) | 1989.4 | 2982.0 | +49.9% |
+| Warrior Arms (Kebab) | 1920.1 | 2884.5 | +50.2% |
 | Warrior Fury (Glaives) | 2364.4 | 3515.7 | +48.7% |
 | Rogue (Glaives) | 2406.2 | 2890.1 | +20.1% |
 | Rogue | 2235.4 | 2670.7 | +19.5% |
@@ -381,7 +426,7 @@ its numbers barely move). Absolute DPS (Dragonspine Trophy row, single-target �
 | Hunter BM | 2931.8 | 3115.8 | +6.3% |
 | Hunter BM (Weave) | 3338.1 | 3525.9 | +5.6% |
 | Enhancement Shaman | 2246.2 | 2358.1 | +5.0% |
-| Retribution Paladin | 1904.9 | 1932.1 | +1.4% |
+| Retribution Paladin | 1931.3 | 1958.3 | +1.4% |
 | Feral Druid | 2458.8 | 2474.0 | +0.6% |
 
 Warrior Fury/Arms see by far the largest gains (~48-57%), since Whirlwind is a core,
