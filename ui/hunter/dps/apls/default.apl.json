@@ -25,6 +25,25 @@
 				"condition": {
 					"and": {
 						"vals": [
+							{ "cmp": { "op": "OpGt", "lhs": { "numberTargets": {} }, "rhs": { "const": { "val": "1" } } } },
+							{
+								"cmp": {
+									"op": "OpLe",
+									"lhs": { "spellCastTime": { "spellId": { "spellId": 27021, "rank": 6 } } },
+									"rhs": { "variableRef": { "name": "Time until auto with buffer" } }
+								}
+							}
+						]
+					}
+				},
+				"castSpell": { "spellId": { "spellId": 27021, "rank": 6 } }
+			}
+		},
+		{
+			"action": {
+				"condition": {
+					"and": {
+						"vals": [
 							{ "variableRef": { "name": "Use Multi-Shot" } },
 							{ "variableRef": { "name": "Melee weave" } },
 							{
