@@ -11,7 +11,9 @@ import (
 
 // Scratch benchmark: P3 trinket comparison across physical-DPS specs.
 // Slot1 (Trinket1) is fixed to Bloodlust Brooch; Slot2 (Trinket2) cycles
-// through the 4 candidate trinkets. Every run gets +30 bonus hit rating.
+// through the 4 candidate trinkets. Every run gets +30 bonus hit rating and
+// the same core.FullRaidBuffs / FullPartyBuffs / FullIndividualBuffs / FullDebuffs
+// so every spec is compared under identical raid conditions.
 // Delete this file after extracting results.
 
 const (
@@ -393,6 +395,7 @@ func runTrinketBenchmark(t *testing.T, encounter *proto.Encounter) {
 				Profession2:        spec.profession2,
 				DistanceFromTarget: spec.distance,
 				Rotation:           rotation,
+				Buffs:              core.FullIndividualBuffs,
 			}
 			core.WithSpec(player, spec.spec)
 
