@@ -294,6 +294,22 @@ func benchSpecs() []benchSpecConfig {
 }
 
 func TestTrinketBenchmark(t *testing.T) {
+	runTrinketBenchmark(t, core.MakeSingleTargetEncounter(5))
+}
+
+// Cleave scenario: same 13 specs x 4 trinkets grid, but against 2 targets
+// instead of 1, to see how AOE/cleave-capable rotations shift the trinket
+// ranking (e.g. Whirlwind, Fan of Knives, Swipe picking up extra targets).
+func TestTrinketBenchmarkCleave(t *testing.T) {
+	encounter := core.MakeSingleTargetEncounter(5)
+	encounter.Targets = []*proto.Target{
+		core.NewDefaultTarget(),
+		core.NewDefaultTarget(),
+	}
+	runTrinketBenchmark(t, encounter)
+}
+
+func runTrinketBenchmark(t *testing.T, encounter *proto.Encounter) {
 	RegisterAll()
 
 	fmt.Printf("%-22s | %-26s | %10s | %10s\n", "Spec", "Trinket2", "DPS", "Hit Rating")
@@ -369,7 +385,6 @@ func TestTrinketBenchmark(t *testing.T) {
 			core.WithSpec(player, spec.spec)
 
 			raid := core.SinglePlayerRaidProto(player, core.FullPartyBuffs, core.FullRaidBuffs, core.FullDebuffs)
-			encounter := core.MakeSingleTargetEncounter(5)
 
 			computeResult := core.ComputeStats(&proto.ComputeStatsRequest{Raid: raid, Encounter: encounter})
 			hitRating := computeResult.RaidStats.Parties[0].Players[0].FinalStats.Stats[stats.MeleeHitRating]
