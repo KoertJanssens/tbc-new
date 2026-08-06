@@ -101,6 +101,18 @@ since Warglaives of Azzinoth are itemized as Swords in this repo's item database
 | 2 target | 4257.7 | 4419.2 | +161.5 | +3.79% |
 | 4 target | 5026.6 | 5172.5 | +145.9 | +2.90% |
 
+## Glaives + Sword Spec vs Non-Glaive (total delta)
+
+Combines both upgrades into one number: Non-Glaive/standard-talents (the baseline a Warglave-
+less Fury Warrior would be running) vs. Glaives equipped *and* respec'd into Sword Spec (the
+best build found in this comparison).
+
+| Scenario | Non-Glaive DPS | Glaives + Sword Spec DPS | Total gain | % gain |
+|---|---:|---:|---:|---:|
+| 1 target | 2667.0 | 2845.8 | +178.8 | +6.70% |
+| 2 target | 4191.2 | 4419.2 | +228.0 | +5.44% |
+| 4 target | 4977.9 | 5172.5 | +194.6 | +3.91% |
+
 ## Fury Warrior vs Rogue (both on Glaives, Phase 4 BiS)
 
 | Scenario | Warrior Fury DPS | Rogue DPS | Warrior lead | % lead |
@@ -145,3 +157,9 @@ since Warglaives of Azzinoth are itemized as Swords in this repo's item database
   and into Sword Specialization (a proc for a free extra attack) is a small but real net DPS
   win on this gear/rotation — for a Warglaive-wielding Fury Warrior, standard "Improved
   Berserker Stance" talents leave a little DPS on the table.
+- **Stacked together, Glaives + Sword Spec gain +3.9% to +6.7% total DPS over the
+  Non-Glaive/standard-talents baseline** — biggest at 1 target (+178.8 DPS, +6.70%),
+  shrinking through 2 targets (+228.0 DPS, +5.44%) and 4 targets (+194.6 DPS, +3.91%). The %
+  shrinks with target count for the same reason the Glaives-alone advantage does (Whirlwind
+  cleave dilutes any fixed weapon-damage-based gain across more targets), even though the
+  absolute DPS gain stays roughly flat (~+180-230 DPS) across all three scenarios.
