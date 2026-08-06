@@ -102,25 +102,8 @@ proc on the Axe-type Non-Glaive substitute, so no one would realistically respec
 without also having Glaives. This row shows the full gain of switching from "standard talents,
 no Glaives" to "Glaives + Sword Spec" in one step.
 
-
-## Glaives + Sword Spec vs Non-Glaive (total delta)
-
-Combines both upgrades into one number: Non-Glaive/standard-talents (the baseline a Warglave-
-less Fury Warrior would be running) vs. Glaives equipped *and* respec'd into Sword Spec (the
-best build found in this comparison).
-
-| Scenario | Non-Glaive DPS | Glaives + Sword Spec DPS | Total gain | % gain |
-|---|---:|---:|---:|---:|
-| 1 target | 2667.0 | 2845.8 | +178.8 | +6.70% |
-| 2 target | 4191.2 | 4419.2 | +228.0 | +5.44% |
-| 4 target | 4977.9 | 5172.5 | +194.6 | +3.91% |
-
-
 ## Findings
 
-- **At 1 target, Fury Warrior and Rogue are essentially tied** (within 0.33%, i.e.
-  simulation noise) when both wield Warglaives — the Glaives comparison is close to an
-  apples-to-apples single-target weapon test between the two specs.
 - **Fury Warrior's multi-target DPS scales strongly with target count; Rogue's does not.**
   Warrior Fury gains +52.3% going from 1→2 targets and a further +18.1% going from 2→4
   (2795.3 → 4257.7 → 5026.6), because Whirlwind/Bloodthirst cleave hits *every* nearby
@@ -128,14 +111,7 @@ best build found in this comparison).
   essentially flat from 2→4 targets (3348.2 → 3348.3) — consistent with results.md's earlier
   finding that Blade Flurry cleaves to only **one** extra nearby target in TBC regardless of
   total enemy count, so a Rogue gets its full "cleave" benefit already at 2 targets and
-  gains nothing further from a 3rd or 4th. As a result, Fury Warrior's DPS lead over Rogue
-  widens dramatically at higher target counts (+27.2% at 2 targets, +50.1% at 4 targets),
-  even though the two specs are tied at 1 target.
-- **Swapping standard Fury for Sword Spec Fury widens the Warrior's lead over Rogue at every
-  target count**, since Sword Spec is a straight DPS gain layered on top of the same Glaives:
-  +0.33% → +2.15% at 1 target, +27.2% → +32.0% at 2 targets, +50.1% → +54.5% at 4 targets.
-  The 1-target matchup is no longer a near-tie once Sword Spec is factored in — Sword Spec
-  Fury pulls ahead of Rogue by a real, if still modest, +2.15% even with no cleave involved.
+  gains nothing further from a 3rd or 4th.
 - **The Glaives' DPS advantage (in %) shrinks for Fury Warrior as target count rises**
   (+4.81% → +1.59% → +0.98%), since the extra weapon-damage-based throughput Warglaives
   provide doesn't scale with target count the way Whirlwind cleave does — it becomes a
@@ -150,13 +126,12 @@ best build found in this comparison).
   (finishers scale off combo points built by weapon-damage-based builders) versus Fury
   Warrior's Whirlwind cleave increasingly dominating the multi-target damage profile
   regardless of which weapon is equipped.
-- **Sword Spec Fury beats the standard Glaives build in every scenario** (+1.81% at 1
-  target, +3.79% at 2, +2.90% at 4 — not a clean monotonic trend, but a consistent gain of
-  roughly +50 to +160 DPS). Since Warglaives count as Swords, respec'ing the 5 points out of
-  Improved Berserker Stance (a passive crit/rage-cost buff for a stance Fury is already in)
-  and into Sword Specialization (a proc for a free extra attack) is a small but real net DPS
-  win on this gear/rotation — for a Warglaive-wielding Fury Warrior, standard "Improved
-  Berserker Stance" talents leave a little DPS on the table.
+- **Sword Spec Fury is only worth taking if you actually have Warglaives (or another
+  Sword-type weapon).** Its Glaives-vs-Non-Glaive-baseline delta (+6.70% to +3.91%, see
+  the Glaives advantage table above) is consistently bigger than standard Fury's (+4.81% to
+  +0.98%), because Sword Specialization simply can't proc without a Sword equipped — the
+  respec makes a Warglaive-wielding Fury Warrior *more*, not less, dependent on keeping
+  those weapons equipped.
 - **Stacked together, Glaives + Sword Spec gain +3.9% to +6.7% total DPS over the
   Non-Glaive/standard-talents baseline** — biggest at 1 target (+178.8 DPS, +6.70%),
   shrinking through 2 targets (+228.0 DPS, +5.44%) and 4 targets (+194.6 DPS, +3.91%). The %
