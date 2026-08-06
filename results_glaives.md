@@ -68,17 +68,17 @@ since Warglaives of Azzinoth are itemized as Swords in this repo's item database
 |---|---|---|---:|---:|
 | 1 target | Warrior Fury | Glaives | 2795.3 | 220.0 |
 | 1 target | Warrior Fury | Non-Glaive | 2667.0 | 215.0 |
-| 1 target | Warrior Fury | Sword Spec | 2845.8 | 220.0 |
+| 1 target | Warrior Fury (Sword Spec) | Glaives | 2845.8 | 220.0 |
 | 1 target | Rogue | Glaives | 2786.0 | 299.0 |
 | 1 target | Rogue | Non-Glaive | 2590.2 | 301.0 |
 | 2 target | Warrior Fury | Glaives | 4257.7 | 220.0 |
 | 2 target | Warrior Fury | Non-Glaive | 4191.2 | 215.0 |
-| 2 target | Warrior Fury | Sword Spec | 4419.2 | 220.0 |
+| 2 target | Warrior Fury (Sword Spec) | Glaives | 4419.2 | 220.0 |
 | 2 target | Rogue | Glaives | 3348.2 | 299.0 |
 | 2 target | Rogue | Non-Glaive | 3100.0 | 301.0 |
 | 4 target | Warrior Fury | Glaives | 5026.6 | 220.0 |
 | 4 target | Warrior Fury | Non-Glaive | 4977.9 | 215.0 |
-| 4 target | Warrior Fury | Sword Spec | 5172.5 | 220.0 |
+| 4 target | Warrior Fury (Sword Spec) | Glaives | 5172.5 | 220.0 |
 | 4 target | Rogue | Glaives | 3348.3 | 299.0 |
 | 4 target | Rogue | Non-Glaive | 3101.8 | 301.0 |
 
@@ -87,19 +87,21 @@ since Warglaives of Azzinoth are itemized as Swords in this repo's item database
 | Scenario | Spec | DPS gain from Glaives | % gain |
 |---|---|---:|---:|
 | 1 target | Warrior Fury | +128.3 | +4.81% |
+| 1 target | Warrior Fury (Sword Spec) | +178.8 | +6.70% |
 | 1 target | Rogue | +195.8 | +7.56% |
 | 2 target | Warrior Fury | +66.5 | +1.59% |
+| 2 target | Warrior Fury (Sword Spec) | +228.0 | +5.44% |
 | 2 target | Rogue | +248.2 | +8.01% |
 | 4 target | Warrior Fury | +48.7 | +0.98% |
+| 4 target | Warrior Fury (Sword Spec) | +194.6 | +3.91% |
 | 4 target | Rogue | +246.5 | +7.95% |
 
-## Sword Spec Fury vs standard Fury (both on Glaives)
+Warrior Fury (Sword Spec)'s "Non-Glaive" baseline here is the standard-talents Non-Glaive
+DPS (2667.0 / 4191.2 / 4977.9), not a Sword Spec + Non-Glaive number — Sword Spec can't
+proc on the Axe-type Non-Glaive substitute, so no one would realistically respec into it
+without also having Glaives. This row shows the full gain of switching from "standard talents,
+no Glaives" to "Glaives + Sword Spec" in one step.
 
-| Scenario | Standard DPS | Sword Spec DPS | Gain | % gain |
-|---|---:|---:|---:|---:|
-| 1 target | 2795.3 | 2845.8 | +50.5 | +1.81% |
-| 2 target | 4257.7 | 4419.2 | +161.5 | +3.79% |
-| 4 target | 5026.6 | 5172.5 | +145.9 | +2.90% |
 
 ## Glaives + Sword Spec vs Non-Glaive (total delta)
 
@@ -113,13 +115,6 @@ best build found in this comparison).
 | 2 target | 4191.2 | 4419.2 | +228.0 | +5.44% |
 | 4 target | 4977.9 | 5172.5 | +194.6 | +3.91% |
 
-## Fury Warrior vs Rogue (both on Glaives, Phase 4 BiS)
-
-| Scenario | Warrior Fury DPS | Rogue DPS | Warrior lead | % lead |
-|---|---:|---:|---:|---:|
-| 1 target | 2795.3 | 2786.0 | +9.3 | +0.33% |
-| 2 target | 4257.7 | 3348.2 | +909.5 | +27.2% |
-| 4 target | 5026.6 | 3348.3 | +1678.3 | +50.1% |
 
 ## Findings
 
@@ -136,6 +131,11 @@ best build found in this comparison).
   gains nothing further from a 3rd or 4th. As a result, Fury Warrior's DPS lead over Rogue
   widens dramatically at higher target counts (+27.2% at 2 targets, +50.1% at 4 targets),
   even though the two specs are tied at 1 target.
+- **Swapping standard Fury for Sword Spec Fury widens the Warrior's lead over Rogue at every
+  target count**, since Sword Spec is a straight DPS gain layered on top of the same Glaives:
+  +0.33% → +2.15% at 1 target, +27.2% → +32.0% at 2 targets, +50.1% → +54.5% at 4 targets.
+  The 1-target matchup is no longer a near-tie once Sword Spec is factored in — Sword Spec
+  Fury pulls ahead of Rogue by a real, if still modest, +2.15% even with no cleave involved.
 - **The Glaives' DPS advantage (in %) shrinks for Fury Warrior as target count rises**
   (+4.81% → +1.59% → +0.98%), since the extra weapon-damage-based throughput Warglaives
   provide doesn't scale with target count the way Whirlwind cleave does — it becomes a
