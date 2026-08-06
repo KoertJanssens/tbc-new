@@ -797,3 +797,6 @@ from it, and the main cleave benchmark above remains 2 targets.
 The full results table, trinket rankings, and cleave summary above already reflect the kept
 Hunter change — every other spec there is byte-for-byte the same APL as the single-target
 scenario.
+
+For the Phase 4 Glaives vs Non-Glaives comparison (Fury Warrior vs Rogue), see
+[results_glaives.md](results_glaives.md).
