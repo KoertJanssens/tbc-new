@@ -4,6 +4,9 @@
 weapon substitute, for Fury Warrior and Combat Rogue on their **Phase 4** BiS gear, across
 1/2/4-target encounters. Unlike the Phase 3 trinket benchmark (see [results.md](results.md)),
 trinkets are not cycled here — each spec keeps the fixed trinkets from its own P4 gear preset.
+A third option, **Sword Spec Fury**, is also included for Warrior Fury: same Warglaives, but
+with 5 points respec'd from Improved Berserker Stance into Sword Specialization (legal here
+since Warglaives of Azzinoth are itemized as Swords in this repo's item database).
 
 ## Assumptions
 
@@ -48,6 +51,14 @@ trinkets are not cycled here — each spec keeps the fixed trinkets from its own
   Warrior talents `3500501130201-05050005505012050115` with the `fury` APL; Rogue talents
   `00532012502-023305200005015002321151` with the `swords` APL. Consumables/race/professions
   also match that project's configs.
+- **Sword Spec Fury variant**: same gear/APL/consumables as standard Warrior Fury, always
+  equipped with Warglaives, but talents `350050113020105-0505000550501205011` — the standard
+  Fury build with 5 points moved from Improved Berserker Stance (Fury tree) to Sword
+  Specialization (Arms tree), verified field-by-field against `proto.WarriorTalents`'
+  generated field numbers and this repo's `warrior.TalentTreeSizes = [3]int{23, 21, 22}` (so
+  every other talent point is unchanged from the standard build). Warglaive of Azzinoth is
+  `weaponType: 9` (Sword) in `assets/database/db.json`, so Sword Specialization's proc is
+  live with this weapon.
 - **Scratch benchmark code**: `sim/glaivebench_test.go` (temporary, deleted after extracting
   these results).
 
@@ -57,14 +68,17 @@ trinkets are not cycled here — each spec keeps the fixed trinkets from its own
 |---|---|---|---:|---:|
 | 1 target | Warrior Fury | Glaives | 2795.3 | 220.0 |
 | 1 target | Warrior Fury | Non-Glaive | 2667.0 | 215.0 |
+| 1 target | Warrior Fury | Sword Spec | 2845.8 | 220.0 |
 | 1 target | Rogue | Glaives | 2786.0 | 299.0 |
 | 1 target | Rogue | Non-Glaive | 2590.2 | 301.0 |
 | 2 target | Warrior Fury | Glaives | 4257.7 | 220.0 |
 | 2 target | Warrior Fury | Non-Glaive | 4191.2 | 215.0 |
+| 2 target | Warrior Fury | Sword Spec | 4419.2 | 220.0 |
 | 2 target | Rogue | Glaives | 3348.2 | 299.0 |
 | 2 target | Rogue | Non-Glaive | 3100.0 | 301.0 |
 | 4 target | Warrior Fury | Glaives | 5026.6 | 220.0 |
 | 4 target | Warrior Fury | Non-Glaive | 4977.9 | 215.0 |
+| 4 target | Warrior Fury | Sword Spec | 5172.5 | 220.0 |
 | 4 target | Rogue | Glaives | 3348.3 | 299.0 |
 | 4 target | Rogue | Non-Glaive | 3101.8 | 301.0 |
 
@@ -78,6 +92,14 @@ trinkets are not cycled here — each spec keeps the fixed trinkets from its own
 | 2 target | Rogue | +248.2 | +8.01% |
 | 4 target | Warrior Fury | +48.7 | +0.98% |
 | 4 target | Rogue | +246.5 | +7.95% |
+
+## Sword Spec Fury vs standard Fury (both on Glaives)
+
+| Scenario | Standard DPS | Sword Spec DPS | Gain | % gain |
+|---|---:|---:|---:|---:|
+| 1 target | 2795.3 | 2845.8 | +50.5 | +1.81% |
+| 2 target | 4257.7 | 4419.2 | +161.5 | +3.79% |
+| 4 target | 5026.6 | 5172.5 | +145.9 | +2.90% |
 
 ## Fury Warrior vs Rogue (both on Glaives, Phase 4 BiS)
 
@@ -116,3 +138,10 @@ trinkets are not cycled here — each spec keeps the fixed trinkets from its own
   (finishers scale off combo points built by weapon-damage-based builders) versus Fury
   Warrior's Whirlwind cleave increasingly dominating the multi-target damage profile
   regardless of which weapon is equipped.
+- **Sword Spec Fury beats the standard Glaives build in every scenario** (+1.81% at 1
+  target, +3.79% at 2, +2.90% at 4 — not a clean monotonic trend, but a consistent gain of
+  roughly +50 to +160 DPS). Since Warglaives count as Swords, respec'ing the 5 points out of
+  Improved Berserker Stance (a passive crit/rage-cost buff for a stance Fury is already in)
+  and into Sword Specialization (a proc for a free extra attack) is a small but real net DPS
+  win on this gear/rotation — for a Warglaive-wielding Fury Warrior, standard "Improved
+  Berserker Stance" talents leave a little DPS on the table.
