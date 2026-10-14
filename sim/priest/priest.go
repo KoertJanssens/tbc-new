@@ -22,21 +22,13 @@ type Priest struct {
 	Shadowfiend    *core.Spell
 	InnerFocusAura *core.Aura
 
-	ShadowWordPain  []*core.Spell
-	MindBlast       []*core.Spell
-	MindFlay        []*core.Spell
-	ShadowWordDeath []*core.Spell
-	DevouringPlague []*core.Spell
 	VampiricEmbrace *core.Spell
-	VampiricTouch   []*core.Spell
-	Smite           []*core.Spell
-	Starshards      []*core.Spell
-	HolyNova        []*core.Spell
 }
 
 type SelfBuffs struct {
 	UseShadowfiend bool
 	PreShadowform  bool
+	Armor          proto.PriestOptions_Armor
 }
 
 func (priest *Priest) GetCharacter() *core.Character {
@@ -53,26 +45,26 @@ func (priest *Priest) Initialize() {
 	mindblastCDTimer := priest.NewTimer()
 	shadowWordDeathCDTimer := priest.NewTimer()
 
-	MindBlastRankMap.RegisterAll(func(rankConfig shared.SpellRankConfig) {
-		priest.registerMindBlastSpell(rankConfig, mindblastCDTimer)
+	MindBlastRankMap.RegisterAll(func(rank shared.SpellData) {
+		priest.registerMindBlastSpell(rank, mindblastCDTimer)
 	})
 	ShadowWordPainRankMap.RegisterAll(priest.registerShadowWordPainSpell)
-	ShadowWordDeathRankMap.RegisterAll(func(rankConfig shared.SpellRankConfig) {
-		priest.registerShadowWordDeathSpell(rankConfig, shadowWordDeathCDTimer)
+	ShadowWordDeathRankMap.RegisterAll(func(rank shared.SpellData) {
+		priest.registerShadowWordDeathSpell(rank, shadowWordDeathCDTimer)
 	})
 	SmiteRankMap.RegisterAll(priest.registerSmiteSpell)
 	priest.registerShadowfiendSpell()
 
 	if priest.Race == proto.Race_RaceNightElf {
 		starshardsCDTimer := priest.NewTimer()
-		StarshardsRankMap.RegisterAll(func(rankConfig shared.SpellRankConfig) {
-			priest.registerStarshardsSpell(rankConfig, starshardsCDTimer)
+		StarshardsRankMap.RegisterAll(func(rank shared.SpellData) {
+			priest.registerStarshardsSpell(rank, starshardsCDTimer)
 		})
 	}
 	if priest.Race == proto.Race_RaceUndead {
 		devouringPlagueCDTimer := priest.NewTimer()
-		DevouringPlagueRankMap.RegisterAll(func(rankConfig shared.SpellRankConfig) {
-			priest.registerDevouringPlagueSpell(rankConfig, devouringPlagueCDTimer)
+		DevouringPlagueRankMap.RegisterAll(func(rank shared.SpellData) {
+			priest.registerDevouringPlagueSpell(rank, devouringPlagueCDTimer)
 		})
 	}
 }
@@ -95,6 +87,7 @@ func (priest *Priest) ApplyTalents() {
 	priest.applySearingLight()
 	priest.applySurgeOfLight()
 	priest.applySpiritualGuidance()
+	priest.applySpiritOfRedemption()
 
 	// Shadow
 	priest.applyMindFlay()
@@ -128,6 +121,10 @@ func New(char *core.Character, selfBuffs SelfBuffs, talents string) *Priest {
 
 	core.FillTalentsProto(priest.Talents.ProtoReflect(), talents, TalentTreeSizes)
 	priest.EnableManaBar()
+	if selfBuffs.Armor == proto.PriestOptions_InnerFire {
+		// Inner Fire rank 7: +1580 armor. The charges never run out on a caster that is not hit.
+		priest.AddStat(stats.Armor, 1580)
+	}
 	priest.AddStatDependency(stats.Agility, stats.PhysicalCritPercent, core.CritPerAgiMaxLevel[char.Class])
 	priest.ShadowfiendPet = priest.NewShadowfiend()
 
@@ -140,10 +137,11 @@ type PriestAgent interface {
 }
 
 func NewPriest(character *core.Character, options *proto.Player) *Priest {
-	classOptions := options.GetPriest().GetOptions().GetClassOptions()
+	classOptions := options.GetDpsPriest().GetOptions().GetClassOptions()
 	selfBuffs := SelfBuffs{
 		UseShadowfiend: true,
 		PreShadowform:  classOptions.GetPreShadowform(),
+		Armor:          classOptions.GetArmor(),
 	}
 
 	basePriest := New(character, selfBuffs, options.TalentsString)
@@ -154,13 +152,13 @@ func NewPriest(character *core.Character, options *proto.Player) *Priest {
 
 func RegisterPriest() {
 	core.RegisterAgentFactory(
-		proto.Player_Priest{},
-		proto.Spec_SpecPriest,
+		proto.Player_DpsPriest{},
+		proto.Spec_SpecDpsPriest,
 		func(character *core.Character, options *proto.Player, _ *proto.Raid) core.Agent {
 			return NewPriest(character, options)
 		},
 		func(player *proto.Player, spec interface{}) {
-			playerSpec, ok := spec.(*proto.Player_Priest)
+			playerSpec, ok := spec.(*proto.Player_DpsPriest)
 			if !ok {
 				panic("Invalid spec value for Priest!")
 			}

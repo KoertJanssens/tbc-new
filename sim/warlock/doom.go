@@ -1,41 +1,42 @@
 package warlock
 
 import (
-	"time"
-
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
 
-const doomCoeff = 2
+var doomRank = spellData.CurseOfDoom.BySpellID(30910)
+var doomTick = doomRank.Periodic.(shared.SpellDataPeriodic)
+var doomCoeff = doomTick.Coef
 
 func (warlock *Warlock) registerCurseOfDoom() {
 
 	calculateBaseDamage := func() float64 {
 		damageMultiplier := core.TernaryFloat64(warlock.AmplifyCurseAura != nil && warlock.AmplifyCurseAura.IsActive(), 1.5, 1.0)
-		return 4200 * damageMultiplier
+		return doomTick.Tick * damageMultiplier
 	}
 
 	warlock.CurseOfDoom = warlock.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 30910},
-		SpellSchool:    core.SpellSchoolShadow,
+		ActionID:       core.ActionID{SpellID: doomRank.SpellID},
+		SpellSchool:    doomRank.SpellSchool,
+		DefenseType:    doomRank.DefenseType,
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: WarlockSpellCurseOfDoom,
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: doomRank.GCD,
 			},
 			CD: core.Cooldown{
 				Timer:    warlock.NewTimer(),
-				Duration: time.Second * 60,
+				Duration: doomRank.Cooldown,
 			},
 		},
 
 		ThreatMultiplier: 1,
 		DamageMultiplier: 1,
 		BonusCoefficient: doomCoeff,
-		CritMultiplier:   1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			result := spell.CalcOutcome(sim, target, spell.OutcomeMagicHit)
@@ -51,8 +52,8 @@ func (warlock *Warlock) registerCurseOfDoom() {
 				Label: "Doom",
 				Tag:   "Affliction",
 			},
-			NumberOfTicks:            1,
-			TickLength:               1 * time.Minute,
+			NumberOfTicks:            doomTick.NumberOfTicks,
+			TickLength:               doomTick.TickLength,
 			BonusCoefficient:         doomCoeff,
 			PeriodicDamageMultiplier: 1,
 
@@ -69,7 +70,7 @@ func (warlock *Warlock) registerCurseOfDoom() {
 			if useSnapshot {
 				return dot.CalcSnapshotDamage(sim, target, dot.OutcomeTick)
 			} else {
-				return spell.CalcPeriodicDamage(sim, target, calculateBaseDamage(), spell.OutcomeExpectedMagicCrit)
+				return spell.CalcPeriodicDamage(sim, target, calculateBaseDamage(), spell.OutcomeExpectedMagicHit)
 			}
 		},
 	})

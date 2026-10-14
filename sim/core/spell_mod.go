@@ -18,6 +18,7 @@ type SpellModConfig struct {
 	ClassMask         int64
 	Kind              SpellModType
 	School            SpellSchool
+	DefenseType       DefenseType // Only apply to spells with a matching DefenseType
 	ProcMask          ProcMask
 	SpellFlag         SpellFlag
 	ResourceType      proto.ResourceType
@@ -35,6 +36,7 @@ type SpellMod struct {
 	ClassMask      int64
 	Kind           SpellModType
 	School         SpellSchool
+	DefenseType    DefenseType
 	ProcMask       ProcMask
 	SpellFlag      SpellFlag
 	ResourceType   proto.ResourceType
@@ -96,6 +98,7 @@ func buildMod(unit *Unit, config SpellModConfig) *SpellMod {
 		ClassMask:    config.ClassMask,
 		Kind:         config.Kind,
 		School:       config.School,
+		DefenseType:  config.DefenseType,
 		ProcMask:     config.ProcMask,
 		SpellFlag:    config.SpellFlag,
 		ResourceType: config.ResourceType,
@@ -181,6 +184,10 @@ func shouldApply(spell *Spell, mod *SpellMod) bool {
 	}
 
 	if mod.School > 0 && !mod.School.Matches(spell.SpellSchool) {
+		return false
+	}
+
+	if mod.DefenseType > 0 && spell.DefenseType != mod.DefenseType {
 		return false
 	}
 
@@ -274,9 +281,21 @@ const (
 	SpellMod_DamageDone_Flat
 
 	// Will reduce spell.Cost.PercentModifier by % amount. -5% = -0.05
+	// Stacks multiplicatively with other pct cost mods.
+	// Use for effects that are SPELL_AURA_MOD_POWER_COST_SCHOOL_PCT (aura 72)
+	// in DBC, e.g. Elemental Precision, Pyromaniac, The Beast Within.
 	// For 0 Mana cost use -2
 	// Uses FloatValue
 	SpellMod_PowerCost_Pct
+
+	// Adds to spell.Cost.AdditivePercentModifier. +75% = 0.75
+	// Stacks additively with other mods of this kind: bucket = 1 + sum of mods.
+	// Applied on top of (multiplied with) SpellMod_PowerCost_Pct mods.
+	// Use for effects that are SPELL_AURA_ADD_PCT_MODIFIER (aura 108) with
+	// EffectMiscValue SPELLMOD_COST (14) in DBC — the common case for talents,
+	// set bonuses and procs.
+	// Uses FloatValue
+	SpellMod_PowerCost_Pct_Add
 
 	// Increases or decreases spell.Cost.FlatModifier by flat amount. -5 Mana = -5
 	// Uses IntValue
@@ -290,11 +309,11 @@ const (
 	// Uses FloatValue
 	SpellMod_Cooldown_Multiplier
 
-	// Will increase the AdditiveCritMultiplier. +100% = 1.0
+	// Will increase the CritMultiplierAdditive. +100% = 1.0
 	// Uses FloatValue
 	SpellMod_CritMultiplier_Flat
 
-	// Will increase the CritMultiplier. x100% = 1.0
+	// Will multiply the CritMultiplierPct. +3% = 0.03
 	// Uses FloatValue
 	SpellMod_CritMultiplier_Pct
 
@@ -396,6 +415,11 @@ var spellModMap = map[SpellModType]*SpellModFunctions{
 	SpellMod_PowerCost_Pct: {
 		Apply:  applyPowerCostPercent,
 		Remove: removePowerCostPercent,
+	},
+
+	SpellMod_PowerCost_Pct_Add: {
+		Apply:  applyPowerCostPercentAdditive,
+		Remove: removePowerCostPercentAdditive,
 	},
 
 	SpellMod_PowerCost_Flat: {
@@ -558,6 +582,18 @@ func removePowerCostPercent(mod *SpellMod, spell *Spell) {
 	}
 }
 
+func applyPowerCostPercentAdditive(mod *SpellMod, spell *Spell) {
+	if spell.Cost != nil {
+		spell.Cost.AdditivePercentModifier += mod.floatValue
+	}
+}
+
+func removePowerCostPercentAdditive(mod *SpellMod, spell *Spell) {
+	if spell.Cost != nil {
+		spell.Cost.AdditivePercentModifier -= mod.floatValue
+	}
+}
+
 func applyPowerCostFlat(mod *SpellMod, spell *Spell) {
 	if spell.Cost != nil {
 		spell.Cost.FlatModifier += mod.intValue
@@ -595,11 +631,11 @@ func removeCritMultiplierFlat(mod *SpellMod, spell *Spell) {
 }
 
 func applyCritMultiplierPct(mod *SpellMod, spell *Spell) {
-	spell.CritMultiplier *= (1 + mod.floatValue)
+	spell.CritMultiplierPct *= (1 + mod.floatValue)
 }
 
 func removeCritMultiplierPct(mod *SpellMod, spell *Spell) {
-	spell.CritMultiplier /= (1 + mod.floatValue)
+	spell.CritMultiplierPct /= (1 + mod.floatValue)
 }
 
 func applyCastTimePercent(mod *SpellMod, spell *Spell) {

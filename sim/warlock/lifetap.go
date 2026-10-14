@@ -8,7 +8,7 @@ func (warlock *Warlock) registerLifeTap() {
 	actionID := core.ActionID{SpellID: 27222}
 	manaMetrics := warlock.NewManaMetrics(actionID)
 	healthCost := 582.0
-	baseRestore := healthCost * (1.0 + 0.1*float64(warlock.Talents.ImprovedLifeTap))
+	baseRestore := healthCost * spellData.ImprovedLifeTap.MultiplierAt(warlock.Talents.ImprovedLifeTap)
 
 	petRestore := 0.3333 * float64(warlock.Talents.ManaFeed)
 	var petManaMetrics []*core.ResourceMetrics
@@ -19,6 +19,7 @@ func (warlock *Warlock) registerLifeTap() {
 	warlock.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID,
 		SpellSchool:    core.SpellSchoolShadow,
+		DefenseType:    core.DefenseTypeMagic,
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: WarlockSpellLifeTap,

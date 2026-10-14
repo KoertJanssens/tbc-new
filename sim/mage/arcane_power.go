@@ -14,7 +14,7 @@ func (mage *Mage) registerArcanePowerSpell() {
 	arcanePowerCostMod := mage.AddDynamicMod(core.SpellModConfig{
 		ClassMask:  MageSpellsAll,
 		FloatValue: .3,
-		Kind:       core.SpellMod_PowerCost_Pct,
+		Kind:       core.SpellMod_PowerCost_Pct_Add,
 	})
 
 	arcanePowerDmgMod := mage.AddDynamicMod(core.SpellModConfig{
@@ -45,6 +45,7 @@ func (mage *Mage) registerArcanePowerSpell() {
 
 	arcanePowerSpell = mage.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 12042},
+		DefenseType:    core.DefenseTypeMagic,
 		Flags:          core.SpellFlagNoOnCastComplete,
 		ClassSpellMask: MageSpellArcanePower,
 		Cast: core.CastConfig{

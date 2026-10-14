@@ -3,16 +3,19 @@ package warlock
 import (
 	"time"
 
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
 
-const immolateCoeff = 0.2
-const immolateDotCoeff = 0.13
+var immolateRank = spellData.Immolate.BySpellID(27215)
+var immolateTick = immolateRank.Periodic.(shared.SpellDataPeriodic)
+var immolateCoeff = immolateRank.Direct.BonusCoefficient()
+var immolateDotCoeff = immolateTick.Coef
 
 func (warlock *Warlock) registerImmolate() {
-	actionID := core.ActionID{SpellID: 27215}
-	tickCount := int32(5)
-	warlock.ImmolateTickBaseDamage = float64(615 / tickCount)
+	actionID := core.ActionID{SpellID: immolateRank.SpellID}
+	tickCount := immolateTick.NumberOfTicks
+	warlock.ImmolateTickBaseDamage = immolateTick.Tick
 
 	warlock.Immolate = warlock.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID,
@@ -22,22 +25,22 @@ func (warlock *Warlock) registerImmolate() {
 		ClassSpellMask: WarlockSpellImmolate,
 
 		ManaCost: core.ManaCostOptions{
-			FlatCost: 445,
+			FlatCost: immolateRank.Cost,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD:      core.GCDDefault,
-				CastTime: 2000 * time.Millisecond,
+				GCD:      immolateRank.GCD,
+				CastTime: immolateRank.CastTime,
 			},
 		},
 
 		DamageMultiplier: 1,
-		CritMultiplier:   warlock.DefaultSpellCritMultiplier(),
+		DefenseType:      core.DefenseTypeMagic,
 		ThreatMultiplier: 1,
 		BonusCoefficient: immolateCoeff,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			result := spell.CalcDamage(sim, target, 332, spell.OutcomeMagicHitAndCrit)
+			result := spell.CalcDamage(sim, target, immolateRank.Direct.Damage(sim), spell.OutcomeMagicHitAndCrit)
 			if result.Landed() {
 				spell.RelatedDotSpell.Dot(target).Apply(sim)
 			}
@@ -49,6 +52,7 @@ func (warlock *Warlock) registerImmolate() {
 	warlock.Immolate.RelatedDotSpell = warlock.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID.WithTag(1),
 		SpellSchool:    core.SpellSchoolFire,
+		DefenseType:    core.DefenseTypeMagic,
 		ProcMask:       core.ProcMaskSpellDamage,
 		ClassSpellMask: WarlockSpellImmolateDot,
 		Flags:          core.SpellFlagPassiveSpell,
@@ -60,7 +64,7 @@ func (warlock *Warlock) registerImmolate() {
 				Label: "Immolate (DoT)",
 			},
 			NumberOfTicks:    tickCount,
-			TickLength:       3 * time.Second,
+			TickLength:       immolateTick.TickLength,
 			BonusCoefficient: immolateDotCoeff,
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.Snapshot(target, warlock.ImmolateTickBaseDamage)
@@ -77,7 +81,7 @@ func (warlock *Warlock) registerImmolate() {
 				result.Damage /= dot.TickPeriod().Seconds()
 				return result
 			} else {
-				result := spell.CalcPeriodicDamage(sim, target, 613, spell.OutcomeExpectedMagicCrit)
+				result := spell.CalcPeriodicDamage(sim, target, immolateTick.Tick*float64(immolateTick.NumberOfTicks), spell.OutcomeExpectedMagicHit)
 				result.Damage /= dot.CalcTickPeriod().Round(time.Millisecond).Seconds()
 				return result
 			}

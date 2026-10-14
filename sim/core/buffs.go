@@ -21,6 +21,10 @@ const (
 	ResistanceCategoryShadow = "ResistanceShadow"
 )
 
+// Exclusive category for flat stat buffs which don't stack with each other
+// e.g. Arcane Brilliance vs Scroll of Intellect.
+const StatBuffCategory = "StatBuff"
+
 type BuffConfig struct {
 	Label             string
 	ActionID          ActionID
@@ -202,6 +206,14 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 		MakePermanent(ChainOfTheTwilightOwlAura(char))
 	}
 
+	if partyBuffs.EyeOfTheNight {
+		MakePermanent(EyeOfTheNightAura(char))
+	}
+
+	if partyBuffs.JadePendantOfBlasting {
+		MakePermanent(JadePendantOfBlastingAura(char))
+	}
+
 	if partyBuffs.CommandingShout != proto.TristateEffect_TristateEffectMissing {
 		boomingVoicePoints := int32(0)
 
@@ -228,20 +240,12 @@ func applyBuffEffects(agent Agent, raidBuffs *proto.RaidBuffs, partyBuffs *proto
 		DraneiRacialAura(char, false)
 	}
 
-	if partyBuffs.EyeOfTheNight {
-		MakePermanent(EyeOfTheNightAura(char))
-	}
-
 	if partyBuffs.FerociousInspiration > 0 {
 		MakePermanent(FerociousInspiration(char, partyBuffs.FerociousInspiration))
 	}
 
 	if partyBuffs.GraceOfAirTotem != proto.TristateEffect_TristateEffectMissing {
 		GraceOfAirTotemAura(char, IsImproved(partyBuffs.GraceOfAirTotem), partyBuffs.TotemTwisting)
-	}
-
-	if partyBuffs.JadePendantOfBlasting {
-		MakePermanent(JadePendantOfBlastingAura(char))
 	}
 
 	if partyBuffs.LeaderOfThePack != proto.TristateEffect_TristateEffectMissing {
@@ -409,23 +413,21 @@ func ArcaneBrillianceAura(char *Character) *Aura {
 		Stats: []StatConfig{
 			{stats.Intellect, 40, false},
 		},
+		ExclusiveCategory: StatBuffCategory,
 	})
 }
 
 func DivineSpiritAura(char *Character, improved bool) *Aura {
-	spiritBuff := stats.Stats{stats.Spirit: 50}
-
 	dsSDStatDep := char.NewDynamicStatDependency(stats.Spirit, stats.SpellDamage, 0.1)
 	dsHPStatDep := char.NewDynamicStatDependency(stats.Spirit, stats.HealingPower, 0.1)
 
-	return char.GetOrRegisterAura(Aura{
+	aura := char.GetOrRegisterAura(Aura{
 		Label:      "Divine Spirit Buff",
 		ActionID:   ActionID{SpellID: 25312},
 		Duration:   time.Minute * 30,
 		BuildPhase: CharacterBuildPhaseBuffs,
 
 		OnGain: func(aura *Aura, sim *Simulation) {
-			char.AddStatsDynamic(sim, spiritBuff)
 			if improved {
 				char.EnableBuildPhaseStatDep(sim, dsSDStatDep)
 				char.EnableBuildPhaseStatDep(sim, dsHPStatDep)
@@ -433,13 +435,18 @@ func DivineSpiritAura(char *Character, improved bool) *Aura {
 		},
 
 		OnExpire: func(aura *Aura, sim *Simulation) {
-			char.AddStatsDynamic(sim, spiritBuff.Invert())
 			if improved {
 				char.DisableBuildPhaseStatDep(sim, dsSDStatDep)
 				char.DisableBuildPhaseStatDep(sim, dsHPStatDep)
 			}
 		},
 	})
+
+	// The Spirit is exclusive with other flat Spirit buffs (Scroll of Spirit), so
+	// only the strongest source applies. The Imp. DS conversion is DS-only and stays
+	// tied to the aura itself.
+	makeExclusiveFlatStatBuff(aura, stats.Spirit, 50, StatBuffCategory)
+	return aura
 }
 
 func GiftOfTheWildAura(char *Character, improved bool) *Aura {
@@ -1109,6 +1116,7 @@ func WindfuryTotemAura(char *Character, isImpoved bool) *Aura {
 	wfProcTrigger := char.MakeProcTriggerAura(ProcTrigger{
 		Name:               "Windfury Totem Trigger",
 		MetricsActionID:    ActionID{SpellID: 25580, Tag: -1},
+		IsWeaponProc:       true,
 		ProcChance:         0.2,
 		Duration:           NeverExpires,
 		Outcome:            OutcomeLanded,
@@ -1231,11 +1239,18 @@ func AtieshAura(char *Character, class proto.Class, numStaves float64) *Aura {
 
 }
 
+const (
+	BraidedEterniumChainAuraLabel  = "Braided Eternium Chain"
+	ChainOfTheTwilightOwlAuraLabel = "Chain of the Twilight Owl"
+	EyeOfTheNightAuraLabel         = "Eye of the Night"
+	JadePendantOfBlastingAuraLabel = "Jade Pendant of Blasting"
+)
+
 func BraidedEterniumChainAura(char *Character) *Aura {
 	return makeStatBuff(char, BuffConfig{
-		Label:             "Braided Eternium Chain",
+		Label:             BraidedEterniumChainAuraLabel,
 		ActionID:          ActionID{SpellID: 31025},
-		ExclusiveCategory: "Braided Eternium Chain",
+		ExclusiveCategory: BraidedEterniumChainAuraLabel,
 		Stats: []StatConfig{
 			{stats.MeleeCritRating, 28, false},
 		},
@@ -1244,11 +1259,33 @@ func BraidedEterniumChainAura(char *Character) *Aura {
 
 func ChainOfTheTwilightOwlAura(char *Character) *Aura {
 	return makeStatBuff(char, BuffConfig{
-		Label:             "Chain of the Twilight Owl",
+		Label:             ChainOfTheTwilightOwlAuraLabel,
 		ActionID:          ActionID{SpellID: 31035},
-		ExclusiveCategory: "Chain of the Twilight Owl",
+		ExclusiveCategory: ChainOfTheTwilightOwlAuraLabel,
 		Stats: []StatConfig{
 			{stats.SpellCritPercent, 2, false},
+		},
+	})
+}
+
+func EyeOfTheNightAura(char *Character) *Aura {
+	return makeStatBuff(char, BuffConfig{
+		Label:             EyeOfTheNightAuraLabel,
+		ActionID:          ActionID{SpellID: 31033},
+		ExclusiveCategory: EyeOfTheNightAuraLabel,
+		Stats: []StatConfig{
+			{stats.SpellDamage, 34, false},
+		},
+	})
+}
+
+func JadePendantOfBlastingAura(char *Character) *Aura {
+	return makeStatBuff(char, BuffConfig{
+		Label:             JadePendantOfBlastingAuraLabel,
+		ActionID:          ActionID{SpellID: 25607},
+		ExclusiveCategory: JadePendantOfBlastingAuraLabel,
+		Stats: []StatConfig{
+			{stats.SpellDamage, 15, false},
 		},
 	})
 }
@@ -1286,28 +1323,6 @@ func DraneiRacialAura(char *Character, caster bool) *Aura {
 	}
 
 	return MakePermanent(aura)
-}
-
-func EyeOfTheNightAura(char *Character) *Aura {
-	return makeStatBuff(char, BuffConfig{
-		Label:             "Eye of the Night",
-		ActionID:          ActionID{SpellID: 31033},
-		ExclusiveCategory: "Eye of the Night",
-		Stats: []StatConfig{
-			{stats.SpellDamage, 34, false},
-		},
-	})
-}
-
-func JadePendantOfBlastingAura(char *Character) *Aura {
-	return makeStatBuff(char, BuffConfig{
-		Label:             "Jade Pendant of Blasting",
-		ActionID:          ActionID{SpellID: 25607},
-		ExclusiveCategory: "Jade Pendant of Blasting",
-		Stats: []StatConfig{
-			{stats.SpellDamage, 15, false},
-		},
-	})
 }
 
 const TinnitusAuraLabel = "Tinnitus"
@@ -1564,11 +1579,20 @@ func BlessingOfWisdomAura(char *Character, improved bool) *Aura {
 ////////////////////////////
 
 func ShadowPriestDPSManaAura(char *Character, dps float64) *Aura {
-	return makeStatBuff(char, BuffConfig{
+	manaMetrics := char.NewManaMetrics(ActionID{SpellID: 34914})
+
+	manaGain := dps * 0.05
+
+	return char.GetOrRegisterAura(Aura{
 		Label:    "Vampiric Touch",
 		ActionID: ActionID{SpellID: 34914},
-		Stats: []StatConfig{
-			{stats.MP5, dps * 0.25, false},
+		OnGain: func(aura *Aura, sim *Simulation) {
+			StartPeriodicAction(sim, PeriodicActionOptions{
+				Period: DurationFromSeconds(1),
+				OnAction: func(s *Simulation) {
+					char.AddMana(sim, manaGain, manaMetrics)
+				},
+			})
 		},
 	})
 }
@@ -1655,7 +1679,7 @@ const InnervateCD = time.Minute * 6
 func InnervateManaThreshold(character *Character) float64 {
 	if character.Class == proto.Class_ClassMage {
 		// Mages burn mana really fast so they need a higher threshold.
-		return character.MaxMana() * 0.7
+		return character.MaxMana() * 0.4
 	} else {
 		return 1000
 	}
@@ -1774,23 +1798,22 @@ func applyPetBuffEffects(petAgent PetAgent, raidBuffs *proto.RaidBuffs, partyBuf
 	partyBuffs = googleProto.Clone(partyBuffs).(*proto.PartyBuffs)
 	// Pets can't get extra attacks, doh!
 	partyBuffs.WindfuryTotem = proto.TristateEffect_TristateEffectMissing
+	// Neck auras are automatically inherited when a unit gets into range (40 yds)
+	partyBuffs.ChainOfTheTwilightOwl = partyBuffs.ChainOfTheTwilightOwl || petAgent.GetPet().Owner.HasAura(ChainOfTheTwilightOwlAuraLabel)
+	partyBuffs.EyeOfTheNight = partyBuffs.EyeOfTheNight || petAgent.GetPet().Owner.HasAura(EyeOfTheNightAuraLabel)
+	partyBuffs.BraidedEterniumChain = partyBuffs.BraidedEterniumChain || petAgent.GetPet().Owner.HasAura(BraidedEterniumChainAuraLabel)
+	partyBuffs.JadePendantOfBlasting = partyBuffs.JadePendantOfBlasting || petAgent.GetPet().Owner.HasAura(JadePendantOfBlastingAuraLabel)
 
 	individualBuffs = googleProto.Clone(individualBuffs).(*proto.IndividualBuffs)
 	individualBuffs.Innervates = 0
 	individualBuffs.PowerInfusions = 0
 
-	// Pets don't benefit from buffs that are ratings, e.g. crit rating or haste rating.
 	partyBuffs.Drums = proto.Drums_DrumsUnknown
 	partyBuffs.LeaderOfThePack = MinTristate(partyBuffs.LeaderOfThePack, proto.TristateEffect_TristateEffectRegular)
 	partyBuffs.MoonkinAura = MinTristate(partyBuffs.MoonkinAura, proto.TristateEffect_TristateEffectRegular)
-	partyBuffs.BraidedEterniumChain = false
 
 	if !petAgent.GetPet().enabledOnStart {
 		// Auras etc still apply, but not targeted buffs (usually)
-		partyBuffs.ChainOfTheTwilightOwl = false
-		partyBuffs.EyeOfTheNight = false
-		partyBuffs.JadePendantOfBlasting = false
-
 		// Strip targeted buffs that require presence at fight start
 		raidBuffs.ArcaneBrilliance = false
 		raidBuffs.DivineSpirit = proto.TristateEffect_TristateEffectMissing

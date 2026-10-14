@@ -1,5 +1,7 @@
 # Commands
+
 We use a makefile for our build system. These commands will usually be all you need while developing for this project:
+
 ```sh
 # Installs a pre-commit git hook so that your go code is automatically formatted (if you don't use an IDE that supports that).  If you want to manually format go code you can run make fmt.
 # Also installs `air` to reload the dev servers automatically
@@ -70,8 +72,7 @@ make wowsimtbc
 make simdb
 
 # Generate data from WoW client files
-# Requires dotnet 9 to run
-# https://learn.microsoft.com/en-us/dotnet/
+# Requires a local WoW install; point Settings.BaseDir in the settings file at it
 # Uses tools/database/generator-settings.json for settings
 # Also runs make simdb
 # This is what you will use most of the time for generation

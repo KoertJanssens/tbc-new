@@ -24,11 +24,13 @@ type Spell struct {
 	ChargeRecoveryTime    int32
 	CategoryTypeMask      int32
 	Category              int32
+	DefenseType           int32 // SpellCategories.DefenseType: 0 none, 1 magic, 2 melee, 3 ranged
 	Duration              int32
 	ProcChance            float32
 	ProcCharges           int32
 	ProcTypeMask          []int
 	ProcCategoryRecovery  int32
+	CategoryRecoveryTime  int32
 	EquippedItemClass     int32
 	EquippedItemInvTypes  int32
 	EquippedItemSubclass  int32
@@ -50,4 +52,47 @@ func (s *Spell) HasAttributeAt(index int, flag int) bool {
 		return false
 	}
 	return (s.Attributes[index] & flag) != 0
+}
+
+// Reports whether the spell's effect amounts come from the item level of the item carrying it
+// rather than from a class curve. On such an effect EffectBasePoints is a stale snapshot and
+// only the scaling coefficient resolves the real amount.
+func (s *Spell) ScalesWithItemLevel() bool {
+	return s.HasAttributeAt(ATTR_INDEX_EX_11, ATTR_EX_11_SCALES_WITH_ITEM_LEVEL)
+}
+
+// Reports whether the listener aura also fires from hits of triggered spells that lack
+// ATTR_EX_3_NOT_A_PROC. Emitted as ProcTrigger.CanProcFromProcs.
+func (s *Spell) CanProcFromProcs() bool {
+	return s.HasAttributeAt(ATTR_INDEX_EX_3, ATTR_EX_3_CAN_PROC_FROM_PROCS)
+}
+
+// Reports whether a triggered spell's hits count as ability hits to aura listeners rather than
+// as proc hits. A damage proc built from a spell without it gets SpellFlagProc.
+func (s *Spell) NotAProc() bool {
+	return s.HasAttributeAt(ATTR_INDEX_EX_3, ATTR_EX_3_NOT_A_PROC)
+}
+
+// Reports whether weapon procs ignore this spell's hits. Emitted as SpellFlagSuppressWeaponProcs.
+func (s *Spell) SuppressesWeaponProcs() bool {
+	return s.HasAttributeAt(ATTR_INDEX_EX_4, ATTR_EX_4_SUPPRESS_WEAPON_PROCS)
+}
+
+// Reports whether the listener aura, although not a weapon proc, ignores hits that suppress
+// weapon procs. Emitted as SpellFlagsExclude: SpellFlagSuppressWeaponProcs.
+func (s *Spell) IsWeaponProcAura() bool {
+	return s.HasAttributeAt(ATTR_INDEX_EX_6, ATTR_EX_6_AURA_IS_WEAPON_PROC)
+}
+
+// Reports whether the spell is barred from critically striking. Seal of Light, Judgement of Wisdom,
+// Sweeping Strikes and Vampiric Embrace are the shape: effects the client resolves at a flat amount.
+// A damage proc built from one of these has to roll an outcome that cannot crit, or it gains crit
+// damage the game never gives it.
+func (s *Spell) CannotCrit() bool {
+	return s.HasAttributeAt(ATTR_INDEX_EX_2, ATTR_EX_2_CANT_CRIT)
+}
+
+// Reports whether the spell only procs from class abilities rather than from any hit.
+func (s *Spell) OnlyProcsFromClassAbilities() bool {
+	return s.HasAttributeAt(ATTR_INDEX_EX_12, ATTR_EX_12_ONLY_PROC_FROM_CLASS_ABILITIES)
 }

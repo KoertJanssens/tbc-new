@@ -1,23 +1,23 @@
-import { LaunchStatus } from '../core/launched_sims';
 import {
 	ArmorType,
 	Class,
+	ItemQuality,
+	ItemSlot,
 	MobType,
+	Profession,
 	PseudoStat,
 	Race,
-	Profession,
-	Spec,
-	Stat,
-	SpellSchool,
-	WeaponType,
 	RangedWeaponType,
-	ItemSlot,
-	ItemQuality,
-} from '../core/proto/common';
-import { ResourceType } from '../core/proto/spell';
-import { RaidFilterOption, SourceFilterOption } from '../core/proto/ui';
-import { BulkSimItemSlot } from '../core/components/individual_sim_ui/bulk/utils';
-import { PresetConfigurationCategory } from '../core/components/individual_sim_ui/preset_configuration_picker';
+	Spec,
+	SpellSchool,
+	Stat,
+	WeaponType,
+} from '@generated/proto/common';
+import { ResourceType } from '@generated/proto/spell';
+import { RaidFilterOption, SourceFilterOption } from '@generated/proto/ui';
+import { BulkSimItemSlot } from '@sim/bulk/constants_auto_gen';
+import { LaunchStatus } from '@sim/constants/other';
+import { PresetConfigurationCategory } from '@sim/constants/preset_categories';
 
 export const statI18nKeys: Record<Stat, string> = {
 	[Stat.StatStrength]: 'strength',
@@ -204,19 +204,6 @@ export const itemQualityI18nKeys: Record<ItemQuality, string> = {
 	[ItemQuality.ItemQualityHeirloom]: 'heirloom',
 };
 
-// standardize keys regardless they are from backend or frontend
-export const backendMetricI18nKeys: Record<string, string> = {
-	'Chance of Death': 'cod',
-	DTPS: 'dtps',
-	TMI: 'tmi',
-	DPS: 'dps',
-	HPS: 'hps',
-	TPS: 'tps',
-	DUR: 'dur',
-	TTO: 'tto',
-	OOM: 'oom',
-};
-
 export const specI18nKeys: Record<Spec, string> = {
 	[Spec.SpecUnknown]: 'unknown',
 	// Druid
@@ -233,7 +220,8 @@ export const specI18nKeys: Record<Spec, string> = {
 	[Spec.SpecProtectionPaladin]: 'protection',
 	[Spec.SpecRetributionPaladin]: 'retribution',
 	// Priest
-	[Spec.SpecPriest]: 'priest',
+	[Spec.SpecDpsPriest]: 'dps',
+	[Spec.SpecHealerPriest]: 'healer',
 	// Rogue
 	[Spec.SpecRogue]: 'rogue',
 	// Shaman
@@ -249,6 +237,7 @@ export const specI18nKeys: Record<Spec, string> = {
 
 export const statusI18nKeys: Record<LaunchStatus, string> = {
 	[LaunchStatus.Unlaunched]: 'unlaunched',
+	[LaunchStatus.GearPlanner]: 'gear_planner',
 	[LaunchStatus.Alpha]: 'alpha',
 	[LaunchStatus.Beta]: 'beta',
 	[LaunchStatus.Launched]: 'launched',

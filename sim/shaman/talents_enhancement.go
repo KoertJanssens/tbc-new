@@ -3,6 +3,7 @@ package shaman
 import (
 	"time"
 
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
@@ -31,7 +32,7 @@ func (shaman *Shaman) applyAncestralKnowledge() {
 	if shaman.Talents.AncestralKnowledge == 0 {
 		return
 	}
-	shaman.MultiplyStat(stats.Mana, 1+(0.01*float64(shaman.Talents.AncestralKnowledge)))
+	shaman.MultiplyStat(stats.Mana, spellData.AncestralKnowledge.MultiplierAt(shaman.Talents.AncestralKnowledge))
 }
 
 func (shaman *Shaman) applyDualWield() {
@@ -45,7 +46,7 @@ func (shaman *Shaman) applyDualWieldSpecialization() {
 	if shaman.Talents.DualWieldSpecialization == 0 {
 		return
 	}
-	value := 2 * float64(shaman.Talents.DualWieldSpecialization)
+	value := spellData.DualWieldSpecialization.ValueAt(shaman.Talents.DualWieldSpecialization)
 	buffed := false
 	DWaura := shaman.RegisterAura(core.Aura{
 		Label:      "Dual Wield Specialization",
@@ -129,9 +130,10 @@ func (shaman *Shaman) applyFlurry() {
 	}).AttachMultiplyMeleeSpeed(attackSpeed)
 
 	shaman.MakeProcTriggerAura(core.ProcTrigger{
-		Name:     "Flurry Trigger",
-		Callback: core.CallbackOnSpellHitDealt,
-		ProcMask: core.ProcMaskMelee | core.ProcMaskMeleeProc,
+		Name:             "Flurry Trigger",
+		Callback:         core.CallbackOnSpellHitDealt,
+		ProcMask:         core.ProcMaskMelee,
+		CanProcFromProcs: true, // 16256, 16281-16284 carry the bit.
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			if result.Outcome.Matches(core.OutcomeCrit) {
 				flurryAura.Activate(sim)
@@ -155,7 +157,7 @@ func (shaman *Shaman) applyImprovedLightningShield() {
 	}
 	shaman.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
-		FloatValue: 0.05 * float64(shaman.Talents.ImprovedLightningShield),
+		FloatValue: spellData.ImprovedLightningShield.FractionAt(shaman.Talents.ImprovedLightningShield),
 		ClassMask:  SpellMaskLightningShield,
 	})
 }
@@ -166,7 +168,7 @@ func (shaman *Shaman) applyImprovedWeaponTotems() {
 	}
 	shaman.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
-		FloatValue: 0.06 * float64(shaman.Talents.ImprovedWeaponTotems),
+		FloatValue: spellData.ImprovedWeaponTotems.EffectAt(1).FractionAt(shaman.Talents.ImprovedWeaponTotems),
 		ClassMask:  SpellMaskFlametongueTotem,
 	})
 	// WF bonus in totems.go
@@ -177,14 +179,14 @@ func (shaman *Shaman) applyMentalQuickness() {
 		return
 	}
 	shaman.AddStaticMod(core.SpellModConfig{
-		Kind:       core.SpellMod_PowerCost_Pct,
+		Kind:       core.SpellMod_PowerCost_Pct_Add,
 		FloatValue: -0.02 * float64(shaman.Talents.MentalQuickness),
 		SpellFlag:  SpellFlagInstant,
 	})
 	core.MakePermanent(shaman.RegisterAura(core.Aura{
 		Label:      "Mental Quickness",
 		BuildPhase: core.CharacterBuildPhaseTalents,
-	})).AttachStatDependency(shaman.NewDynamicStatDependency(stats.AttackPower, stats.SpellDamage, 0.1*float64(shaman.Talents.MentalQuickness)))
+	})).AttachStatDependency(shaman.NewDynamicStatDependency(stats.AttackPower, stats.SpellDamage, spellData.MentalQuickness.Effect(shared.A_MOD_SPELL_DAMAGE_OF_ATTACK_POWER, 126).FractionAt(shaman.Talents.MentalQuickness)))
 }
 
 func (shaman *Shaman) applyShamanisticFocus() {
@@ -196,16 +198,17 @@ func (shaman *Shaman) applyShamanisticFocus() {
 		ActionID: core.ActionID{SpellID: 43339},
 		Duration: time.Second * 15,
 	}).AttachSpellMod(core.SpellModConfig{
-		Kind:       core.SpellMod_PowerCost_Pct,
+		Kind:       core.SpellMod_PowerCost_Pct_Add,
 		FloatValue: -0.6,
 		ClassMask:  SpellMaskShock,
 	})
 
 	shaman.MakeProcTriggerAura(core.ProcTrigger{
-		Name:     "Shamanistic Focus Trigger",
-		Callback: core.CallbackOnSpellHitDealt,
-		ProcMask: core.ProcMaskMeleeOrMeleeProc,
-		Outcome:  core.OutcomeCrit,
+		Name:             "Shamanistic Focus Trigger",
+		Callback:         core.CallbackOnSpellHitDealt,
+		ProcMask:         core.ProcMaskMelee,
+		CanProcFromProcs: true, // 43338 carries the bit.
+		Outcome:          core.OutcomeCrit,
 		Handler: func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) {
 			sfAura.Activate(sim)
 		},
@@ -221,11 +224,13 @@ func (shaman *Shaman) applyShamanisticFocus() {
 	})
 }
 
+var shamanisticRageRank = spellData.ShamanisticRage.BySpellID(30823)
+
 func (shaman *Shaman) applyShamanisticRage() {
 	if !shaman.Talents.ShamanisticRage {
 		return
 	}
-	actionId := core.ActionID{SpellID: 30823}
+	actionId := core.ActionID{SpellID: shamanisticRageRank.SpellID}
 	srManaMetric := shaman.NewManaMetrics(actionId)
 	shamRageAura := shaman.MakeProcTriggerAura(core.ProcTrigger{
 		Name:               "Shamanistic Rage",
@@ -248,11 +253,11 @@ func (shaman *Shaman) applyShamanisticRage() {
 		ClassSpellMask: SpellMaskShamanisticRage,
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: shamanisticRageRank.GCD,
 			},
 			CD: core.Cooldown{
 				Timer:    shaman.NewTimer(),
-				Duration: time.Second * 120,
+				Duration: shamanisticRageRank.Cooldown,
 			},
 		},
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, _ *core.Spell) {
@@ -281,7 +286,7 @@ func (shaman *Shaman) applyThunderingStrikes() {
 	}
 	shaman.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
-		FloatValue: 1 * float64(shaman.Talents.ThunderingStrikes),
+		FloatValue: spellData.ThunderingStrikes.ValueAt(shaman.Talents.ThunderingStrikes),
 		ProcMask:   core.ProcMaskMelee,
 	})
 }
@@ -296,7 +301,8 @@ func (shaman *Shaman) applyUnleashedRage() {
 	shaman.MakeProcTriggerAura(core.ProcTrigger{
 		Name:               "Unleashed Rage Trigger",
 		Callback:           core.CallbackOnSpellHitDealt,
-		ProcMask:           core.ProcMaskMeleeOrMeleeProc,
+		ProcMask:           core.ProcMaskMelee,
+		CanProcFromProcs:   true, // 30802, 30808-30811 carry the bit.
 		Outcome:            core.OutcomeCrit,
 		RequireDamageDealt: true,
 		Handler: func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) {
@@ -311,7 +317,7 @@ func (shaman *Shaman) applyWeaponMastery() {
 	}
 	shaman.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Pct,
-		FloatValue: 0.02 * float64(shaman.Talents.WeaponMastery),
+		FloatValue: spellData.WeaponMastery.FractionAt(shaman.Talents.WeaponMastery),
 		ProcMask:   core.ProcMaskMelee,
 	})
 }

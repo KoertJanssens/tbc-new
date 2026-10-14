@@ -1,14 +1,17 @@
 /** @type {import('vite').UserConfig} */
 
 import fs from 'fs';
-import { glob } from 'glob';
 import { IncomingMessage, ServerResponse } from 'http';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import tailwindcss from '@tailwindcss/vite';
+import react from '@vitejs/plugin-react';
 import { ConfigEnv, defineConfig, PluginOption, UserConfigExport } from 'vite';
+import { watchAndRun } from 'vite-plugin-watch-and-run';
 import { checker } from 'vite-plugin-checker';
 import i18nextLoader from 'vite-plugin-i18next-loader';
-import stylelint from 'vite-plugin-stylelint';
+
+import { SPEC_PAGE_TEMPLATE, specPages } from './tools/vite/spec_pages.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -16,12 +19,26 @@ const __dirname = path.dirname(__filename);
 export const BASE_PATH = path.resolve(__dirname, 'ui');
 export const OUT_DIR = path.join(__dirname, 'dist', 'tbc');
 
+// The ui/ path aliases. Mirrored by `compilerOptions.paths` in tsconfig.json and by the
+// layering rules in .oxlintrc.json; shared with vite.harness.mts from here so the two vite
+// configs cannot drift.
+export const UI_ALIASES: Record<string, string> = {
+	'@sim': path.resolve(BASE_PATH, 'sim'),
+	'@generated': path.resolve(BASE_PATH, 'generated'),
+	'@worker': path.resolve(BASE_PATH, 'worker'),
+	'@ui-kit': path.resolve(BASE_PATH, 'ui-kit'),
+	'@features': path.resolve(BASE_PATH, 'features'),
+	'@app': path.resolve(BASE_PATH, 'app'),
+	'@specs': path.resolve(BASE_PATH, 'specs'),
+	'@i18n': path.resolve(BASE_PATH, 'i18n'),
+};
+
 function serveExternalAssets() {
+	const simWorker = process.env.WASM_WORKER ? '/tbc/sim_worker.js' : '/tbc/local_worker.js';
 	const workerMappings = {
-		'/tbc/sim_worker.js': '/tbc/local_worker.js',
+		'/tbc/sim_worker.js': simWorker,
 		'/tbc/net_worker.js': '/tbc/net_worker.js',
-		'/tbc/lib.wasm': '/tbc/lib.wasm',
-		'/tbc/reforge_worker.js': '/tbc/reforge_worker.js',
+		'/tbc/lib.wasm.gz': '/tbc/lib.wasm.gz',
 		'/tbc/highs.wasm': '/tbc/highs.wasm',
 	};
 
@@ -30,9 +47,10 @@ function serveExternalAssets() {
 		configureServer(server) {
 			server.middlewares.use((req, res, next) => {
 				const url = req.url!;
+				const pathname = new URL(url, 'http://localhost').pathname;
 
-				if (Object.keys(workerMappings).includes(url)) {
-					const targetPath = workerMappings[url as keyof typeof workerMappings];
+				if (Object.keys(workerMappings).includes(pathname)) {
+					const targetPath = workerMappings[pathname as keyof typeof workerMappings];
 					const assetsPath = path.resolve(__dirname, './dist/tbc');
 					const requestedPath = path.join(assetsPath, targetPath.replace('/tbc/', ''));
 
@@ -40,18 +58,9 @@ function serveExternalAssets() {
 					return;
 				}
 
-				// Serve HiGHS chunk files
-				if (url.startsWith('/tbc/highs-') && url.endsWith('.js')) {
-					const assetsPath = path.resolve(__dirname, './dist/tbc');
-					const requestedPath = path.join(assetsPath, url.replace('/tbc/', ''));
-
-					serveFile(res, requestedPath);
-					return;
-				}
-
-				if (url.includes('/tbc/assets')) {
+				if (pathname.includes('/tbc/assets')) {
 					const assetsPath = path.resolve(__dirname, './assets');
-					const assetRelativePath = url.split('/tbc/assets')[1];
+					const assetRelativePath = pathname.split('/tbc/assets')[1];
 					const requestedPath = path.join(assetsPath, assetRelativePath);
 
 					serveFile(res, requestedPath);
@@ -107,9 +116,12 @@ export const getBaseConfig = ({ command, mode }: ConfigEnv) =>
 	({
 		base: '/tbc/',
 		root: BASE_PATH,
+		resolve: {
+			alias: { ...UI_ALIASES },
+		},
 		build: {
 			outDir: OUT_DIR,
-			minify: mode === 'development' ? false : 'terser',
+			minify: mode === 'development' ? false : 'oxc',
 			sourcemap: command === 'serve' ? 'inline' : false,
 			target: ['es2020'],
 		},
@@ -117,43 +129,57 @@ export const getBaseConfig = ({ command, mode }: ConfigEnv) =>
 
 export default defineConfig(({ command, mode }) => {
 	const baseConfig = getBaseConfig({ command, mode });
+	const watchedBackendFiles = [
+		path.resolve(__dirname, 'sim/core/character_constants.go'),
+		path.resolve(__dirname, 'sim/core/bulk/candidates.go'),
+		path.resolve(__dirname, 'tools/database/gen_character_constants_ts.go'),
+		path.resolve(__dirname, 'tools/database/gen_bulksim_constants.ts.go'),
+	];
+
 	return {
 		...baseConfig,
-		css: {
-			preprocessorOptions: {
-				scss: {
-					silenceDeprecations: ['import', 'global-builtin', 'color-functions'],
-				},
-			},
-		},
 		plugins: [
+			// Fast Refresh only: on vite 8 this plugin carries no transform of its own, it turns on
+			// `oxc.jsx.refresh` for `serve` and lets rolldown's native refresh wrapper instrument the
+			// modules. The `oxc` block below still states the transform for both commands.
+			react(),
+			tailwindcss(),
 			i18nextLoader({ namespaceResolution: 'basename', paths: ['assets/locales'] }),
+			watchAndRun([
+				{
+					name: 'Generate TypeScript from Go',
+					watch: watchedBackendFiles,
+					watchKind: ['ready', 'change'],
+					run: 'go run ./tools/database/gen_db -gen=go-to-ts',
+					delay: 0,
+					logs: ['trigger', 'end'],
+				},
+			]),
 			serveExternalAssets(),
+			specPages(BASE_PATH),
 			checker({
 				root: BASE_PATH,
-				typescript: true,
-				enableBuild: true,
-			}),
-			stylelint({
-				build: true,
-				lintInWorker: process.env.NODE_ENV === 'production',
-				include: ['ui/**/*.scss'],
-				configFile: path.resolve(__dirname, 'stylelint.config.mjs'),
+				typescript: { root: __dirname, tsconfigPath: 'tsconfig.json' },
+				// Type-checking during build is redundant: the makefile runs `tsc --noEmit` right before `vite build`.
+				enableBuild: false,
 			}),
 		],
-		esbuild: {
-			jsxInject: "import { element, fragment } from 'tsx-vanilla';",
+		oxc: {
+			jsx: {
+				runtime: 'automatic',
+				importSource: 'react',
+			},
 		},
 		build: {
 			...baseConfig.build,
 			rollupOptions: {
+				// The per-spec pages are added by the specPages plugin.
 				input: {
-					...glob.sync(path.resolve(BASE_PATH, '**/index.html').replace(/\\/g, '/')).reduce<Record<string, string>>((acc, cur) => {
-						const name = path.relative(__dirname, cur).split(path.sep).join('/');
-						acc[name] = cur;
-						return acc;
-					}, {}),
-					// Add shared.scss as a separate entry if needed or handle it separately
+					'ui/index.html': path.resolve(BASE_PATH, 'index.html'),
+					// The single spec page. `specPages` copies the processed result to
+					// `<class>/<spec>/index.html` and drops this path from the bundle; the key only
+					// names the page's js/css ([name] in the *FileNames below), not its html output.
+					spec_entry: path.resolve(BASE_PATH, SPEC_PAGE_TEMPLATE),
 				},
 				output: {
 					assetFileNames: () => 'bundle/[name]-[hash].style.css',

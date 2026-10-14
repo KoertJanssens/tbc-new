@@ -1,8 +1,6 @@
 package core
 
-import (
-	"github.com/wowsims/tbc/sim/core/stats"
-)
+import "github.com/wowsims/tbc/sim/core/stats"
 
 // This function should do 3 things:
 //  1. Set the Outcome of the hit effect.
@@ -61,9 +59,6 @@ func (spell *Spell) OutcomeMagicHitAndCritNoHitCounter(sim *Simulation, result *
 	spell.outcomeMagicHitAndCrit(sim, result, attackTable, false)
 }
 func (spell *Spell) outcomeMagicHitAndCrit(sim *Simulation, result *SpellResult, attackTable *AttackTable, countHits bool) {
-	if spell.CritMultiplier == 0 {
-		panic("Spell " + spell.ActionID.String() + " missing CritMultiplier")
-	}
 	if spell.MagicHitCheck(sim, attackTable) {
 		isPartialResist := result.DidResist()
 		if spell.MagicCritCheck(sim, result.Target) {
@@ -98,10 +93,6 @@ func (spell *Spell) OutcomeMagicCritNoHitCounter(sim *Simulation, result *SpellR
 	spell.outcomeMagicCrit(sim, result, at, false)
 }
 func (spell *Spell) outcomeMagicCrit(sim *Simulation, result *SpellResult, attackTable *AttackTable, countHits bool) {
-	if spell.CritMultiplier == 0 {
-		panic("Spell " + spell.ActionID.String() + " missing CritMultiplier")
-	}
-
 	isPartialResist := result.DidResist()
 	if spell.MagicCritCheck(sim, result.Target) {
 		result.Outcome = OutcomeCrit
@@ -143,10 +134,6 @@ func (spell *Spell) OutcomeHealingCritNoHitCounter(sim *Simulation, result *Spel
 	spell.outcomeHealingCrit(sim, result, nil, false)
 }
 func (spell *Spell) outcomeHealingCrit(sim *Simulation, result *SpellResult, attackTable *AttackTable, countHits bool) {
-	if spell.CritMultiplier == 0 {
-		panic("Spell " + spell.ActionID.String() + " missing CritMultiplier")
-	}
-
 	if spell.HealingCritCheck(sim) {
 		result.Outcome = OutcomeCrit
 		result.Damage *= spell.CritDamageMultiplier(attackTable)
@@ -671,9 +658,6 @@ func (result *SpellResult) applyAttackTableGlance(spell *Spell, attackTable *Att
 }
 
 func (result *SpellResult) applyAttackTableCrit(spell *Spell, attackTable *AttackTable, roll float64, chance *float64, countHits bool) bool {
-	if spell.CritMultiplier == 0 {
-		panic("Spell " + spell.ActionID.String() + " missing CritMultiplier")
-	}
 	*chance += spell.PhysicalCritChance(attackTable)
 
 	if roll < *chance {
@@ -692,9 +676,6 @@ func (result *SpellResult) applyAttackTableCrit(spell *Spell, attackTable *Attac
 }
 
 func (result *SpellResult) applyAttackTableCritSeparateRoll(sim *Simulation, spell *Spell, attackTable *AttackTable, countHits bool) bool {
-	if spell.CritMultiplier == 0 {
-		panic("Spell " + spell.ActionID.String() + " missing CritMultiplier")
-	}
 	if spell.PhysicalCritCheck(sim, attackTable) {
 		isPartialResist := result.DidResist()
 		result.Outcome = OutcomeCrit
@@ -792,16 +773,25 @@ func (result *SpellResult) applyEnemyAttackTableParry(spell *Spell, attackTable 
 	return false
 }
 
-func (result *SpellResult) applyEnemyAttackTableCrit(spell *Spell, _ *AttackTable, roll float64, chance *float64, countHits bool) bool {
-	critPercent := spell.Unit.GetStat(stats.PhysicalCritPercent) + spell.BonusCritPercent
-
+func (result *SpellResult) applyEnemyAttackTableCrit(spell *Spell, attackTable *AttackTable, roll float64, chance *float64, countHits bool) bool {
+	critPercent := spell.Unit.stats[stats.PhysicalCritPercent] + spell.BonusCritPercent
 	if spell.ProcMask.Matches(ProcMaskRanged) {
-		critPercent += spell.Unit.GetStat(stats.RangedCritPercent)
+		critPercent += spell.Unit.stats[stats.RangedCritPercent]
+	}
+	chances := getCritChances(critPercent/100-attackTable.MeleeCritSuppression, result.Target)
+	*chance += chances.suppressed
+	if roll < *chance {
+		result.Outcome = OutcomeSuppressedCrit
+		if countHits {
+			spell.SpellMetrics[result.Target.UnitIndex].Hits++
+			if result.DidResist() {
+				spell.SpellMetrics[result.Target.UnitIndex].ResistedHits++
+			}
+		}
+		return true
 	}
 
-	critChance := critPercent / 100
-	critChance -= result.Target.PseudoStats.ReducedCritTakenPercent
-	*chance += max(0, critChance)
+	*chance += chances.actual
 
 	if roll < *chance {
 		isPartialResist := result.DidResist()
@@ -852,10 +842,6 @@ func (spell *Spell) OutcomeExpectedMagicHit(_ *Simulation, result *SpellResult, 
 }
 
 func (spell *Spell) OutcomeExpectedMagicCrit(_ *Simulation, result *SpellResult, attackTable *AttackTable) {
-	if spell.CritMultiplier == 0 {
-		panic("Spell " + spell.ActionID.String() + " missing CritMultiplier")
-	}
-
 	averageMultiplier := 1.0
 	averageMultiplier += spell.SpellCritChance(result.Target) * (spell.CritDamageMultiplier(attackTable) - 1)
 
@@ -863,10 +849,6 @@ func (spell *Spell) OutcomeExpectedMagicCrit(_ *Simulation, result *SpellResult,
 }
 
 func (spell *Spell) OutcomeExpectedMagicHitAndCrit(_ *Simulation, result *SpellResult, attackTable *AttackTable) {
-	if spell.CritMultiplier == 0 {
-		panic("Spell " + spell.ActionID.String() + " missing CritMultiplier")
-	}
-
 	averageMultiplier := 1.0
 	averageMultiplier -= spell.SpellChanceToMiss(attackTable)
 	averageMultiplier += averageMultiplier * spell.SpellCritChance(result.Target) * (spell.CritDamageMultiplier(attackTable) - 1)
@@ -875,10 +857,6 @@ func (spell *Spell) OutcomeExpectedMagicHitAndCrit(_ *Simulation, result *SpellR
 }
 
 func (spell *Spell) OutcomeExpectedPhysicalCrit(_ *Simulation, result *SpellResult, attackTable *AttackTable) {
-	if spell.CritMultiplier == 0 {
-		panic("Spell " + spell.ActionID.String() + " missing CritMultiplier")
-	}
-
 	averageMultiplier := 1.0
 	averageMultiplier += spell.PhysicalCritChance(attackTable) * (spell.CritDamageMultiplier(attackTable) - 1)
 

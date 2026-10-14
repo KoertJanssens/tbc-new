@@ -3,9 +3,12 @@ package shaman
 import (
 	"time"
 
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/stats"
 )
+
+var totemOfWrathRank = spellData.TotemOfWrath.BySpellID(30706)
 
 func (shaman *Shaman) ApplyElementalTalents() {
 	shaman.applyCallOfFlame()
@@ -31,7 +34,7 @@ func (shaman *Shaman) applyCallOfFlame() {
 	}
 	shaman.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
-		FloatValue: 0.05 * float64(shaman.Talents.CallOfFlame),
+		FloatValue: spellData.CallOfFlame.FractionAt(shaman.Talents.CallOfFlame),
 		ClassMask:  SpellMaskFireTotem,
 	})
 }
@@ -41,7 +44,7 @@ func (shaman *Shaman) applyCallOfThunder() {
 	}
 	shaman.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
-		FloatValue: 1 * float64(shaman.Talents.CallOfThunder),
+		FloatValue: spellData.CallOfThunder.ValueAt(shaman.Talents.CallOfThunder),
 		ClassMask:  SpellMaskLightningBolt | SpellMaskChainLightning | SpellMaskOverload,
 	})
 }
@@ -51,7 +54,7 @@ func (shaman *Shaman) applyConcussion() {
 	}
 	shaman.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
-		FloatValue: 0.01 * float64(shaman.Talents.Concussion),
+		FloatValue: spellData.Concussion.Effect(shared.A_ADD_PCT_MODIFIER, shared.SPELLMOD_DAMAGE).FractionAt(shaman.Talents.Concussion),
 		ClassMask:  SpellMaskLightningBolt | SpellMaskChainLightning | SpellMaskOverload | SpellMaskShock,
 	})
 }
@@ -60,7 +63,7 @@ func (shaman *Shaman) applyConvection() {
 		return
 	}
 	shaman.AddStaticMod(core.SpellModConfig{
-		Kind:       core.SpellMod_PowerCost_Pct,
+		Kind:       core.SpellMod_PowerCost_Pct_Add,
 		FloatValue: -0.02 * float64(shaman.Talents.Convection),
 		ClassMask:  SpellMaskLightningBolt | SpellMaskChainLightning | SpellMaskOverload | SpellMaskShock,
 	})
@@ -79,10 +82,11 @@ func (shaman *Shaman) applyElementalDevastation() {
 		ProcMask:   core.ProcMaskMelee,
 	})
 	shaman.MakeProcTriggerAura(core.ProcTrigger{
-		Name:     "Elemental Devastation Trigger",
-		Callback: core.CallbackOnSpellHitDealt,
-		ProcMask: core.ProcMaskSpellDamage,
-		Outcome:  core.OutcomeCrit,
+		Name:             "Elemental Devastation Trigger",
+		CanProcFromProcs: true, // 29179/29180/30160 carry the bit.
+		Callback:         core.CallbackOnSpellHitDealt,
+		ProcMask:         core.ProcMaskSpellDamage,
+		Outcome:          core.OutcomeCrit,
 		Handler: func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) {
 			critBuffAura.Activate(sim)
 		},
@@ -115,7 +119,7 @@ func (shaman *Shaman) applyElementalFocus() {
 			aura.RemoveStack(sim)
 		},
 	}).AttachSpellMod(core.SpellModConfig{
-		Kind:       core.SpellMod_PowerCost_Pct,
+		Kind:       core.SpellMod_PowerCost_Pct_Add,
 		ClassMask:  canConsumeSpells,
 		FloatValue: -0.4,
 	})
@@ -123,6 +127,7 @@ func (shaman *Shaman) applyElementalFocus() {
 	shaman.MakeProcTriggerAura(core.ProcTrigger{
 		Name:               "Elemental Focus",
 		Callback:           core.CallbackOnSpellHitDealt,
+		CanProcFromProcs:   true, // 16164 carries the bit: Lightning Overload crits count.
 		Outcome:            core.OutcomeCrit,
 		TriggerImmediately: true,
 
@@ -141,10 +146,13 @@ func (shaman *Shaman) applyElementalFury() {
 	if !shaman.Talents.ElementalFury {
 		return
 	}
+	// The talent's class mask (16089) also covers Flametongue Attack (bit 21) and Frostbrand
+	// Attack (bit 24): shamans' Flametongue Weapon hits crit for 2.0x in logs while the same
+	// attack granted by Flametongue Totem crits for 1.5x on other players.
 	shaman.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_CritMultiplier_Flat,
 		FloatValue: 1.0,
-		ClassMask:  SpellMaskFireTotem | SpellMaskFire | SpellMaskNature | SpellMaskFrost,
+		ClassMask:  SpellMaskFireTotem | SpellMaskFire | SpellMaskNature | SpellMaskFrost | SpellMaskFlametongueWeapon | SpellMaskFrostbrandWeapon,
 	})
 }
 func (shaman *Shaman) applyElementalMastery() {
@@ -167,14 +175,15 @@ func (shaman *Shaman) applyElementalMastery() {
 		FloatValue: 100,
 		ClassMask:  SpellMaskFire | SpellMaskFrost | SpellMaskNature,
 	}).AttachSpellMod(core.SpellModConfig{
-		Kind:       core.SpellMod_PowerCost_Pct,
-		FloatValue: -2,
+		Kind:       core.SpellMod_PowerCost_Pct_Add,
+		FloatValue: -1,
 		ClassMask:  SpellMaskFire | SpellMaskFrost | SpellMaskNature,
 	})
 
 	spell := shaman.RegisterSpell(core.SpellConfig{
 		ActionID:    core.ActionID{SpellID: 16166},
 		SpellSchool: core.SpellSchoolNature,
+		DefenseType: core.DefenseTypeMagic,
 		Flags:       core.SpellFlagAPL | core.SpellFlagNoOnCastComplete | SpellFlagInstant,
 		Cast: core.CastConfig{
 			CD: core.Cooldown{
@@ -197,9 +206,10 @@ func (shaman *Shaman) applyElementalPrecision() {
 		return
 	}
 
-	shaman.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexFire] += 2 * float64(shaman.Talents.ElementalPrecision)
-	shaman.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexFrost] += 2 * float64(shaman.Talents.ElementalPrecision)
-	shaman.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexNature] += 2 * float64(shaman.Talents.ElementalPrecision)
+	hitPercent := spellData.ElementalPrecision.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_RESIST_MISS_CHANCE).ValueAt(shaman.Talents.ElementalPrecision)
+	shaman.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexFire] += hitPercent
+	shaman.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexFrost] += hitPercent
+	shaman.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexNature] += hitPercent
 
 	shaman.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_ThreatMultiplier_Pct,
@@ -249,7 +259,7 @@ func (shaman *Shaman) applyTotemOfWrath() {
 	}
 	duration := time.Second * 120
 	value := 3.0
-	config := shaman.newTotemSpellConfig(int32(shaman.GetInitialStat(stats.Mana)*0.05), 30706, SpellMaskBasicTotem)
+	config := shaman.newTotemSpellConfig(int32(shaman.GetInitialStat(stats.Mana)*0.05), totemOfWrathRank.SpellID, SpellMaskBasicTotem, totemOfWrathRank.GCD)
 	buffAura := shaman.RegisterAura(core.Aura{
 		Label:      "Totem Of Wrath (Self)",
 		ActionID:   config.ActionID,

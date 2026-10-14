@@ -24,13 +24,13 @@ func (rogue *Rogue) registerDeadlyPoisonSpell() {
 	rogue.DeadlyPoison = rogue.GetOrRegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 27187},
 		SpellSchool:    core.SpellSchoolNature,
+		DefenseType:    core.DefenseTypeMagic,
 		ProcMask:       core.ProcMaskSpellDamageProc,
 		ClassSpellMask: RogueSpellDeadlyPoison,
-		Flags:          core.SpellFlagPoison | core.SpellFlagPassiveSpell,
+		Flags:          core.SpellFlagPoison | core.SpellFlagPassiveSpell | core.SpellFlagProc,
 
 		DamageMultiplier:         1,
 		DamageMultiplierAdditive: 1,
-		CritMultiplier:           1,
 		ThreatMultiplier:         1,
 
 		Dot: core.DotConfig{
@@ -73,13 +73,13 @@ func (rogue *Rogue) registerDeadlyPoisonSpell() {
 	rogue.ShivDeadlyPoison = rogue.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 27187, Tag: 1},
 		SpellSchool:    core.SpellSchoolNature,
+		DefenseType:    core.DefenseTypeMagic,
 		ProcMask:       core.ProcMaskSpellDamageProc,
 		ClassSpellMask: RogueSpellDeadlyPoison,
-		Flags:          core.SpellFlagPoison | core.SpellFlagPassiveSpell,
+		Flags:          core.SpellFlagPoison | core.SpellFlagPassiveSpell | core.SpellFlagProc,
 
 		DamageMultiplier:         1,
 		DamageMultiplierAdditive: 1,
-		CritMultiplier:           1,
 		ThreatMultiplier:         1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
@@ -124,13 +124,13 @@ func (rogue *Rogue) registerWoundPoisonSpell() {
 	wpConfig := core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 27189},
 		SpellSchool:    core.SpellSchoolNature,
+		DefenseType:    core.DefenseTypeMagic,
 		ProcMask:       core.ProcMaskSpellDamageProc,
 		ClassSpellMask: RogueSpellWoundPoison,
-		Flags:          core.SpellFlagPoison | core.SpellFlagPassiveSpell,
+		Flags:          core.SpellFlagPoison | core.SpellFlagPassiveSpell | core.SpellFlagProc,
 
 		DamageMultiplier:         1,
 		DamageMultiplierAdditive: 1,
-		CritMultiplier:           rogue.DefaultSpellCritMultiplier(),
 		ThreatMultiplier:         1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
@@ -159,13 +159,13 @@ func (rogue *Rogue) registerInstantPoisonSpell() {
 	ipConfig := core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 26890},
 		SpellSchool:    core.SpellSchoolNature,
+		DefenseType:    core.DefenseTypeMagic,
 		ProcMask:       core.ProcMaskSpellDamageProc,
 		ClassSpellMask: RogueSpellInstantPoison,
-		Flags:          core.SpellFlagPoison | core.SpellFlagPassiveSpell,
+		Flags:          core.SpellFlagPoison | core.SpellFlagPassiveSpell | core.SpellFlagProc,
 
 		DamageMultiplier:         1,
 		DamageMultiplierAdditive: 1,
-		CritMultiplier:           rogue.DefaultSpellCritMultiplier(),
 		ThreatMultiplier:         1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
@@ -195,7 +195,7 @@ func (rogue *Rogue) applyDeadlyPoison() {
 	if procMask == core.ProcMaskUnknown {
 		return
 	}
-	pph := 0.3 + 0.02*float64(rogue.Talents.ImprovedPoisons)
+	pph := 0.3 + spellData.ImprovedPoisons.FractionAt(rogue.Talents.ImprovedPoisons)
 	rogue.deadlyPoisonPPHM = rogue.NewFixedProcChanceManager(pph, procMask)
 
 	rogue.MakeProcTriggerAura(core.ProcTrigger{
@@ -204,6 +204,7 @@ func (rogue *Rogue) applyDeadlyPoison() {
 		Callback:           core.CallbackOnSpellHitDealt,
 		TriggerImmediately: true,
 		ProcMask:           procMask,
+		IsWeaponProc:       true,
 		DPM:                rogue.deadlyPoisonPPHM,
 
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
@@ -217,7 +218,7 @@ func (rogue *Rogue) applyWoundPoison() {
 	if procMask == core.ProcMaskUnknown {
 		return
 	}
-	pph := 0.3 + 0.02*float64(rogue.Talents.ImprovedPoisons)
+	pph := 0.3 + spellData.ImprovedPoisons.FractionAt(rogue.Talents.ImprovedPoisons)
 	rogue.woundPoisonPPHM = rogue.NewFixedProcChanceManager(pph, procMask)
 
 	rogue.MakeProcTriggerAura(core.ProcTrigger{
@@ -226,6 +227,7 @@ func (rogue *Rogue) applyWoundPoison() {
 		Callback:           core.CallbackOnSpellHitDealt,
 		TriggerImmediately: true,
 		ProcMask:           procMask,
+		IsWeaponProc:       true,
 		DPM:                rogue.woundPoisonPPHM,
 
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
@@ -239,7 +241,7 @@ func (rogue *Rogue) applyInstantPoison() {
 	if procMask == core.ProcMaskUnknown {
 		return
 	}
-	pph := 0.2 + 0.02*float64(rogue.Talents.ImprovedPoisons)
+	pph := 0.2 + spellData.ImprovedPoisons.FractionAt(rogue.Talents.ImprovedPoisons)
 	rogue.instantPoisonPPHM = rogue.NewFixedProcChanceManager(pph, procMask)
 
 	rogue.MakeProcTriggerAura(core.ProcTrigger{
@@ -248,6 +250,7 @@ func (rogue *Rogue) applyInstantPoison() {
 		Callback:           core.CallbackOnSpellHitDealt,
 		TriggerImmediately: true,
 		ProcMask:           procMask,
+		IsWeaponProc:       true,
 		DPM:                rogue.instantPoisonPPHM,
 
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {

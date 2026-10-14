@@ -21,10 +21,11 @@ func init() {
 		procAura := character.NewTemporaryStatsAura("Focus", core.ActionID{SpellID: 18803}, stats.Stats{stats.SpellHasteRating: 320}, time.Second*4)
 
 		character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:       "Mystical Skyfire Diamond",
-			ProcChance: 0.15,
-			ICD:        time.Second * 35,
-			Callback:   core.CallbackOnCastComplete,
+			Name:            "Mystical Skyfire Diamond",
+			ProcChance:      0.15,
+			ClassSpellsOnly: true,
+			ICD:             time.Second * 35,
+			Callback:        core.CallbackOnCastComplete,
 			Handler: func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) {
 				procAura.Activate(sim)
 			},

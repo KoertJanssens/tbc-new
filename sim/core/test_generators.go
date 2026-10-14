@@ -280,7 +280,9 @@ func (filter *ItemFilter) Matches(item Item, equipChecksOnly bool) bool {
 func (filter *ItemFilter) FindAllItems() []Item {
 	var filteredItems []Item
 
-	for _, item := range ItemsByID {
+	dbMu.RLock()
+	defer dbMu.RUnlock()
+	for _, item := range itemsByID {
 		if filter.Matches(item, false) {
 			filteredItems = append(filteredItems, item)
 		}
@@ -306,7 +308,9 @@ func (filter *ItemFilter) FindAllSets() []*ItemSet {
 func (filter *ItemFilter) FindAllMetaGems() []Gem {
 	var filteredGems []Gem
 
-	for _, gem := range GemsByID {
+	dbMu.RLock()
+	defer dbMu.RUnlock()
+	for _, gem := range gemsByID {
 		if gem.Color == proto.GemColor_GemColorMeta {
 			if !strings.Contains(gem.Name, "Skyfire") &&
 				!strings.Contains(gem.Name, "Earthstorm") &&
@@ -326,13 +330,12 @@ func (filter *ItemFilter) FindAllEnchants() []Enchant {
 	})
 
 	return MapSlice(filteredEnchantIDs, func(id int32) Enchant {
-		enchant, ok := EnchantsByEffectID[id]
-
-		if !ok {
+		enchant := GetEnchantByEffectID(id)
+		if enchant == nil {
 			panic(fmt.Sprintf("No DB data for enchant with id: %d", id))
 		}
 
-		return enchant
+		return *enchant
 	})
 }
 
@@ -529,9 +532,60 @@ type CharacterSuiteConfig struct {
 	EPReferenceStat    proto.Stat
 }
 
+// defaultPlayerAndRaid builds the suite's default setup: the default race, gear, talents, spec
+// options and rotation, with full buffs unless the config sets its own.
+func (config CharacterSuiteConfig) defaultPlayerAndRaid() (*proto.Player, *proto.Raid) {
+	individualBuffs := Ternary(config.IndividualBuffs != nil, config.IndividualBuffs, FullIndividualBuffs)
+	raidBuffs := Ternary(config.RaidBuffs != nil, config.RaidBuffs, FullRaidBuffs)
+	partyBuffs := Ternary(config.PartyBuffs != nil, config.PartyBuffs, FullPartyBuffs)
+	debuffs := Ternary(config.Debuffs != nil, config.Debuffs, FullDebuffs)
+
+	defaultPlayer := WithSpec(
+		&proto.Player{
+			Class:          config.Class,
+			Race:           config.Race,
+			Equipment:      config.GearSet.GearSet,
+			Consumables:    config.Consumables,
+			Buffs:          individualBuffs,
+			TalentsString:  config.Talents,
+			Profession1:    Ternary(config.Profession1 != proto.Profession_ProfessionUnknown, config.Profession1, proto.Profession_Engineering),
+			Profession2:    config.Profession2,
+			Rotation:       config.Rotation.Rotation,
+			ItemSwap:       config.ItemSwapSet.ItemSwap,
+			EnableItemSwap: config.ItemSwapSet.ItemSwap != nil,
+			Cooldowns:      config.Cooldowns,
+			HealingModel:   config.HealingModel,
+
+			InFrontOfTarget:    config.InFrontOfTarget,
+			DistanceFromTarget: config.StartingDistance,
+			ReactionTimeMs:     TernaryInt32(config.ReactionTimeMs != 0, config.ReactionTimeMs, 100),
+			ChannelClipDelayMs: TernaryInt32(config.ChannelClipDelayMs != 0, config.ChannelClipDelayMs, 50),
+		},
+		config.SpecOptions.SpecOptions)
+
+	defaultRaid := SinglePlayerRaidProto(defaultPlayer, partyBuffs, raidBuffs, debuffs)
+	if config.IsTank {
+		if config.Tanks != nil {
+			defaultRaid.Tanks = config.Tanks
+		} else {
+			defaultRaid.Tanks = append(defaultRaid.Tanks, &proto.UnitReference{Type: proto.UnitReference_Player, Index: 0})
+		}
+	}
+	defaultRaid.TargetDummies = TernaryInt32(config.TargetDummies != 0, config.TargetDummies, 0)
+	defaultRaid.NumActiveParties = min(5, int32(math.Round(float64(defaultRaid.TargetDummies)/5)))
+	for range defaultRaid.NumActiveParties - 1 {
+		defaultRaid.Parties = append(defaultRaid.Parties, &proto.Party{})
+	}
+	if config.IsHealer && defaultRaid.TargetDummies == 0 {
+		defaultRaid.TargetDummies = 1
+	}
+
+	return defaultPlayer, defaultRaid
+}
+
 // FullCharacterTestSuiteGenerator generates a full test suite for a character.
 // Also accepts JSON build config, Example:
-// core.GetTestBuildFromJSON(proto.Class_ClassWarrior, "../../../ui/warrior/arms/builds", "default", ItemFilter, proto.Stat_StatStrength, nil)
+// core.GetTestBuildFromJSON(proto.Class_ClassWarrior, "../../../ui/specs/warrior/arms/builds", "default", ItemFilter, proto.Stat_StatStrength, nil)
 func FullCharacterTestSuiteGenerator(configs []CharacterSuiteConfig) []TestGenerator {
 	testIndex := 0
 	return MapSlice(configs, func(config CharacterSuiteConfig) TestGenerator {
@@ -551,45 +605,7 @@ func FullCharacterTestSuiteGenerator(configs []CharacterSuiteConfig) []TestGener
 		partyBuffs := Ternary(config.PartyBuffs != nil, config.PartyBuffs, FullPartyBuffs)
 		debuffs := Ternary(config.Debuffs != nil, config.Debuffs, FullDebuffs)
 
-		defaultPlayer := WithSpec(
-			&proto.Player{
-				Class:          config.Class,
-				Race:           config.Race,
-				Equipment:      config.GearSet.GearSet,
-				Consumables:    config.Consumables,
-				Buffs:          individualBuffs,
-				TalentsString:  config.Talents,
-				Profession1:    Ternary(config.Profession1 != proto.Profession_ProfessionUnknown, config.Profession1, proto.Profession_Engineering),
-				Profession2:    config.Profession2,
-				Rotation:       config.Rotation.Rotation,
-				ItemSwap:       config.ItemSwapSet.ItemSwap,
-				EnableItemSwap: config.ItemSwapSet.ItemSwap != nil,
-				Cooldowns:      config.Cooldowns,
-				HealingModel:   config.HealingModel,
-
-				InFrontOfTarget:    config.InFrontOfTarget,
-				DistanceFromTarget: config.StartingDistance,
-				ReactionTimeMs:     TernaryInt32(config.ReactionTimeMs != 0, config.ReactionTimeMs, 100),
-				ChannelClipDelayMs: TernaryInt32(config.ChannelClipDelayMs != 0, config.ChannelClipDelayMs, 50),
-			},
-			config.SpecOptions.SpecOptions)
-
-		defaultRaid := SinglePlayerRaidProto(defaultPlayer, partyBuffs, raidBuffs, debuffs)
-		if config.IsTank {
-			if config.Tanks != nil {
-				defaultRaid.Tanks = config.Tanks
-			} else {
-				defaultRaid.Tanks = append(defaultRaid.Tanks, &proto.UnitReference{Type: proto.UnitReference_Player, Index: 0})
-			}
-		}
-		defaultRaid.TargetDummies = TernaryInt32(config.TargetDummies != 0, config.TargetDummies, 0)
-		defaultRaid.NumActiveParties = min(5, int32(math.Round(float64(defaultRaid.TargetDummies)/5)))
-		for range defaultRaid.NumActiveParties - 1 {
-			defaultRaid.Parties = append(defaultRaid.Parties, &proto.Party{})
-		}
-		if config.IsHealer && defaultRaid.TargetDummies == 0 {
-			defaultRaid.TargetDummies = 1
-		}
+		defaultPlayer, defaultRaid := config.defaultPlayerAndRaid()
 
 		generator := &CombinedTestGenerator{}
 		// We only run this for the first test

@@ -6,9 +6,11 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var blizzardRank = spellData.Blizzard.BySpellID(27085)
+
 func (mage *Mage) registerBlizzardSpell() {
 
-	blizzardActionId := core.ActionID{SpellID: 27085}
+	blizzardActionId := core.ActionID{SpellID: blizzardRank.SpellID}
 
 	// https://wago.tools/db2/SpellEffect?build=2.5.5.65295&filter%5BSpellID%5D=42208
 	blizzardCoefficient := 0.11900000274
@@ -16,31 +18,32 @@ func (mage *Mage) registerBlizzardSpell() {
 	blizzardTickSpell := mage.RegisterSpell(core.SpellConfig{
 		ActionID:       blizzardActionId,
 		SpellSchool:    core.SpellSchoolFrost,
+		DefenseType:    core.DefenseTypeMagic,
 		ProcMask:       core.ProcMaskSpellDamage,
 		ClassSpellMask: MageSpellBlizzard,
 
 		DamageMultiplier: 1,
-		CritMultiplier:   mage.DefaultSpellCritMultiplier(),
 		BonusCoefficient: blizzardCoefficient,
 		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, spell *core.Spell) {
-			spell.CalcAndDealAoeDamage(sim, 184, spell.OutcomeMagicHitAndCrit)
+			spell.CalcAndDealAoeDamage(sim, 184, spell.OutcomeMagicHit)
 		},
 	})
 
 	mage.RegisterSpell(core.SpellConfig{
 		ActionID:       blizzardActionId,
 		SpellSchool:    core.SpellSchoolFrost,
+		DefenseType:    core.DefenseTypeMagic,
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagChanneled | core.SpellFlagAPL,
 		ClassSpellMask: MageSpellBlizzard,
 		ManaCost: core.ManaCostOptions{
-			FlatCost: 1645,
+			FlatCost: blizzardRank.Cost,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: blizzardRank.GCD,
 			},
 		},
 		Dot: core.DotConfig{

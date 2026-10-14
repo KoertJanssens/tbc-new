@@ -14,24 +14,23 @@ const (
 
 type ShamSpellConfig struct {
 	ActionID            core.ActionID
+	Rank                int32
 	BaseFlatCost        int32
 	BaseCastTime        time.Duration
 	IsElementalOverload bool
 	BonusCoefficient    float64
 	BounceReduction     float64
 	SpellSchool         core.SpellSchool
-	Overloads           *[][]*core.Spell
+	Overloads           map[int32][]*core.Spell
 	ClassSpellMask      int64
 }
 
 // Shared precomputation logic for LB and CL.
 // Needs isElementalOverload, actionID, BaseFlatCost, baseCastTime, bonusCoefficient fields of the shamSpellConfig
 func (shaman *Shaman) newElectricSpellConfig(config ShamSpellConfig) core.SpellConfig {
-	mask := core.ProcMaskSpellDamage
 	flags := SpellFlagShamanSpell | SpellFlagFocusable
 	if config.IsElementalOverload {
-		mask = core.ProcMaskSpellProc
-		flags |= core.SpellFlagPassiveSpell
+		flags |= core.SpellFlagPassiveSpell | core.SpellFlagProc
 	} else {
 		flags |= core.SpellFlagAPL
 	}
@@ -39,9 +38,11 @@ func (shaman *Shaman) newElectricSpellConfig(config ShamSpellConfig) core.SpellC
 	spell := core.SpellConfig{
 		ActionID:       config.ActionID,
 		SpellSchool:    core.SpellSchoolNature,
-		ProcMask:       mask,
+		DefenseType:    core.DefenseTypeMagic,
+		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          flags,
 		ClassSpellMask: config.ClassSpellMask,
+		Rank:           config.Rank,
 
 		ManaCost: core.ManaCostOptions{
 			FlatCost: core.TernaryInt32(config.IsElementalOverload, 0, config.BaseFlatCost),
@@ -60,7 +61,6 @@ func (shaman *Shaman) newElectricSpellConfig(config ShamSpellConfig) core.SpellC
 		},
 
 		DamageMultiplier: 1,
-		CritMultiplier:   shaman.DefaultSpellCritMultiplier(),
 		BonusCoefficient: config.BonusCoefficient,
 		ThreatMultiplier: 1,
 	}

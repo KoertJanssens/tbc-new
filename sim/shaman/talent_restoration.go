@@ -52,6 +52,7 @@ func (shaman *Shaman) applyNaturesSwiftness() {
 	shaman.RegisterSpell(core.SpellConfig{
 		ActionID:    core.ActionID{SpellID: 16188},
 		SpellSchool: core.SpellSchoolPhysical,
+		DefenseType: core.DefenseTypeMagic,
 		Flags:       core.SpellFlagAPL | core.SpellFlagNoOnCastComplete | SpellFlagInstant,
 		Cast: core.CastConfig{
 			CD: core.Cooldown{
@@ -78,7 +79,7 @@ func (shaman *Shaman) applyTidalMastery() {
 	}
 	shaman.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
-		FloatValue: 1 * float64(shaman.Talents.TidalMastery),
+		FloatValue: spellData.TidalMastery.ValueAt(shaman.Talents.TidalMastery),
 		ClassMask:  SpellMaskChainLightning | SpellMaskLightningBolt | SpellMaskLightningShield | SpellMaskOverload,
 	})
 }
@@ -88,7 +89,7 @@ func (shaman *Shaman) applyTotemicFocus() {
 		return
 	}
 	shaman.AddStaticMod(core.SpellModConfig{
-		Kind:       core.SpellMod_PowerCost_Pct,
+		Kind:       core.SpellMod_PowerCost_Pct_Add,
 		FloatValue: -0.05 * float64(shaman.Talents.TotemicFocus),
 		ClassMask:  SpellMaskTotem,
 	})

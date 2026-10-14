@@ -6,20 +6,23 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var arcaneMissilesRank = spellData.ArcaneMissiles.BySpellID(38699)
+
 func (mage *Mage) registerArcaneMissilesSpell() {
 	// Values found at https://wago.tools/db2/SpellEffect?build=2.5.5.65295&filter%5BSpellID%5D=exact%253A7268
 	arcaneMissilesCoefficient := 0.28600001335
-	actionID := core.ActionID{SpellID: 38699}
+	actionID := core.ActionID{SpellID: arcaneMissilesRank.SpellID}
 
 	arcaneMissilesTickSpell := mage.GetOrRegisterSpell(core.SpellConfig{
 		ActionID:       actionID.WithTag(1),
 		SpellSchool:    core.SpellSchoolArcane,
+		DefenseType:    core.DefenseTypeMagic, // Arcane Missile (7268), the real damage spell behind this tick's ActionID (38699)
 		ProcMask:       core.ProcMaskSpellDamage,
 		ClassSpellMask: MageSpellArcaneMissilesTick,
-		MissileSpeed:   20,
+		// The channel itself carries no speed - the missile spell does, and it is not a ranked row.
+		MissileSpeed: 20,
 
 		DamageMultiplier: 1,
-		CritMultiplier:   mage.DefaultSpellCritMultiplier(),
 		ThreatMultiplier: 1,
 		BonusCoefficient: arcaneMissilesCoefficient,
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
@@ -40,12 +43,12 @@ func (mage *Mage) registerArcaneMissilesSpell() {
 		DamageMultiplier: 0,
 
 		ManaCost: core.ManaCostOptions{
-			FlatCost: 740,
+			FlatCost: arcaneMissilesRank.Cost,
 		},
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: arcaneMissilesRank.GCD,
 			},
 		},
 

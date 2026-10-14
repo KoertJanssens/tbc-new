@@ -1,42 +1,43 @@
 package mage
 
 import (
-	"time"
-
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
 
-func (mage *Mage) registerPyroblastSpell() {
-	actionID := core.ActionID{SpellID: 33938}
+var pyroblastRank = spellData.Pyroblast.BySpellID(33938)
 
-	pyroblastCoefficient := 1.14999997616 // Per https://wago.tools/db2/SpellEffect?build=2.5.5.65295&filter%5BSpellID%5D=11366 Field: "BonusCoefficient"
+func (mage *Mage) registerPyroblastSpell() {
+	actionID := core.ActionID{SpellID: pyroblastRank.SpellID}
+
 	pyroblastDotCoefficient := 0.05000000075
+	pyroblastTick := pyroblastRank.Periodic.(shared.SpellDataPeriodic)
 
 	mage.Pyroblast = mage.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID,
 		SpellSchool:    core.SpellSchoolFire,
+		DefenseType:    core.DefenseTypeMagic,
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: MageSpellPyroblast,
-		MissileSpeed:   24,
+		MissileSpeed:   pyroblastRank.MissileSpeed,
 
 		ManaCost: core.ManaCostOptions{
-			FlatCost: 500,
+			FlatCost: pyroblastRank.Cost,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD:      core.GCDDefault,
-				CastTime: time.Millisecond * 6000,
+				GCD:      pyroblastRank.GCD,
+				CastTime: pyroblastRank.CastTime,
 			},
 		},
 
 		DamageMultiplier: 1,
-		CritMultiplier:   mage.DefaultSpellCritMultiplier(),
-		BonusCoefficient: pyroblastCoefficient,
+		BonusCoefficient: pyroblastRank.Direct.BonusCoefficient(),
 		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := mage.CalcAndRollDamageRange(sim, 939, 1191)
+			baseDamage := pyroblastRank.Direct.Damage(sim)
 			result := spell.CalcDamage(sim, target, baseDamage, spell.OutcomeMagicHitAndCrit)
 
 			spell.WaitTravelTime(sim, func(s *core.Simulation) {
@@ -51,23 +52,23 @@ func (mage *Mage) registerPyroblastSpell() {
 	mage.Pyroblast.RelatedDotSpell = mage.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID.WithTag(1),
 		SpellSchool:    core.SpellSchoolFire,
+		DefenseType:    core.DefenseTypeMagic,
 		ProcMask:       core.ProcMaskSpellDamage,
 		ClassSpellMask: MageSpellPyroblastDot,
 		Flags:          core.SpellFlagNoOnCastComplete | core.SpellFlagPassiveSpell,
 
 		DamageMultiplier: 1,
-		CritMultiplier:   mage.DefaultSpellCritMultiplier(),
 		ThreatMultiplier: 1,
 
 		Dot: core.DotConfig{
 			Aura: core.Aura{
 				Label: "PyroblastDoT",
 			},
-			NumberOfTicks:    4,
-			TickLength:       time.Second * 3,
+			NumberOfTicks:    pyroblastTick.NumberOfTicks,
+			TickLength:       pyroblastTick.TickLength,
 			BonusCoefficient: pyroblastDotCoefficient,
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
-				dot.Snapshot(target, 89)
+				dot.Snapshot(target, pyroblastTick.Tick)
 			},
 			OnTick: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
 				dot.CalcAndDealPeriodicSnapshotDamage(sim, target, dot.OutcomeTick)

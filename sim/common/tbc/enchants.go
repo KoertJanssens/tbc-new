@@ -3,12 +3,34 @@ package tbc
 import (
 	"time"
 
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
 )
 
 func init() {
+
+	// Felsteel Shield Spike
+	// EffectID: 2714, Proc SpellID: 29455
+	// Permanently attaches a felsteel spike to your shield that deals 26 to 38 damage to attackers whose melee attacks you block.
+	// https://www.wowhead.com/tbc/spell=29455
+	shared.NewProcDamageEffect(shared.ProcDamageEffect{
+		EnchantID: 2714,
+		SpellID:   29455,
+		School:    core.SpellSchoolPhysical,
+		MinDmg:    26,
+		MaxDmg:    38,
+		IsMelee:   true,
+		Flags:     core.SpellFlagNoOnCastComplete | core.SpellFlagPassiveSpell | core.SpellFlagNoOnDamageDealt,
+		Trigger: core.ProcTrigger{
+			Name:       "Felsteel Shield Spike",
+			Callback:   core.CallbackOnSpellHitTaken,
+			ProcMask:   core.ProcMaskMelee,
+			Outcome:    core.OutcomeBlock,
+			ProcChance: 1,
+		},
+	})
 
 	// Mongoose
 	// EffectID: 2673, Proc SpellID: 28093
@@ -44,11 +66,12 @@ func init() {
 		ohAuras := createMongooseAuras(2)
 
 		character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:     "Enchant Weapon - Mongoose",
-			Callback: core.CallbackOnSpellHitDealt,
-			ActionID: core.ActionID{SpellID: 28093},
-			DPM:      character.NewDynamicLegacyProcForEnchant(2673, 1.0, 0),
-			Outcome:  core.OutcomeLanded,
+			Name:         "Enchant Weapon - Mongoose",
+			Callback:     core.CallbackOnSpellHitDealt,
+			ActionID:     core.ActionID{SpellID: 28093},
+			IsWeaponProc: true,
+			DPM:          character.NewDynamicLegacyProcForEnchant(2673, 1.0, 0),
+			Outcome:      core.OutcomeLanded,
 			Handler: func(sim *core.Simulation, spell *core.Spell, _ *core.SpellResult) {
 				core.Ternary(spell.IsOH(), ohAuras, mhAuras).Activate(sim)
 			},
@@ -73,11 +96,12 @@ func init() {
 		character.ItemSwap.RegisterWeaponEnchantBuff(aura.Aura, 3225)
 
 		character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:     "Enchant Weapon - Executioner",
-			Callback: core.CallbackOnSpellHitDealt,
-			ActionID: core.ActionID{SpellID: 28093},
-			DPM:      character.NewDynamicLegacyProcForEnchant(3225, 1.0, 0),
-			Outcome:  core.OutcomeLanded,
+			Name:         "Enchant Weapon - Executioner",
+			Callback:     core.CallbackOnSpellHitDealt,
+			ActionID:     core.ActionID{SpellID: 28093},
+			IsWeaponProc: true,
+			DPM:          character.NewDynamicLegacyProcForEnchant(3225, 1.0, 0),
+			Outcome:      core.OutcomeLanded,
 			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 				aura.Activate(sim)
 			},
@@ -115,11 +139,11 @@ func init() {
 		dfSpell := character.RegisterSpell(core.SpellConfig{
 			ActionID:    core.ActionID{SpellID: 46579},
 			SpellSchool: core.SpellSchoolFrost,
-			Flags:       core.SpellFlagNoOnCastComplete | core.SpellFlagPassiveSpell,
-			ProcMask:    core.ProcMaskSpellProc,
+			DefenseType: core.DefenseTypeMagic,
+			Flags:       core.SpellFlagNoOnCastComplete | core.SpellFlagPassiveSpell | core.SpellFlagProc,
+			ProcMask:    core.ProcMaskSpellDamage,
 
 			DamageMultiplier: 1,
-			CritMultiplier:   character.DefaultSpellCritMultiplier(),
 			ThreatMultiplier: 1,
 
 			ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
@@ -127,28 +151,73 @@ func init() {
 			},
 		})
 
+		// Enchant 3273 carries two effects: a combat spell (Effect 1) that rolls on melee hits, and an
+		// Equip aura 46662 (Effect 3) that rolls on spell damage, direct and periodic (ProcTypeMask
+		// 2424832), without Can Proc From Procs. Both cast 46579. The 25 s lockout is 46662's proc
+		// recovery; the combat half has none in the DBC, so the two halves share one here rather than
+		// doubling the rate the old single trigger had.
+		//
+		// The roll and the lockout are taken in ExtraCondition, which runs synchronously in the
+		// callback. The handler runs a batch window later, and hits landing on the same timestamp
+		// (both hands, extra attacks, multiple targets) would all pass a lockout consumed there.
+		lockout := core.Cooldown{
+			Timer:    character.NewTimer(),
+			Duration: time.Second * 25,
+		}
+		meleeDPM := character.NewFixedProcChanceManager(0.5, core.ProcMaskMelee)
+		handler := func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+			debuffArray.Get(result.Target).Activate(sim)
+			dfSpell.Cast(sim, result.Target)
+		}
+
 		character.MakeProcTriggerAura(core.ProcTrigger{
-			Name:     "Enchant Weapon - Deathfrost",
-			Callback: core.CallbackOnSpellHitDealt,
-			ActionID: core.ActionID{SpellID: 46579},
-			DPM:      character.NewFixedProcChanceManager(0.5, core.ProcMaskMeleeOrMeleeProc|core.ProcMaskSpellOrSpellProc),
-			Outcome:  core.OutcomeLanded,
-			ICD:      time.Second * 25,
-			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-				debuffArray.Get(result.Target).Activate(sim)
-				dfSpell.Cast(sim, result.Target)
+			Name:         "Enchant Weapon - Deathfrost (Melee)",
+			Callback:     core.CallbackOnSpellHitDealt,
+			ActionID:     core.ActionID{SpellID: 46579},
+			IsWeaponProc: true,
+			Outcome:      core.OutcomeLanded,
+			ExtraCondition: func(sim *core.Simulation, spell *core.Spell, _ *core.SpellResult) bool {
+				if !lockout.IsReady(sim) || !meleeDPM.Proc(sim, spell.ProcMask, "Deathfrost (Melee)") {
+					return false
+				}
+				lockout.Use(sim)
+				return true
 			},
+			Handler: handler,
+		})
+
+		character.MakeProcTriggerAura(core.ProcTrigger{
+			Name:     "Enchant Weapon - Deathfrost (Spell)",
+			Callback: core.CallbackOnSpellHitDealt | core.CallbackOnPeriodicDamageDealt,
+			ActionID: core.ActionID{SpellID: 46662},
+			ProcMask: core.ProcMaskSpellDamage,
+			Outcome:  core.OutcomeLanded,
+			ExtraCondition: func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) bool {
+				if !lockout.IsReady(sim) || !sim.Proc(0.5, "Deathfrost (Spell)") {
+					return false
+				}
+				lockout.Use(sim)
+				return true
+			},
+			Handler: handler,
 		})
 	})
 
-	// Savage Guard - +10 Nature Resistance (item 22635)
-	core.NewEnchantEffect(2681, func(agent core.Agent) {
-		agent.GetCharacter().AddStat(stats.NatureResistance, 10)
-	})
+	// Enchant Weapon - Major Striking / Enchant 2H Weapon - Greater Impact
+	// EffectID: 963
+	// Permanently enchant a Melee Weapon to do +7 damage.
+	core.NewEnchantEffect(963, func(agent core.Agent) {
+		character := agent.GetCharacter()
 
-	// Ice Guard - +10 Frost Resistance (item 22636)
-	core.NewEnchantEffect(2682, func(agent core.Agent) {
-		agent.GetCharacter().AddStat(stats.FrostResistance, 10)
+		addWeaponDamage := func(item *core.Item, weapon *core.Weapon) {
+			if item.Enchant.EffectID == 963 {
+				weapon.BaseDamageMin += 7
+				weapon.BaseDamageMax += 7
+			}
+		}
+
+		addWeaponDamage(character.MainHand(), character.AutoAttacks.MH())
+		addWeaponDamage(character.OffHand(), character.AutoAttacks.OH())
 	})
 
 	// Scopes

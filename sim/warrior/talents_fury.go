@@ -3,6 +3,7 @@ package warrior
 import (
 	"time"
 
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
@@ -54,7 +55,7 @@ func (war *Warrior) registerCruelty() {
 		return
 	}
 
-	war.AddStat(stats.PhysicalCritPercent, 1*float64(war.Talents.Cruelty))
+	war.AddStat(stats.PhysicalCritPercent, spellData.Cruelty.ValueAt(war.Talents.Cruelty))
 }
 
 func (war *Warrior) registerUnbridledWrath() {
@@ -84,7 +85,7 @@ func (war *Warrior) registerDualWieldSpecialization() {
 	war.AddStaticMod(core.SpellModConfig{
 		ProcMask:   core.ProcMaskMeleeOH,
 		Kind:       core.SpellMod_DamageDone_Pct,
-		FloatValue: 0.05 * float64(war.Talents.DualWieldSpecialization),
+		FloatValue: spellData.DualWieldSpecialization.FractionAt(war.Talents.DualWieldSpecialization),
 	})
 }
 
@@ -130,7 +131,7 @@ func (war *Warrior) registerEnrage() {
 	war.MakeProcTriggerAura(core.ProcTrigger{
 		Name:     "Enrage - Trigger",
 		ProcMask: core.ProcMaskMelee,
-		Outcome:  core.OutcomeCrit,
+		Outcome:  core.OutcomeCrit | core.OutcomeSuppressedCrit,
 		Callback: core.CallbackOnSpellHitTaken,
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			war.EnrageAura.Activate(sim)
@@ -178,6 +179,7 @@ func (war *Warrior) registerSweepingStrikes() {
 		ActionID:       actionID.WithTag(1), // Real SpellID: 26654
 		ClassSpellMask: SpellMaskSweepingStrikesNormalizedHit,
 		SpellSchool:    core.SpellSchoolPhysical,
+		DefenseType:    core.DefenseTypeMelee,
 		ProcMask:       core.ProcMaskMeleeSpecial,
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagPassiveSpell | core.SpellFlagNoOnCastComplete,
 
@@ -295,6 +297,7 @@ func (war *Warrior) registerFlurry() {
 		Name:               "Flurry - Trigger",
 		ActionID:           core.ActionID{SpellID: 12974},
 		ProcMask:           core.ProcMaskMelee,
+		CanProcFromProcs:   true, // 12319, 12971-12974 carry the bit.
 		TriggerImmediately: true,
 		Callback:           core.CallbackOnSpellHitDealt,
 		Outcome:            core.OutcomeLanded,
@@ -322,7 +325,7 @@ func (war *Warrior) registerPrecision() {
 		return
 	}
 
-	war.AddStat(stats.PhysicalHitPercent, 1*float64(war.Talents.Precision))
+	war.AddStat(stats.PhysicalHitPercent, spellData.Precision.ValueAt(war.Talents.Precision))
 }
 
 func (war *Warrior) registerBloodthirst() {
@@ -335,6 +338,7 @@ func (war *Warrior) registerBloodthirst() {
 	war.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID,
 		SpellSchool:    core.SpellSchoolPhysical,
+		DefenseType:    core.DefenseTypeMelee,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagAPL,
 		ClassSpellMask: SpellMaskBloodthirst,
@@ -357,7 +361,6 @@ func (war *Warrior) registerBloodthirst() {
 		},
 
 		DamageMultiplier: 1,
-		CritMultiplier:   war.DefaultMeleeCritMultiplier(),
 		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
@@ -387,7 +390,7 @@ func (war *Warrior) registerImprovedBerserkerStance() {
 		return
 	}
 
-	apDep := war.NewDynamicMultiplyStat(stats.AttackPower, 1+0.02*float64(war.Talents.ImprovedBerserkerStance))
+	apDep := war.NewDynamicMultiplyStat(stats.AttackPower, spellData.ImprovedBerserkerStance.Effect(shared.A_MOD_ATTACK_POWER_PCT, 0).MultiplierAt(war.Talents.ImprovedBerserkerStance))
 	aura := war.RegisterAura(core.Aura{
 		Label:      "Improved Berserker Stance",
 		Duration:   core.NeverExpires,
@@ -425,6 +428,8 @@ func (war *Warrior) registerRampage() {
 	war.MakeProcTriggerAura(core.ProcTrigger{
 		Name:               "Rampage - Trigger",
 		TriggerImmediately: true,
+		ProcMask:           core.ProcMaskMelee,
+		CanProcFromProcs:   true, // 29801 carries the bit.
 		Outcome:            core.OutcomeLanded,
 		Callback:           core.CallbackOnSpellHitDealt,
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {

@@ -25,6 +25,7 @@ func (paladin *Paladin) registerDivineFavor() {
 		ClassMask:  SpellMaskHolyLight | SpellMaskFlashOfLight | SpellMaskHolyShock,
 		FloatValue: 100,
 	}).AttachProcTrigger(core.ProcTrigger{
+		CanProcFromProcs:   true, // 20216 carries the bit.
 		Callback:           core.CallbackOnCastComplete,
 		ClassSpellMask:     SpellMaskHolyLight | SpellMaskFlashOfLight | SpellMaskHolyShock,
 		TriggerImmediately: true,
@@ -38,6 +39,7 @@ func (paladin *Paladin) registerDivineFavor() {
 		Flags:          core.SpellFlagAPL | core.SpellFlagHelpful,
 		ClassSpellMask: SpellMaskDivineFavor,
 		SpellSchool:    core.SpellSchoolHoly,
+		DefenseType:    core.DefenseTypeMagic,
 
 		ManaCost: core.ManaCostOptions{
 			BaseCostPercent: 3,

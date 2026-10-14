@@ -1189,7 +1189,7 @@ LEFT JOIN SpellName sn ON sn.ID = sm.SpellID
 	return iconsByID, nil
 }
 
-var iconsMap, _ = LoadArtTexturePaths("./tools/DB2ToSqlite/listfile.csv")
+var iconsMap, _ = LoadArtTexturePaths(ListfilePath)
 
 func ScanSpells(rows *sql.Rows) (dbc.Spell, error) {
 	var spell dbc.Spell
@@ -1216,6 +1216,7 @@ func ScanSpells(rows *sql.Rows) (dbc.Spell, error) {
 		&spell.MaxLevel,
 		&spell.MaxPassiveAuraLevel,
 		&spell.Cooldown,
+		&spell.CategoryRecoveryTime,
 		&spell.GCD,
 		&spell.MinRange,
 		&spell.MaxRange,
@@ -1225,6 +1226,7 @@ func ScanSpells(rows *sql.Rows) (dbc.Spell, error) {
 		&spell.ChargeRecoveryTime,
 		&spell.CategoryTypeMask,
 		&spell.Category,
+		&spell.DefenseType,
 		&spell.Duration,
 		&spell.ProcChance,
 		&spell.ProcCharges,
@@ -1295,6 +1297,7 @@ func LoadAndWriteSpells(dbHelper *DBHelper, inputsDir string) ([]dbc.Spell, erro
 	COALESCE(sl.MaxLevel, 0),
 	COALESCE(sl.MaxPassiveAuraLevel, 0),
 	COALESCE(sc.RecoveryTime, 0),
+	COALESCE(sc.CategoryRecoveryTime, 0),
 	COALESCE(sc.StartRecoveryTime, 0),
 	COALESCE(sr.RangeMin_0, 0.0),
 	COALESCE(sr.RangeMax_0, 0.0),
@@ -1304,6 +1307,7 @@ func LoadAndWriteSpells(dbHelper *DBHelper, inputsDir string) ([]dbc.Spell, erro
 	COALESCE(ssc.ChargeRecoveryTime, 0),
 	COALESCE(ssc.TypeMask, 0),
 	COALESCE(scs.Category, 0),
+	COALESCE(scs.DefenseType, 0),
 	COALESCE(sd.Duration, 0),
 	COALESCE(sao.ProcChance, 0),
 	COALESCE(sao.ProcCharges, 0),
@@ -1416,7 +1420,7 @@ func LoadAndWriteEnchantDescriptions(outputPath string, db *WowDatabase, instanc
 
 	dataProvider := tooltip.DBCTooltipDataProvider{DBC: instance}
 	for _, enchant := range db.Enchants {
-		dbcEnch := instance.Enchants[int(enchant.EffectId)]
+		dbcEnch := instance.EnchantsByEffectId[int(enchant.EffectId)]
 		tooltip, err := tooltip.ParseTooltip(dbcEnch.EffectName, dataProvider, int64(enchant.EffectId))
 		if err != nil {
 			fmt.Printf("Could not parse enchant (%d), '%s'\n", enchant.EffectId, dbcEnch.EffectName)

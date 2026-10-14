@@ -3,37 +3,40 @@ package warlock
 import (
 	"time"
 
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
 
-const agonyCoeff = 0.1
+var agonyRank = spellData.CurseOfAgony.BySpellID(27218)
+var agonyTick = agonyRank.Periodic.(shared.SpellDataPeriodic)
+var agonyCoeff = agonyTick.Coef
 
 func (warlock *Warlock) registerCurseOfAgony() {
 
 	calculateBaseDamage := func(sim *core.Simulation, dot *core.Dot) float64 {
 		damageMultiplier := core.TernaryFloat64(warlock.AmplifyCurseAura != nil && warlock.AmplifyCurseAura.IsActive(), 1.5, 1.0)
-		return 1356 * damageMultiplier / float64(dot.BaseTickCount)
+		return agonyTick.Tick * damageMultiplier
 	}
 
 	warlock.CurseOfAgony = warlock.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 27218},
+		ActionID:       core.ActionID{SpellID: agonyRank.SpellID},
 		Flags:          core.SpellFlagAPL,
 		ProcMask:       core.ProcMaskSpellDamage,
-		SpellSchool:    core.SpellSchoolShadow,
+		SpellSchool:    agonyRank.SpellSchool,
+		DefenseType:    agonyRank.DefenseType,
 		ClassSpellMask: WarlockSpellCurseOfAgony,
 
 		ThreatMultiplier: 1,
 		DamageMultiplier: 1,
 		BonusCoefficient: agonyCoeff,
-		CritMultiplier:   1,
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: agonyRank.GCD,
 			},
 		},
 
 		ManaCost: core.ManaCostOptions{
-			FlatCost: 265.0,
+			FlatCost: agonyRank.Cost,
 		},
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			result := spell.CalcOutcome(sim, target, spell.OutcomeMagicHit)
@@ -50,8 +53,8 @@ func (warlock *Warlock) registerCurseOfAgony() {
 				Tag:   "Affliction",
 			},
 
-			TickLength:               2 * time.Second,
-			NumberOfTicks:            12,
+			TickLength:               agonyTick.TickLength,
+			NumberOfTicks:            agonyTick.NumberOfTicks,
 			PeriodicDamageMultiplier: 1,
 
 			OnSnapshot: func(sim *core.Simulation, target *core.Unit, dot *core.Dot) {
@@ -74,7 +77,7 @@ func (warlock *Warlock) registerCurseOfAgony() {
 				result.Damage /= dot.TickPeriod().Seconds()
 				return result
 			} else {
-				result := spell.CalcPeriodicDamage(sim, target, calculateBaseDamage(sim, dot), spell.OutcomeExpectedMagicCrit)
+				result := spell.CalcPeriodicDamage(sim, target, calculateBaseDamage(sim, dot), spell.OutcomeExpectedMagicHit)
 				result.Damage *= 10
 				result.Damage /= dot.CalcTickPeriod().Round(time.Millisecond).Seconds()
 				return result

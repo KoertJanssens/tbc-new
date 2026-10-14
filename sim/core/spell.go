@@ -16,6 +16,7 @@ type SpellConfig struct {
 	// See definition of Spell (below) for comments on these.
 	ActionID
 	SpellSchool    SpellSchool
+	DefenseType    DefenseType
 	ProcMask       ProcMask
 	Flags          SpellFlag
 	MissileSpeed   float64
@@ -45,7 +46,6 @@ type SpellConfig struct {
 
 	DamageMultiplier         float64
 	DamageMultiplierAdditive float64
-	CritMultiplier           float64
 	CritMultiplierAdditive   float64 // Additive extra crit damage %
 
 	BonusBaseDamage  float64 // Certain items can increase the base damage of a spell e.g. https://www.wowhead.com/tbc/item=28248/totem-of-the-void
@@ -83,6 +83,11 @@ type Spell struct {
 	// Fire, Frost, Shadow, etc.
 	SpellSchool SpellSchool
 	SchoolIndex stats.SchoolIndex
+
+	// Decides the base crit multiplier (1.5 for Magic, 2.0 for Melee and Ranged) and which
+	// SpellMods with a DefenseType filter apply. Taken from the SpellCategories client table.
+	// A spell left at DefenseTypeNone panics if it ever tries to crit.
+	DefenseType DefenseType
 
 	// Controls which effects can proc from this spell.
 	ProcMask ProcMask
@@ -144,7 +149,7 @@ type Spell struct {
 	CdMultiplier             float64
 	DamageMultiplier         float64
 	DamageMultiplierAdditive float64
-	CritMultiplier           float64
+	CritMultiplierPct        float64 // Multiplies the base crit multiplier, 1 = unmodified. Fed by SpellMod_CritMultiplier_Pct.
 	CritMultiplierAdditive   float64 // Additive critical damage bonus
 
 	BonusBaseDamage  float64 // Certain items can increase the base damage of a spell e.g. https://www.wowhead.com/tbc/item=28248/totem-of-the-void
@@ -222,6 +227,7 @@ func (unit *Unit) RegisterSpell(config SpellConfig) *Spell {
 		Rank:           config.Rank,
 		Unit:           unit,
 		SpellSchool:    config.SpellSchool,
+		DefenseType:    config.DefenseType,
 		ProcMask:       config.ProcMask,
 		Flags:          config.Flags,
 		MissileSpeed:   config.MissileSpeed,
@@ -248,7 +254,7 @@ func (unit *Unit) RegisterSpell(config SpellConfig) *Spell {
 		CdMultiplier:             1,
 		DamageMultiplier:         config.DamageMultiplier,
 		DamageMultiplierAdditive: config.DamageMultiplierAdditive,
-		CritMultiplier:           config.CritMultiplier,
+		CritMultiplierPct:        1,
 		CritMultiplierAdditive:   config.CritMultiplierAdditive,
 
 		BonusBaseDamage:  config.BonusBaseDamage,
@@ -640,6 +646,13 @@ func (spell *Spell) CanCompleteCast(sim *Simulation, target *Unit, logCastFailur
 		return false
 	}
 
+	if spell.Unit.PseudoStats.Incapacitated && !spell.Flags.Matches(SpellFlagCastWhileIncapacitated) {
+		if logCastFailure {
+			return spell.castFailureHelper(sim, "unit is incapacitated")
+		}
+		return false
+	}
+
 	if target == nil {
 		if logCastFailure {
 			return spell.castFailureHelper(sim, "target is not set")
@@ -749,8 +762,22 @@ func (spell *Spell) ExpectedTickDamageFromCurrentSnapshot(sim *Simulation, targe
 	return result.Damage
 }
 
+// The damage multiplier of a critical strike. The base comes from the DefenseType: spells crit
+// for 150%, melee and ranged attacks for 200%. Multiplicative modifiers (the 3% meta gems, the
+// slaying talents on the attack table, SpellMod_CritMultiplier_Pct) scale that base; additive
+// ones (Ruin, Impale, SpellMod_CritMultiplier_Flat) scale only the bonus part above 100%.
+// https://web.archive.org/web/20081014064638/http://elitistjerks.com/f31/t12595-relentless_earthstorm_diamond_-_melee_only/p4/
 func (spell *Spell) CritDamageMultiplier(at *AttackTable) float64 {
-	return ((spell.CritMultiplier*spell.Unit.PseudoStats.CritDamageMultiplier*at.CritMultiplier)-1)*(spell.CritMultiplierAdditive+1) + 1
+	var base float64
+	switch spell.DefenseType {
+	case DefenseTypeNone:
+		panic(fmt.Sprintf("CritDamageMultiplier() called for %s which has no DefenseType", spell.ActionID))
+	case DefenseTypeMagic:
+		base = 1.5
+	default:
+		base = 2.0
+	}
+	return (base*spell.CritMultiplierPct*spell.Unit.PseudoStats.CritDamageMultiplier*at.CritMultiplier-1)*(spell.CritMultiplierAdditive+1) + 1
 }
 
 // Time until either the cast is finished or GCD is ready again, whichever is longer
@@ -796,10 +823,11 @@ type ResourceCostImpl interface {
 }
 
 type SpellCost struct {
-	BaseCost        int32   // The base power cost before all modifiers.
-	FlatModifier    int32   // Flat value added to base cost before pct mods
-	PercentModifier float64 // Multiplier for cost, as of MoP a float
-	spell           *Spell
+	BaseCost                int32   // The base power cost before all modifiers.
+	FlatModifier            int32   // Flat value added to base cost before pct mods
+	PercentModifier         float64 // Multiplier for cost, as of MoP a float
+	AdditivePercentModifier float64 // Additive pct cost bucket: defaults to 1, additive pct mods sum into it
+	spell                   *Spell
 	ResourceCostImpl
 }
 
@@ -807,7 +835,7 @@ func (sc *SpellCost) ApplyCostModifiers(cost int32) float64 {
 	spell := sc.spell
 	cost = max(0, cost+sc.FlatModifier)
 	cost = max(0, cost*spell.Unit.PseudoStats.SpellCostPercentModifier/100)
-	return max(0, float64(cost)*sc.PercentModifier)
+	return max(0, float64(cost)*sc.PercentModifier*sc.AdditivePercentModifier)
 }
 
 // Get power cost after all modifiers.

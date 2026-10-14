@@ -1,3 +1,6 @@
+import { BinaryReader } from '@protobuf-ts/runtime';
+
+import { ASYNC_SIM_REQUESTS, SimRequest } from './types';
 import { noop, sleep } from './utils';
 import { HandlerFunction, WorkerInterface } from './worker_interface';
 
@@ -8,17 +11,42 @@ const defaultRequestOptions = {
 	},
 };
 
+// ProgressMetrics final_* field numbers (proto/api.proto), mirroring WorkerPool.isFinalProgress. Scanning tags avoids
+// bundling every proto type into this worker; a field missed here only costs one extra poll.
+const FINAL_PROGRESS_FIELDS = new Set([6, 7, 10, 11]);
+
+const isFinalProgress = (progressMetrics: Uint8Array) => {
+	const reader = new BinaryReader(progressMetrics);
+	while (reader.pos < reader.len) {
+		const [fieldNo, wireType] = reader.tag();
+		if (FINAL_PROGRESS_FIELDS.has(fieldNo)) {
+			return true;
+		}
+		reader.skip(wireType);
+	}
+	return false;
+};
+
 export const setupHttpWorker = (baseURL: string) => {
 	const makeHttpApiRequest = (endPoint: string, inputData: Uint8Array, requestId: string) =>
 		fetch(`${baseURL}/${endPoint}?requestId=${requestId}`, {
 			...defaultRequestOptions,
-			body: inputData,
+			body: inputData as BodyInit,
 		});
+
+	const readHttpApiResponse = async (response: Response, endPoint: string) => {
+		if (!response.ok) {
+			const body = await response.text();
+			throw new Error(`HTTP ${response.status} from /${endPoint}: ${body.slice(0, 200)}`);
+		}
+
+		const ab = await response.arrayBuffer();
+		return new Uint8Array(ab);
+	};
 
 	const syncHandler: HandlerFunction = async (inputData, _, id, msg) => {
 		const response = await makeHttpApiRequest(msg, inputData, id);
-		const ab = await response.arrayBuffer();
-		return new Uint8Array(ab);
+		return readHttpApiResponse(response, msg);
 	};
 
 	const asyncHandler: HandlerFunction = async (inputData, progress, id, msg) => {
@@ -32,10 +60,12 @@ export const setupHttpWorker = (baseURL: string) => {
 				break;
 			}
 
-			const ab = await progressResponse.arrayBuffer();
-			outputData = new Uint8Array(ab);
+			outputData = await readHttpApiResponse(progressResponse, 'asyncProgress');
 			progress(outputData);
-			await sleep(500);
+			if (isFinalProgress(outputData)) {
+				break;
+			}
+			await sleep(50);
 		}
 		return outputData;
 	};
@@ -46,18 +76,13 @@ export const setupHttpWorker = (baseURL: string) => {
 		return new Uint8Array();
 	};
 
-	new WorkerInterface({
-		computeStats: syncHandler,
-		computeStatsJson: syncHandler,
-		raidSim: syncHandler,
-		raidSimJson: syncHandler,
-		raidSimAsync: asyncHandler,
-		statWeights: syncHandler,
-		statWeightsAsync: asyncHandler,
-		statWeightRequests: syncHandler,
-		statWeightCompute: syncHandler,
-		raidSimRequestSplit: noWasmConcurrency,
-		raidSimResultCombination: noWasmConcurrency,
-		abortById: syncHandler,
-	}).ready(false);
+	// Route every endpoint through the sync handler except the declared async ones, so a new
+	// async endpoint only needs its ASYNC_SIM_REQUESTS entry to poll progress correctly.
+	const handlers = Object.fromEntries(
+		Object.values(SimRequest).map(request => [request, (ASYNC_SIM_REQUESTS as readonly SimRequest[]).includes(request) ? asyncHandler : syncHandler]),
+	) as Record<SimRequest, HandlerFunction>;
+	handlers[SimRequest.raidSimRequestSplit] = noWasmConcurrency;
+	handlers[SimRequest.raidSimResultCombination] = noWasmConcurrency;
+
+	new WorkerInterface(handlers).ready(false);
 };

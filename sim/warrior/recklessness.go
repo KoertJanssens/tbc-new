@@ -19,11 +19,14 @@ func (war *Warrior) registerRecklessness() {
 		FloatValue: 100,
 	}).AttachMultiplicativePseudoStatBuff(
 		&war.PseudoStats.DamageTakenMultiplier, 1.2,
-	)
+	).
+		// Grants immunity to Fear effects.
+		AttachFearImmunity()
 
 	spell := war.RegisterSpell(core.SpellConfig{
 		ActionID:       actionID,
-		Flags:          core.SpellFlagAPL,
+		DefenseType:    core.DefenseTypeMelee,
+		Flags:          core.SpellFlagAPL | core.SpellFlagCastWhileIncapacitated,
 		ClassSpellMask: SpellMaskRecklessness,
 
 		Cast: core.CastConfig{

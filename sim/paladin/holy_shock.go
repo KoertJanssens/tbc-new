@@ -1,8 +1,6 @@
 package paladin
 
 import (
-	"time"
-
 	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
@@ -14,32 +12,27 @@ func (paladin *Paladin) getHolyShockTimer() *core.Timer {
 	return paladin.holyShockTimer
 }
 
-var HolyShockRankMap = shared.SpellRankMap{
-	{Rank: 1, SpellID: 20473, Cost: 335, MinDamage: 277, MaxDamage: 299, Coefficient: 0.429},
-	{Rank: 2, SpellID: 20929, Cost: 410, MinDamage: 379, MaxDamage: 409, Coefficient: 0.429},
-	{Rank: 3, SpellID: 20930, Cost: 485, MinDamage: 496, MaxDamage: 628, Coefficient: 0.429},
-	{Rank: 4, SpellID: 27174, Cost: 575, MinDamage: 614, MaxDamage: 664, Coefficient: 0.429},
-	{Rank: 5, SpellID: 33072, Cost: 650, MinDamage: 721, MaxDamage: 779, Coefficient: 0.429},
-}
+var HolyShockRankMap = spellData.HolyShock
 
 // Holy Shock
 // https://www.wowhead.com/tbc/spell=20473
 //
 // Blasts the target with Holy energy, causing X to Y Holy damage to an enemy,
 // or X*1.267 to Y*1.267 healing to an ally.
-func (paladin *Paladin) registerHolyShock(rankConfig shared.SpellRankConfig) {
+func (paladin *Paladin) registerHolyShock(rankConfig shared.SpellData) {
 	spellID := rankConfig.SpellID
 	cost := rankConfig.Cost
-	minDamage := rankConfig.MinDamage
-	maxDamage := rankConfig.MaxDamage
-	coefficient := rankConfig.Coefficient
+	coefficient := rankConfig.Direct.BonusCoefficient()
 
 	// Holy Shock heals for 1.267x the damage component of the spell.
 	healingCoeff := 1.267
 
 	paladin.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: spellID},
-		SpellSchool:    core.SpellSchoolHoly,
+		ActionID:    core.ActionID{SpellID: spellID},
+		SpellSchool: core.SpellSchoolHoly,
+		// The cast (20473 .. 33072) is a dummy; the damage (25912 .. 33073) and heal (25914 .. 33074)
+		// spells it triggers are Magic in SpellCategories.
+		DefenseType:    core.DefenseTypeMagic,
 		ProcMask:       core.ProcMaskSpellDamage,
 		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: SpellMaskHolyShock,
@@ -47,20 +40,19 @@ func (paladin *Paladin) registerHolyShock(rankConfig shared.SpellRankConfig) {
 
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
-		CritMultiplier:   paladin.DefaultSpellCritMultiplier(),
 
-		MaxRange: 20,
+		MaxRange: rankConfig.MaxRange,
 
 		ManaCost: core.ManaCostOptions{
 			FlatCost: cost,
 		},
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: core.GCDDefault,
+				GCD: rankConfig.GCD,
 			},
 			CD: core.Cooldown{
 				Timer:    paladin.getHolyShockTimer(),
-				Duration: time.Second * 15,
+				Duration: rankConfig.Cooldown,
 			},
 		},
 
@@ -68,7 +60,7 @@ func (paladin *Paladin) registerHolyShock(rankConfig shared.SpellRankConfig) {
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			if spell.Unit.IsOpponent(target) {
-				damage := sim.Roll(minDamage, maxDamage)
+				damage := rankConfig.Direct.Damage(sim)
 				spell.CalcAndDealDamage(sim, target, damage, spell.OutcomeMagicHitAndCrit)
 			} else {
 				// Temporarily configure the spell as a healing spell
@@ -77,7 +69,7 @@ func (paladin *Paladin) registerHolyShock(rankConfig shared.SpellRankConfig) {
 				spell.ProcMask = core.ProcMaskSpellHealing
 
 				// TODO: Use healing power instead of holy power for healing calculations
-				healing := sim.Roll(minDamage, maxDamage) * healingCoeff
+				healing := rankConfig.Direct.Damage(sim) * healingCoeff
 				spell.CalcAndDealHealing(sim, target, healing, spell.OutcomeHealingCrit)
 
 				// Reset the spell to its original configuration

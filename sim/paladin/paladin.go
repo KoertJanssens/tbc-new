@@ -95,6 +95,16 @@ func (paladin *Paladin) Reset(sim *core.Simulation) {
 func (paladin *Paladin) OnEncounterStart(sim *core.Simulation) {
 }
 
+func (paladin *Paladin) GetMainHandType() proto.HandType {
+	mh := paladin.GetMHWeapon()
+
+	if mh != nil && (mh.HandType == proto.HandType_HandTypeTwoHand) {
+		return proto.HandType_HandTypeTwoHand
+	}
+
+	return proto.HandType_HandTypeOneHand
+}
+
 func NewPaladin(character *core.Character, talentsStr string, options *proto.PaladinOptions) *Paladin {
 	paladin := &Paladin{
 		Character: *character,
@@ -111,7 +121,7 @@ func NewPaladin(character *core.Character, talentsStr string, options *proto.Pal
 	paladin.EnableManaBar()
 
 	paladin.EnableAutoAttacks(paladin, core.AutoAttackOptions{
-		MainHand:       paladin.WeaponFromMainHand(paladin.DefaultMeleeCritMultiplier()),
+		MainHand:       paladin.WeaponFromMainHand(),
 		AutoSwingMelee: true,
 	})
 

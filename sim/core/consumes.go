@@ -1,11 +1,26 @@
 package core
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/wowsims/tbc/sim/core/proto"
 	"github.com/wowsims/tbc/sim/core/stats"
 )
+
+// Scrolls share StatBuffCategory with the raid buffs granting the same stat, so a
+// scroll doesn't stack with e.g. Arcane Brilliance or Divine Spirit; only the
+// strongest source of that stat applies.
+func registerScrollAura(character *Character, label string, itemID int32, stat stats.Stat, amount float64) *Aura {
+	aura := character.GetOrRegisterAura(Aura{
+		Label:      label,
+		ActionID:   ActionID{ItemID: itemID},
+		Duration:   NeverExpires,
+		BuildPhase: CharacterBuildPhaseConsumes,
+	})
+	makeExclusiveFlatStatBuff(aura, stat, amount, StatBuffCategory)
+	return MakePermanent(aura)
+}
 
 // Registers all consume-related effects to the Agent.
 func applyConsumeEffects(agent Agent, partyBuffs *proto.PartyBuffs) {
@@ -16,7 +31,7 @@ func applyConsumeEffects(agent Agent, partyBuffs *proto.PartyBuffs) {
 	}
 
 	if consumables.FlaskId != 0 {
-		flask := ConsumablesByID[consumables.FlaskId]
+		flask := GetConsumableByID(consumables.FlaskId)
 		character.AddStats(flask.Stats)
 	}
 
@@ -32,7 +47,7 @@ func applyConsumeEffects(agent Agent, partyBuffs *proto.PartyBuffs) {
 				}
 			})
 		} else {
-			elixir := ConsumablesByID[consumables.BattleElixirId]
+			elixir := GetConsumableByID(consumables.BattleElixirId)
 			character.AddStats(elixir.Stats)
 		}
 	}
@@ -68,44 +83,49 @@ func applyConsumeEffects(agent Agent, partyBuffs *proto.PartyBuffs) {
 				},
 			})
 		} else {
-			elixir := ConsumablesByID[consumables.GuardianElixirId]
+			elixir := GetConsumableByID(consumables.GuardianElixirId)
 			character.AddStats(elixir.Stats)
 		}
 	}
 	if consumables.FoodId != 0 {
-		food := ConsumablesByID[consumables.FoodId]
+		food := GetConsumableByID(consumables.FoodId)
 		character.AddStats(food.Stats)
 	}
 
 	// Static Imbues
 	if consumables.MhImbueId != 0 && partyBuffs.WindfuryTotem == proto.TristateEffect_TristateEffectMissing {
-		registerStaticImbue(agent, consumables.MhImbueId, true)
+		registerStaticImbue(agent, consumables.MhImbueId)
 	}
 	if consumables.OhImbueId != 0 {
-		registerStaticImbue(agent, consumables.OhImbueId, false)
+		registerStaticImbue(agent, consumables.OhImbueId)
 	}
 
 	// Scrolls
 	if consumables.ScrollAgi {
-		character.AddStat(stats.Agility, 20)
+		registerScrollAura(character, "Scroll of Agility", 27498, stats.Agility, 20)
 	}
 	if consumables.ScrollStr {
-		character.AddStat(stats.Strength, 20)
+		registerScrollAura(character, "Scroll of Strength", 27503, stats.Strength, 20)
 	}
 	if consumables.ScrollInt {
-		character.AddStat(stats.Intellect, 20)
+		registerScrollAura(character, "Scroll of Intellect", 27499, stats.Intellect, 20)
 	}
 	if consumables.ScrollSpi {
-		character.AddStat(stats.Spirit, 30)
+		registerScrollAura(character, "Scroll of Spirit", 27501, stats.Spirit, 30)
 	}
 	if consumables.ScrollArm {
-		character.AddStat(stats.Armor, 300)
+		registerScrollAura(character, "Scroll of Protection", 27500, stats.Armor, 300)
 	}
 
 	// Bloodthistle (Blood Elf only): +10 spell damage and healing for 10 min.
 	if consumables.Bloodthistle && character.Race == proto.Race_RaceBloodElf {
 		character.AddStat(stats.SpellDamage, 10)
 		character.AddStat(stats.HealingPower, 10)
+	}
+
+	// Bogling Root: +1 physical damage for 10 min (item 5206, spell 5665).
+	if consumables.BoglingRoot {
+		character.AddStat(stats.PhysicalDamage, 1)
 	}
 
 	// Pet Consumes
@@ -121,7 +141,7 @@ func applyConsumeEffects(agent Agent, partyBuffs *proto.PartyBuffs) {
 			pet.AddStat(stats.Strength, 20)
 		}
 		if consumables.PetFoodId != 0 {
-			petFood := ConsumablesByID[consumables.PetFoodId]
+			petFood := GetConsumableByID(consumables.PetFoodId)
 			pet.AddStats(petFood.Stats)
 		}
 	}
@@ -141,13 +161,7 @@ func registerPotionCD(agent Agent, consumes *proto.ConsumesSpec) {
 	defaultPotion := consumes.PotId
 
 	for _, potionId := range consumes.Potions {
-		if potionId == 31677 {
-			if defaultPotion == 31677 {
-				registerFelManaPotionCD(character)
-			}
-			continue
-		}
-		potion := ConsumablesByID[potionId]
+		potion := GetConsumableByID(potionId)
 		if potion.Type == proto.ConsumableType_ConsumableTypePotion {
 			potMCD := makePotionActivationSpell(potion.Id, character)
 			if defaultPotion == potion.Id {
@@ -156,59 +170,6 @@ func registerPotionCD(agent Agent, consumes *proto.ConsumesSpec) {
 			}
 		}
 	}
-}
-
-// registerFelManaPotionCD handles Fel Mana Potion (31677): restores 3200 mana over 24s,
-// but reduces spell damage by 25 and healing done by 50 for 15 min.
-func registerFelManaPotionCD(character *Character) {
-	actionID := ActionID{ItemID: 31677}
-	manaMetrics := character.NewManaMetrics(actionID)
-
-	debuffAura := character.NewTemporaryStatsAura(
-		"Fel Mana Potion Debuff",
-		ActionID{SpellID: 38927},
-		stats.Stats{stats.SpellDamage: -25, stats.HealingPower: -50},
-		time.Minute*15,
-	)
-
-	spell := character.GetOrRegisterSpell(SpellConfig{
-		ActionID: actionID,
-		Flags:    SpellFlagNoOnCastComplete | SpellFlagCombatPotion | SpellFlagEncounterOnly | SpellFlagPotion,
-		Cast: CastConfig{
-			CD: Cooldown{
-				Timer:    character.NewTimer(),
-				Duration: time.Minute * 2,
-			},
-			SharedCD: Cooldown{
-				Timer:    character.GetPotionCD(),
-				Duration: time.Minute * 2,
-			},
-		},
-		ApplyEffects: func(sim *Simulation, _ *Unit, spell *Spell) {
-			debuffAura.Activate(sim)
-			StartPeriodicAction(sim, PeriodicActionOptions{
-				Period:   time.Second * 3,
-				NumTicks: 8,
-				Priority: ActionPriorityDOT,
-				OnAction: func(sim *Simulation) {
-					character.AddMana(sim, 400, manaMetrics)
-				},
-			})
-			if sim.CurrentTime < 0 {
-				spell.SharedCD.Set(sim.CurrentTime + time.Minute*2)
-				character.UpdateMajorCooldowns()
-			}
-		},
-	})
-
-	character.AddMajorCooldown(MajorCooldown{
-		Spell: spell,
-		Type:  CooldownTypeMana,
-		ShouldActivate: func(sim *Simulation, character *Character) bool {
-			totalRegen := character.ManaRegenPerSecondWhileCasting() * 5
-			return character.MaxMana()-(character.CurrentMana()+totalRegen) >= 3200
-		},
-	})
 }
 
 var AlchStoneItemIDs = []int32{136197, 80508, 96252, 96253, 96254, 44322, 44323, 44324}
@@ -222,7 +183,7 @@ func (character *Character) HasAlchStone() bool {
 }
 
 func makePotionActivationSpell(potionId int32, character *Character) MajorCooldown {
-	potion := ConsumablesByID[potionId]
+	potion := GetConsumableByID(potionId)
 	categoryCooldownDuration := TernaryDuration(potion.CategoryCooldownDuration > 0, potion.CategoryCooldownDuration, time.Minute*2)
 	mcd := makePotionActivationSpellInternal(potion, character)
 
@@ -245,9 +206,11 @@ func makePotionActivationSpell(potionId int32, character *Character) MajorCooldo
 }
 
 type resourceGainConfig struct {
-	resType proto.ResourceType
-	min     float64
-	spread  float64
+	resType  proto.ResourceType
+	min      float64
+	spread   float64
+	period   time.Duration // Duration between ticks; 0 for one-shot gains.
+	duration time.Duration // Total duration of periodic gains.
 }
 
 func makePotionActivationSpellInternal(potion Consumable, character *Character) MajorCooldown {
@@ -284,10 +247,17 @@ func makePotionActivationSpellInternal(potion Consumable, character *Character) 
 	var gains []resourceGainConfig
 	resourceMetrics := make(map[proto.ResourceType]*ResourceMetrics)
 
+	// Stats applied by triggered auras (e.g. Fel Mana Potion's spell damage reduction).
+	// These may be positive or negative.
+	var auraStats stats.Stats
+	var auraDuration time.Duration
+	var auraSpellId int32
+
 	for _, effectID := range potion.EffectIds {
-		e := SpellEffectsById[effectID]
+		e := GetSpellEffectByID(effectID)
 		resourceType := e.GetResourceType()
-		if e.Type == proto.EffectType_EffectTypeResourceGain && resourceType != 0 {
+		isPeriodic := e.AuraPeriodMs > 0
+		if resourceType != 0 && (isPeriodic || e.Type == proto.EffectType_EffectTypeResourceGain) {
 			if resourceType == proto.ResourceType_ResourceTypeMana && mcd.Type != CooldownTypeSurvival {
 				mcd.Type = CooldownTypeMana
 			} else if resourceType == proto.ResourceType_ResourceTypeHealth {
@@ -296,9 +266,11 @@ func makePotionActivationSpellInternal(potion Consumable, character *Character) 
 				mcd.Type = CooldownTypeDPS
 			}
 			gains = append(gains, resourceGainConfig{
-				resType: resourceType,
-				min:     e.MinEffectSize,
-				spread:  e.EffectSpread,
+				resType:  resourceType,
+				min:      e.MinEffectSize,
+				spread:   e.EffectSpread,
+				period:   time.Duration(e.AuraPeriodMs) * time.Millisecond,
+				duration: time.Duration(e.DurationMs) * time.Millisecond,
 			})
 			if _, exists := resourceMetrics[resourceType]; !exists {
 				resourceMetrics[resourceType] = character.Metrics.NewResourceMetrics(actionID, resourceType)
@@ -307,20 +279,41 @@ func makePotionActivationSpellInternal(potion Consumable, character *Character) 
 			if resourceMetrics[resourceType] == nil {
 				resourceMetrics[resourceType] = character.Metrics.NewResourceMetrics(actionID, resourceType)
 			}
+			continue
 		}
+		if effectStats := stats.FromProtoArray(e.Stats); effectStats != (stats.Stats{}) {
+			auraStats = auraStats.Add(effectStats)
+			auraDuration = max(auraDuration, time.Duration(e.DurationMs)*time.Millisecond)
+			if auraSpellId == 0 {
+				auraSpellId = e.SpellId
+			}
+		}
+	}
+
+	var debuffAura *StatBuffAura
+	if auraDuration > 0 && auraStats != (stats.Stats{}) {
+		debuffAura = character.NewTemporaryStatsAura(fmt.Sprintf("%s Debuff (%d)", potion.Name, auraSpellId), ActionID{SpellID: auraSpellId}, auraStats, auraDuration)
 	}
 
 	mcd.Spell.ApplyEffects = func(sim *Simulation, _ *Unit, _ *Spell) {
 		if aura != nil {
 			aura.Activate(sim)
 		}
+		if debuffAura != nil {
+			debuffAura.Activate(sim)
+		}
 		for _, config := range gains {
 			gain := config.min + sim.RandomFloat(potion.Name)*config.spread
 			gain *= stoneMul
-			if config.resType == proto.ResourceType_ResourceTypeHealth {
-				gain *= character.PseudoStats.HealingTakenMultiplier
+			if config.period > 0 {
+				// Periodic gains (e.g. Fel Mana Potion) tick over the effect's duration.
+				startPeriodicResourceGain(sim, character, config, gain, resourceMetrics[config.resType])
+			} else {
+				if config.resType == proto.ResourceType_ResourceTypeHealth {
+					gain *= character.PseudoStats.HealingTakenMultiplier
+				}
+				character.ExecuteResourceGain(sim, config.resType, gain, resourceMetrics[config.resType])
 			}
-			character.ExecuteResourceGain(sim, config.resType, gain, resourceMetrics[config.resType])
 		}
 	}
 
@@ -332,6 +325,9 @@ func makePotionActivationSpellInternal(potion Consumable, character *Character) 
 				totalRegen := character.ManaRegenPerSecondWhileCasting() * 5
 				manaGain := config.min + config.spread
 				manaGain *= stoneMul
+				if config.period > 0 {
+					manaGain *= float64(startPeriodicResourceGainTicks(config))
+				}
 				shouldActivate = character.MaxMana()-(character.CurrentMana()+totalRegen) >= manaGain
 			}
 		}
@@ -340,6 +336,29 @@ func makePotionActivationSpellInternal(potion Consumable, character *Character) 
 
 	return mcd
 
+}
+
+// startPeriodicResourceGain ticks a periodic resource gain (e.g. Fel Mana Potion's mana over
+// time) across the effect's duration.
+func startPeriodicResourceGain(sim *Simulation, character *Character, config resourceGainConfig, gainPerTick float64, metrics *ResourceMetrics) {
+	if config.resType != proto.ResourceType_ResourceTypeMana && config.resType != proto.ResourceType_ResourceTypeHealth {
+		return
+	}
+	if config.resType == proto.ResourceType_ResourceTypeHealth {
+		gainPerTick *= character.PseudoStats.HealingTakenMultiplier
+	}
+	StartPeriodicAction(sim, PeriodicActionOptions{
+		Period:   config.period,
+		NumTicks: int(startPeriodicResourceGainTicks(config)),
+		Priority: ActionPriorityDOT,
+		OnAction: func(sim *Simulation) {
+			character.ExecuteResourceGain(sim, config.resType, gainPerTick, metrics)
+		},
+	})
+}
+
+func startPeriodicResourceGainTicks(config resourceGainConfig) int32 {
+	return int32(config.duration / config.period)
 }
 
 var ConjuredAuraTag = "Conjured"
@@ -356,10 +375,11 @@ func registerConjuredCD(agent Agent, consumes *proto.ConsumesSpec) {
 			flameCapProc := character.RegisterSpell(SpellConfig{
 				ActionID:    conjuredMCD.Spell.ActionID,
 				SpellSchool: SpellSchoolFire,
-				ProcMask:    ProcMaskEmpty,
+				DefenseType: DefenseTypeMagic, // Flamecap Fire (28715)
+				ProcMask:    ProcMaskSpellDamage,
+				Flags:       SpellFlagProc,
 
 				DamageMultiplier: 1,
-				CritMultiplier:   character.DefaultSpellCritMultiplier(),
 				ThreatMultiplier: 1,
 
 				ApplyEffects: func(sim *Simulation, target *Unit, spell *Spell) {
@@ -372,7 +392,7 @@ func registerConjuredCD(agent Agent, consumes *proto.ConsumesSpec) {
 				ActionID:   conjuredMCD.Spell.ActionID,
 				Duration:   time.Minute * 1,
 				ProcChance: 0.185,
-				ProcMask:   ProcMaskMeleeOrRanged,
+				ProcMask:   ProcMaskMeleeWhiteHit | ProcMaskRangedAuto,
 				Outcome:    OutcomeLanded,
 				Callback:   CallbackOnSpellHitDealt,
 				Handler: func(sim *Simulation, spell *Spell, result *SpellResult) {
@@ -405,7 +425,7 @@ func registerConjuredCD(agent Agent, consumes *proto.ConsumesSpec) {
 }
 
 func makeConjuredActivationSpell(conjuredId int32, character *Character) MajorCooldown {
-	conjured := ConsumablesByID[conjuredId]
+	conjured := GetConsumableByID(conjuredId)
 	categoryCooldownDuration := TernaryDuration(conjured.CategoryCooldownDuration > 0, conjured.CategoryCooldownDuration, time.Minute*2)
 	mcd := makeConjuredActivationSpellInternal(conjured, character)
 
@@ -457,7 +477,7 @@ func makeConjuredActivationSpellInternal(conjured Consumable, character *Charact
 	resourceMetrics := make(map[proto.ResourceType]*ResourceMetrics)
 
 	for _, effectID := range conjured.EffectIds {
-		e := SpellEffectsById[effectID]
+		e := GetSpellEffectByID(effectID)
 		resourceType := e.GetResourceType()
 		if e.Type == proto.EffectType_EffectTypeResourceGain && resourceType != 0 {
 			if resourceType == proto.ResourceType_ResourceTypeMana && mcd.Type != CooldownTypeSurvival {
@@ -586,6 +606,7 @@ func (character *Character) newBasicExplosiveSpellConfig(sharedTimer *Timer, act
 	return SpellConfig{
 		ActionID:     actionID,
 		SpellSchool:  school,
+		DefenseType:  DefenseTypeMagic, // Every explosive's damage spell is Magic in SpellCategories, so they crit for 150%
 		ProcMask:     ProcMaskEmpty,
 		Flags:        SpellFlagExplosive,
 		MissileSpeed: speed,
@@ -604,7 +625,6 @@ func (character *Character) newBasicExplosiveSpellConfig(sharedTimer *Timer, act
 		// Explosives always have 1% resist chance, so just give them hit cap.
 		BonusHitPercent:  100,
 		DamageMultiplier: 1,
-		CritMultiplier:   2,
 		ThreatMultiplier: 1,
 
 		ApplyEffects: func(sim *Simulation, target *Unit, spell *Spell) {
@@ -680,7 +700,7 @@ func registerDrumsCD(agent Agent, consumables *proto.ConsumesSpec, sharedTimer *
 	}
 }
 
-func registerStaticImbue(agent Agent, imbueId int32, isMH bool) {
+func registerStaticImbue(agent Agent, imbueId int32) {
 	character := agent.GetCharacter()
 	switch imbueId {
 	case 25123: // Mana Oil
@@ -691,55 +711,16 @@ func registerStaticImbue(agent Agent, imbueId int32, isMH bool) {
 		character.AddStat(stats.SpellCritRating, 14)
 	case 28017: // Superior Wizard Oil
 		character.AddStat(stats.SpellDamage, 42)
-	case 29453: // Addy Sharpstone
+	case 29453, 34340: // Adamantite Sharpening Stone / Adamantite Weightstone
 		character.AddStat(stats.MeleeCritRating, 14)
-		if isMH {
-			character.AutoAttacks.MH().BaseDamageMax += 12
-			character.AutoAttacks.MH().BaseDamageMin += 12
-
-			if character.AutoAttacks.OH() != nil {
-				character.AutoAttacks.OH().BaseDamageMax += 12
-				character.AutoAttacks.OH().BaseDamageMin += 12
+		for _, weapon := range []*Weapon{character.AutoAttacks.MH(), character.AutoAttacks.OH(), character.AutoAttacks.Ranged()} {
+			if weapon != nil {
+				weapon.BaseDamageMin += 12
+				weapon.BaseDamageMax += 12
 			}
-		} else {
-			character.AutoAttacks.OH().BaseDamageMax += 12
-			character.AutoAttacks.OH().BaseDamageMin += 12
-
-			if character.AutoAttacks.MH() != nil {
-				character.AutoAttacks.MH().BaseDamageMax += 12
-				character.AutoAttacks.MH().BaseDamageMin += 12
-			}
-		}
-		if character.AutoAttacks.Ranged() != nil {
-			character.AutoAttacks.Ranged().BaseDamageMin += 12
-			character.AutoAttacks.Ranged().BaseDamageMax += 12
 		}
 		// Keep Ranged Crit the same
 		character.AddStat(stats.RangedCritPercent, -(14 / PhysicalCritRatingPerCritPercent))
-
-	case 34340: // Addy Weightstone
-		character.AddStat(stats.MeleeCritRating, 14)
-		if isMH {
-			character.AutoAttacks.MH().BaseDamageMax += 12
-			character.AutoAttacks.MH().BaseDamageMin += 12
-
-			if character.AutoAttacks.OH() != nil {
-				character.AutoAttacks.OH().BaseDamageMax += 12
-				character.AutoAttacks.OH().BaseDamageMin += 12
-			}
-		} else {
-			character.AutoAttacks.OH().BaseDamageMax += 12
-			character.AutoAttacks.OH().BaseDamageMin += 12
-
-			if character.AutoAttacks.MH() != nil {
-				character.AutoAttacks.MH().BaseDamageMax += 12
-				character.AutoAttacks.MH().BaseDamageMin += 12
-			}
-		}
-		if character.AutoAttacks.Ranged() != nil {
-			character.AutoAttacks.Ranged().BaseDamageMin += 12
-			character.AutoAttacks.Ranged().BaseDamageMax += 12
-		}
 	case 28891: // Consecrated Sharpening Stone
 		character.Env.RegisterPostFinalizeEffect(func() {
 			for _, at := range character.AttackTables {

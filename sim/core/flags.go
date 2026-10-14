@@ -55,10 +55,11 @@ const (
 	ProcMaskRangedSpecial
 	ProcMaskSpellDamage
 	ProcMaskSpellHealing
-	ProcMaskSpellProc       // Special mask for Spell procs that can trigger things (Can be used together with damage proc mask or alone)
-	ProcMaskMeleeProc       // Special mask for Melee procs that can trigger things (Can be used together with damage proc mask or alone)
-	ProcMaskRangedProc      // Special mask for Ranged procs that can trigger things (Can be used together with damage proc mask or alone)
-	ProcMaskSpellDamageProc // Mask for procs triggering from spell damage procs like FT weapon and rogue poisons
+	// Spell damage dealt by a weapon imbue or poison (Flametongue, Frostbrand, rogue poisons). A hit
+	// kind, not proc-ness (that is SpellFlagProc). It is deliberately not a member of
+	// ProcMaskSpellDamage, so a listener whose mask is ProcMaskSpellDamage never hears these hits
+	// even when it can proc from procs; that is the whole reason the bit survives.
+	ProcMaskSpellDamageProc
 
 	ProcMaskLast
 )
@@ -84,12 +85,6 @@ const (
 	ProcMaskDirect = ProcMaskMelee | ProcMaskRanged | ProcMaskSpellDamage
 
 	ProcMaskSpecial = ProcMaskMeleeOrRangedSpecial | ProcMaskSpellDamage
-
-	ProcMaskMeleeOrMeleeProc   = ProcMaskMelee | ProcMaskMeleeProc
-	ProcMaskRangedOrRangedProc = ProcMaskRanged | ProcMaskRangedProc
-	ProcMaskSpellOrSpellProc   = ProcMaskSpellDamage | ProcMaskSpellProc
-
-	ProcMaskProc = ProcMaskSpellProc | ProcMaskRangedProc | ProcMaskMeleeProc
 )
 
 // Possible outcomes of any hit/damage roll.
@@ -114,6 +109,7 @@ const (
 
 	// These bits are set by the crit and damage rolls.
 	OutcomeCrit
+	OutcomeSuppressedCrit // A resilience-suppressed crit does not deal crit damage, but can trigger crit procs.
 	OutcomeCrush
 
 	OutcomePartial1_4 // 1/4 of the spell was resisted.
@@ -123,7 +119,7 @@ const (
 
 const (
 	OutcomePartial = OutcomePartial1_4 | OutcomePartial2_4 | OutcomePartial3_4
-	OutcomeLanded  = OutcomeHit | OutcomeCrit | OutcomeCrush | OutcomeGlance | OutcomeBlock
+	OutcomeLanded  = OutcomeHit | OutcomeCrit | OutcomeCrush | OutcomeSuppressedCrit | OutcomeGlance | OutcomeBlock
 )
 
 func (ho HitOutcome) String() string {
@@ -141,6 +137,8 @@ func (ho HitOutcome) String() string {
 		return "Glance" + ho.PartialResistString()
 	} else if ho.Matches(OutcomeCrit) {
 		return "Crit" + ho.PartialResistString()
+	} else if ho.Matches(OutcomeSuppressedCrit) {
+		return "SuppressedCrit" + ho.PartialResistString()
 	} else if ho.Matches(OutcomeHit) {
 		return "Hit" + ho.PartialResistString()
 	} else if ho.Matches(OutcomeCrush) {
@@ -201,8 +199,11 @@ const (
 	SpellFlagNoSpellMods                                    // Indicates that no spell mods should be applied to this spell
 	SpellFlagCanCastWhileMoving                             // Allows the cast to be casted while moving
 	SpellFlagPassiveSpell                                   // Indicates this spell is applied/cast as a result of another spell
+	SpellFlagSuppressWeaponProcs                            // The Suppress Weapon Procs attribute (Attributes[4] 0x800000): weapon procs, and auras marked "aura is weapon proc", ignore this spell's hits. In TBC that is Seal of Blood, Righteousness and Martyr damage plus a few CC spells.
+	SpellFlagProc                                           // Not a DBC attribute. The spell is cast by an aura or item effect and lacks Not a Proc (Attributes[3] 0x200), so aura procs only hear its hits when they can proc from procs. Weapon procs do not care.
 	SpellFlagSupressDoTApply                                // If present this spell will not apply dots (Used for DTR dot supression)
 	SpellFlagSwapped                                        // Indicates that this spell is not useable because it is from a currently swapped item
+	SpellFlagCastWhileIncapacitated                         // Allows the cast while the unit is incapacitated, e.g. Berserker Rage breaking a Fear.
 
 	// Used to let agents categorize their spells.
 	SpellFlagAgentReserved1
@@ -215,15 +216,21 @@ const (
 
 type SpellSchool byte
 
+// The bit values are the client's. SpellMisc.SchoolMask uses exactly this order, so a generated spell
+// row carries the number the DBC states rather than a translation of it, and the only school that used
+// to agree on its bit was Frost. Nothing outside this file depends on the numbers: the conversions to
+// stats.SchoolIndex, the resistance stat and the school damage stat are all switches over these names,
+// stats.SchoolIndex is its own enum for array positions, and proto.SpellSchool is separate again.
 const (
 	SpellSchoolNone     SpellSchool = 0
-	SpellSchoolPhysical SpellSchool = 1 << iota
-	SpellSchoolArcane
-	SpellSchoolFire
-	SpellSchoolFrost
-	SpellSchoolHoly
-	SpellSchoolNature
-	SpellSchoolShadow
+	SpellSchoolPhysical SpellSchool = 1
+	SpellSchoolHoly     SpellSchool = 2
+	SpellSchoolFire     SpellSchool = 4
+	SpellSchoolNature   SpellSchool = 8
+	SpellSchoolFrost    SpellSchool = 16
+	SpellSchoolShadow   SpellSchool = 32
+	SpellSchoolArcane   SpellSchool = 64
+
 	SpellSchoolChaos       SpellSchool = SpellSchoolArcane | SpellSchoolFire | SpellSchoolFrost | SpellSchoolHoly | SpellSchoolNature | SpellSchoolShadow
 	SpellSchoolShadowFlame SpellSchool = SpellSchoolFire | SpellSchoolShadow
 	SpellSchoolShadowFrost SpellSchool = SpellSchoolFrost | SpellSchoolShadow

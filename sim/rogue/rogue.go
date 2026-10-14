@@ -78,11 +78,14 @@ type Rogue struct {
 	WoundPoisonDebuffAuras core.AuraArray
 
 	ruthlessnessMetrics      *core.ResourceMetrics
+	ruthlessnessChance       float64
 	relentlessStrikesMetrics *core.ResourceMetrics
 
 	HasPvpEnergy              bool
 	DeathmantleBonus          float64
 	SliceAndDiceBonusDuration time.Duration
+
+	LastFinisherPointSpend int32
 }
 
 // ApplyTalents implements core.Agent.
@@ -106,6 +109,7 @@ func (rogue *Rogue) AddPartyBuffs(_ *proto.PartyBuffs) {}
 // Apply the effect of successfully casting a finisher to combo points
 func (rogue *Rogue) ApplyFinisher(sim *core.Simulation, spell *core.Spell) {
 	numPoints := rogue.ComboPoints()
+	rogue.LastFinisherPointSpend = numPoints
 	rogue.SpendComboPoints(sim, spell.ComboPointMetrics())
 
 	// Relentless Strikes
@@ -114,7 +118,7 @@ func (rogue *Rogue) ApplyFinisher(sim *core.Simulation, spell *core.Spell) {
 	}
 
 	// Ruthlessness
-	if rogue.Talents.Ruthlessness > 0 && sim.Proc(0.2*float64(rogue.Talents.Ruthlessness), "Ruthlessness") {
+	if rogue.Talents.Ruthlessness > 0 && sim.Proc(rogue.ruthlessnessChance, "Ruthlessness") {
 		rogue.AddComboPoints(sim, 1, rogue.ruthlessnessMetrics)
 	}
 }
@@ -124,11 +128,6 @@ func (rogue *Rogue) GetBaseDamageFromCoefficient(c float64) float64 {
 }
 
 func (rogue *Rogue) Initialize() {
-	// Update auto crit multipliers now that we have the targets.
-	rogue.AutoAttacks.MHConfig().CritMultiplier = rogue.DefaultMeleeCritMultiplier()
-	rogue.AutoAttacks.OHConfig().CritMultiplier = rogue.DefaultMeleeCritMultiplier()
-	rogue.AutoAttacks.RangedConfig().CritMultiplier = rogue.DefaultMeleeCritMultiplier()
-
 	rogue.registerAmbushSpell()
 	rogue.registerBackstabSpell()
 	rogue.registerEnvenom()
@@ -146,6 +145,7 @@ func (rogue *Rogue) Initialize() {
 	rogue.registerStealthAura()
 
 	rogue.ruthlessnessMetrics = rogue.NewComboPointMetrics(core.ActionID{SpellID: 14161})
+	rogue.ruthlessnessChance = spellData.Ruthlessness.ProcChanceAt(rogue.Talents.Ruthlessness)
 	rogue.relentlessStrikesMetrics = rogue.NewEnergyMetrics(core.ActionID{SpellID: 14179})
 }
 
@@ -197,8 +197,8 @@ func NewRogue(character *core.Character, options *proto.Player, talents string) 
 	})
 
 	rogue.EnableAutoAttacks(rogue, core.AutoAttackOptions{
-		MainHand:       rogue.WeaponFromMainHand(0), // Set crit multiplier later when we have targets.
-		OffHand:        rogue.WeaponFromOffHand(0),  // Set crit multiplier later when we have targets.
+		MainHand:       rogue.WeaponFromMainHand(),
+		OffHand:        rogue.WeaponFromOffHand(),
 		AutoSwingMelee: true,
 	})
 

@@ -11,6 +11,8 @@ import (
 	"slices"
 	"strings"
 
+	"golang.org/x/sync/errgroup"
+
 	"github.com/wowsims/tbc/sim"
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/proto"
@@ -25,8 +27,8 @@ import (
 // go run ./tools/database/gen_db -outDir=assets -gen=db
 
 var outDir = flag.String("outDir", "assets", "Path to output directory for writing generated .go files.")
-var genAsset = flag.String("gen", "", "Asset to generate. Valid values are 'db', 'atlasloot', 'wowhead-items', 'wowhead-spells', 'wowhead-itemdb', 'mop-items', and 'wago-db2-items'")
-var dbPath = flag.String("dbPath", "./tools/database/wowsims.db", "Location of wowsims.db file from the DB2ToSqliteTool")
+var genAsset = flag.String("gen", "", "Asset to generate. Valid values are 'db', 'atlasloot' and 'go-to-ts'")
+var dbPath = flag.String("dbPath", "./tools/database/wowsims.db", "Location of the wowsims.db file produced by tools/db2tool")
 
 func main() {
 	flag.Parse()
@@ -40,7 +42,18 @@ func main() {
 	dbDir := fmt.Sprintf("%s/database", *outDir)
 	inputsDir := fmt.Sprintf("%s/db_inputs", *outDir)
 
-	if *genAsset == "atlasloot" {
+	if *genAsset == "go-to-ts" {
+		if err := database.GenerateCharacterConstantsTSFile(); err != nil {
+			log.Fatalf("failed to generate capabilities TS file: %v", err)
+		}
+		if err := database.GenerateBulkSimConstantsTSFile(); err != nil {
+			log.Fatalf("failed to generate bulk sim constants TS file: %v", err)
+		}
+		if err := database.GenerateBulkSimTuningConstantsTSFile(); err != nil {
+			log.Fatalf("failed to generate bulk sim tuning constants TS file: %v", err)
+		}
+		return
+	} else if *genAsset == "atlasloot" {
 		helper, err := database.NewDBHelper()
 		if err != nil {
 			log.Fatalf("failed to initialize database: %v", err)
@@ -49,10 +62,6 @@ func main() {
 
 		db := database.ReadAtlasLootData(helper)
 		db.WriteJson(fmt.Sprintf("%s/atlasloot_db.json", inputsDir))
-		return
-	} else if *genAsset == "reforge-stats" {
-		//Todo: fill this when we have information from wowhead @ Neteyes - Gehennas
-		// For now, the version we have was taken from https://web.archive.org/web/20120201045249js_/http://www.wowhead.com/data=item-scaling
 		return
 	} else if *genAsset != "db" {
 		panic("Invalid gen value")
@@ -67,85 +76,57 @@ func main() {
 		log.Fatalf("failed to run overrides: %v", err)
 	}
 
-	_, err = database.LoadAndWriteRawRandomSuffixes(helper, inputsDir)
-	if err != nil {
+	// The extractions below only read the (post-override) database and write
+	// disjoint files, so they run concurrently; everything after the Wait
+	// consumes their results.
+	var (
+		consumables     []dbc.Consumable
+		dropSources     map[int][]*proto.DropSource
+		names           map[int]string
+		craftingSources map[int][]*proto.CraftedSource
+		repSources      map[int][]*proto.RepSource
+		atlaslootDB     *database.WowDatabase
+		iconsMap        map[int]string
+		icons           map[int]database.SpellIcon
+	)
+	var g errgroup.Group
+	g.Go(func() error { _, err := database.LoadAndWriteRawRandomSuffixes(helper, inputsDir); return err })
+	g.Go(func() error {
+		_, err := database.LoadAndWriteRawItems(helper, "s.OverallQualityId != 7 AND s.Field_1_15_7_59706_054 = 0 AND s.OverallQualityId != 0 AND (i.ClassID = 2 OR i.ClassID = 4 OR (i.ClassID = 7 AND i.InventoryType = 12)) AND s.Display_lang != '' AND (s.ID != 34219 AND s.Display_lang NOT LIKE '%Test%' AND s.Display_lang NOT LIKE 'QA%' AND s.Display_lang != 'unused')", inputsDir)
+		return err
+	})
+	g.Go(func() error { _, err := database.LoadAndWriteRandomPropAllocations(helper, inputsDir); return err })
+	g.Go(func() error { _, err := database.LoadAndWriteRawGems(helper, inputsDir); return err })
+	g.Go(func() error { _, err := database.LoadAndWriteRawEnchants(helper, inputsDir); return err })
+	g.Go(func() error { _, err := database.LoadAndWriteRawSpellEffects(helper, inputsDir); return err })
+	g.Go(func() error { _, err := database.LoadAndWriteItemStatEffects(helper, inputsDir); return err })
+	g.Go(func() error { _, err := database.LoadAndWriteItemDamageTables(helper, inputsDir); return err })
+	g.Go(func() error { _, err := database.LoadAndWriteItemArmorTotal(helper, inputsDir); return err })
+	g.Go(func() error { _, err := database.LoadAndWriteItemArmorQuality(helper, inputsDir); return err })
+	g.Go(func() error { _, err := database.LoadAndWriteItemArmorShield(helper, inputsDir); return err })
+	g.Go(func() error { _, err := database.LoadAndWriteArmorLocation(helper, inputsDir); return err })
+	g.Go(func() error { _, err := database.LoadAndWriteItemEffects(helper, inputsDir); return err })
+	g.Go(func() error { _, err := database.LoadAndWriteSpells(helper, inputsDir); return err })
+	g.Go(func() (err error) { consumables, err = database.LoadAndWriteConsumables(helper, inputsDir); return })
+	g.Go(func() (err error) {
+		dropSources, names, err = database.LoadAndWriteDropSources(helper, inputsDir)
+		return
+	})
+	g.Go(func() (err error) { icons, err = database.LoadSpellIcons(helper); return })
+	g.Go(func() error { craftingSources = database.LoadCraftedItems(helper); return nil })
+	g.Go(func() error { repSources = database.LoadRepItems(helper); return nil })
+	g.Go(func() error {
+		//Todo: See if we cant get rid of these as well
+		atlaslootDB = database.ReadDatabaseFromJson(tools.ReadFile(fmt.Sprintf("%s/atlasloot_db.json", inputsDir)))
+		return nil
+	})
+	g.Go(func() (err error) { iconsMap, err = database.LoadArtTexturePaths(database.ListfilePath); return })
+	if err := g.Wait(); err != nil {
 		panic(fmt.Sprintf("Error loading DBC data %v", err))
 	}
-
-	_, err = database.LoadAndWriteRawItems(helper, "s.OverallQualityId != 7 AND s.Field_1_15_7_59706_054 = 0 AND s.OverallQualityId != 0 AND (i.ClassID = 2 OR i.ClassID = 4 OR (i.ClassID = 7 AND i.InventoryType = 12)) AND s.Display_lang != '' AND (s.ID != 34219 AND s.Display_lang NOT LIKE '%Test%' AND s.Display_lang NOT LIKE 'QA%' AND s.Display_lang != 'unused')", inputsDir)
-	if err != nil {
-		panic(fmt.Sprintf("Error loading DBC data %v", err))
-	}
-
-	_, err = database.LoadAndWriteRandomPropAllocations(helper, inputsDir)
-	if err != nil {
-		panic(fmt.Sprintf("Error loading DBC data %v", err))
-	}
-
-	_, err = database.LoadAndWriteRawGems(helper, inputsDir)
-	if err != nil {
-		panic(fmt.Sprintf("Error loading DBC data %v", err))
-	}
-	_, err = database.LoadAndWriteRawEnchants(helper, inputsDir)
-	if err != nil {
-		panic(fmt.Sprintf("Error loading DBC data %v", err))
-	}
-	_, err = database.LoadAndWriteRawSpellEffects(helper, inputsDir)
-	if err != nil {
-		panic(fmt.Sprintf("Error loading DBC data %v", err))
-	}
-	_, err = database.LoadAndWriteItemStatEffects(helper, inputsDir)
-	if err != nil {
-		panic(fmt.Sprintf("Error loading DBC data %v", err))
-	}
-	_, err = database.LoadAndWriteItemDamageTables(helper, inputsDir)
-	if err != nil {
-		panic(fmt.Sprintf("Error loading DBC data %v", err))
-	}
-	_, err = database.LoadAndWriteItemArmorTotal(helper, inputsDir)
-	if err != nil {
-		panic(fmt.Sprintf("Error loading DBC data %v", err))
-	}
-	_, err = database.LoadAndWriteItemArmorQuality(helper, inputsDir)
-	if err != nil {
-		panic(fmt.Sprintf("Error loading DBC data %v", err))
-	}
-	_, err = database.LoadAndWriteItemArmorShield(helper, inputsDir)
-	if err != nil {
-		panic(fmt.Sprintf("Error loading DBC data %v", err))
-	}
-	_, err = database.LoadAndWriteArmorLocation(helper, inputsDir)
-	if err != nil {
-		panic(fmt.Sprintf("Error loading DBC data %v", err))
-	}
-	_, err = database.LoadAndWriteItemEffects(helper, inputsDir)
-	if err != nil {
-		panic(fmt.Sprintf("Error loading DBC data %v", err))
-	}
-	_, err = database.LoadAndWriteSpells(helper, inputsDir)
-	if err != nil {
-		panic(fmt.Sprintf("Error loading DBC data %v", err))
-	}
-	consumables, err := database.LoadAndWriteConsumables(helper, inputsDir)
-	if err != nil {
-		panic(fmt.Sprintf("Error loading DBC data %v", err))
-	}
-	dropSources, names, err := database.LoadAndWriteDropSources(helper, inputsDir)
-	if err != nil {
-		panic(fmt.Sprintf("Error loading DBC data %v", err))
-	}
-	craftingSources := database.LoadCraftedItems(helper)
-	repSources := database.LoadRepItems(helper)
-	//Todo: See if we cant get rid of these as well
-	atlaslootDB := database.ReadDatabaseFromJson(tools.ReadFile(fmt.Sprintf("%s/atlasloot_db.json", inputsDir)))
 
 	db := database.NewWowDatabase()
 	db.Encounters = core.PresetEncounters
-
-	iconsMap, err := database.LoadArtTexturePaths("./tools/DB2ToSqlite/listfile.csv")
-	if err != nil {
-		panic(fmt.Sprintf("Error loading icon paths %v", err))
-	}
 
 	var instance = dbc.GetDBC()
 	instance.LoadSpellScaling()
@@ -197,6 +178,9 @@ func main() {
 
 	for _, consumable := range consumables {
 		db.MergeConsumable(consumable.ToProto())
+		// The consumable proto has no icon field, so ship it in the icon table instead. Without
+		// this the UI fetches every consumable icon from nether.wowhead.com on each page load.
+		db.AddItemIcon(int32(consumable.Id), strings.ToLower(database.GetIconName(iconsMap, consumable.IconFileDataID)), consumable.Name)
 	}
 
 	for _, consumable := range database.ConsumableOverrides {
@@ -241,11 +225,6 @@ func main() {
 		if _, exists := db.RandomSuffixes[int32(randomSuffix.ID)]; !exists {
 			db.RandomSuffixes[int32(randomSuffix.ID)] = randomSuffix.ToProto()
 		}
-	}
-
-	icons, err := database.LoadSpellIcons(helper)
-	if err != nil {
-		panic(fmt.Sprintf("error loading icons: %v", err))
 	}
 
 	addSpellIcons(db, database.SharedSpellsIcons, icons, iconsMap)
@@ -378,7 +357,7 @@ func ApplyGlobalFilters(db *database.WowDatabase) {
 		if len(item.ScalingOptions) <= 0 {
 			return false
 		}
-		if item.ScalingOptions[0].Ilvl > core.MaxIlvl || item.ScalingOptions[0].Ilvl < core.MinIlvl {
+		if item.ScalingOptions[0].Ilvl > core.MaxIlvl {
 			return false
 		}
 		for _, pattern := range database.DenyListNameRegexes {
@@ -640,7 +619,7 @@ func getSpellIdsFromTalentJson(infile *string) []int32 {
 }
 
 func GetAllTalentSpellIds(inputsDir *string) map[string][]int32 {
-	talentsDir := fmt.Sprintf("%s/../../ui/core/talents/trees", *inputsDir)
+	talentsDir := fmt.Sprintf("%s/../../ui/sim/talents/trees", *inputsDir)
 	specFiles := []string{
 		"druid.json",
 		"hunter.json",
@@ -666,7 +645,7 @@ func GetAllTalentSpellIds(inputsDir *string) map[string][]int32 {
 
 func CreateTempAgent(r *proto.Raid) core.Agent {
 	encounter := core.MakeSingleTargetEncounter(0.0)
-	env, _, _ := core.NewEnvironment(r, encounter, false)
+	env, _, _ := core.NewEnvironment(r, encounter, false, false)
 	return env.Raid.Parties[0].Players[0]
 }
 
@@ -740,7 +719,12 @@ func GetAllRotationSpellIds() map[string][]int32 {
 			Class:         proto.Class_ClassPriest,
 			Equipment:     &proto.EquipmentSpec{},
 			TalentsString: "5552323133525122531551-235551332322152531351-553252512251123251551",
-		}, &proto.Player_Priest{Priest: &proto.Priest{Options: &proto.Priest_Options{ClassOptions: &proto.PriestOptions{}}}}), nil, nil, nil)},
+		}, &proto.Player_DpsPriest{DpsPriest: &proto.DpsPriest{Options: &proto.DpsPriest_Options{ClassOptions: &proto.PriestOptions{}}}}), nil, nil, nil)},
+		{Name: "healerPriest", Raid: core.SinglePlayerRaidProto(core.WithSpec(&proto.Player{
+			Class:         proto.Class_ClassPriest,
+			Equipment:     &proto.EquipmentSpec{},
+			TalentsString: "5552323133525122531551-235551332322152531351-553252512251123251551",
+		}, &proto.Player_HealerPriest{HealerPriest: &proto.HealerPriest{Options: &proto.HealerPriest_Options{ClassOptions: &proto.PriestOptions{}}}}), nil, nil, nil)},
 
 		// Rogue
 		{Name: "rogue", Raid: core.SinglePlayerRaidProto(core.WithSpec(&proto.Player{

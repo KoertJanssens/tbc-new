@@ -4,17 +4,22 @@ import (
 	"github.com/wowsims/tbc/sim/core"
 )
 
+var heroicStrikeRank = spellData.HeroicStrike.BySpellID(29707)
+var heroicStrikeBaseDamage, _ = heroicStrikeRank.Direct.Range()
+var cleaveRank = spellData.Cleave.BySpellID(25231)
+
 func (war *Warrior) registerHeroicStrike() {
 	spell := war.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 29707},
-		SpellSchool:    core.SpellSchoolPhysical,
+		ActionID:       core.ActionID{SpellID: heroicStrikeRank.SpellID},
+		SpellSchool:    heroicStrikeRank.SpellSchool,
+		DefenseType:    heroicStrikeRank.DefenseType,
 		ProcMask:       core.ProcMaskMeleeMH,
 		Flags:          core.SpellFlagMeleeMetrics,
 		ClassSpellMask: SpellMaskHeroicStrike,
 		MaxRange:       core.MaxMeleeRange,
 
 		RageCost: core.RageCostOptions{
-			Cost:   15,
+			Cost:   heroicStrikeRank.Cost,
 			Refund: 0.8,
 		},
 
@@ -26,19 +31,16 @@ func (war *Warrior) registerHeroicStrike() {
 
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
-		CritMultiplier:   war.DefaultMeleeCritMultiplier(),
 		FlatThreatBonus:  194,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
-			baseDamage := 176 + war.MHWeaponDamage(sim, spell.MeleeAttackPower(target))
-			result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeWeaponSpecialHitAndCrit)
+			baseDamage := heroicStrikeBaseDamage + war.MHWeaponDamage(sim, spell.MeleeAttackPower(target))
+			result := spell.CalcDamage(sim, target, baseDamage, spell.OutcomeMeleeWeaponSpecialHitAndCrit)
+			war.consumeQueue(sim)
+			spell.DealDamage(sim, result)
 
 			if !result.Landed() {
 				spell.IssueRefund(sim)
-			}
-
-			if war.curQueueAura != nil {
-				war.curQueueAura.Deactivate(sim)
 			}
 		},
 	})
@@ -47,18 +49,20 @@ func (war *Warrior) registerHeroicStrike() {
 
 func (war *Warrior) registerCleave() {
 	const maxTargets int32 = 2
-	flatDamage := 70 * (1 + 0.4*float64(war.Talents.ImprovedCleave))
+	cleaveVal, _ := cleaveRank.Direct.Range()
+	flatDamage := cleaveVal * spellData.ImprovedCleave.MultiplierAt(war.Talents.ImprovedCleave)
 
 	spell := war.RegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 25231},
-		SpellSchool:    core.SpellSchoolPhysical,
+		ActionID:       core.ActionID{SpellID: cleaveRank.SpellID},
+		SpellSchool:    cleaveRank.SpellSchool,
+		DefenseType:    cleaveRank.DefenseType,
 		ProcMask:       core.ProcMaskMeleeMH,
 		Flags:          core.SpellFlagMeleeMetrics,
 		ClassSpellMask: SpellMaskCleave,
 		MaxRange:       core.MaxMeleeRange,
 
 		RageCost: core.RageCostOptions{
-			Cost: 20,
+			Cost: cleaveRank.Cost,
 		},
 
 		Cast: core.CastConfig{
@@ -69,20 +73,25 @@ func (war *Warrior) registerCleave() {
 
 		DamageMultiplier: 1,
 		ThreatMultiplier: 1,
-		CritMultiplier:   war.DefaultMeleeCritMultiplier(),
 		FlatThreatBonus:  125,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			baseDamage := flatDamage + war.MHWeaponDamage(sim, spell.MeleeAttackPower(target))
 			spell.CalcCleaveDamage(sim, target, maxTargets, baseDamage, spell.OutcomeMeleeWeaponSpecialHitAndCrit)
+			war.consumeQueue(sim)
 			spell.DealBatchedAoeDamage(sim)
-
-			if war.curQueueAura != nil {
-				war.curQueueAura.Deactivate(sim)
-			}
 		},
 	})
 	war.makeQueueSpellsAndAura(spell)
+}
+
+// The queue lifts the dual-wield miss penalty, so it ends after the hit roll. It ends before the
+// damage is dealt: an extra main-hand swing procced by that damage must not become another queued
+// Heroic Strike or Cleave.
+func (war *Warrior) consumeQueue(sim *core.Simulation) {
+	if war.curQueueAura != nil {
+		war.curQueueAura.Deactivate(sim)
+	}
 }
 
 func (war *Warrior) makeQueueSpellsAndAura(srcSpell *core.Spell) *core.Spell {
@@ -113,6 +122,7 @@ func (war *Warrior) makeQueueSpellsAndAura(srcSpell *core.Spell) *core.Spell {
 	queueSpell := war.RegisterSpell(core.SpellConfig{
 		ActionID:    srcSpell.ActionID.WithTag(1),
 		SpellSchool: core.SpellSchoolPhysical,
+		DefenseType: srcSpell.DefenseType,
 		ProcMask:    core.ProcMaskMeleeMHSpecial,
 		Flags:       core.SpellFlagMeleeMetrics | core.SpellFlagAPL | core.SpellFlagNoMetrics,
 

@@ -3,6 +3,7 @@ package rogue
 import (
 	"time"
 
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/stats"
 )
@@ -55,7 +56,7 @@ func (rogue *Rogue) registerOpportunity() {
 	rogue.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
 		ClassMask:  RogueSpellBackstab | RogueSpellMutilate | RogueSpellAmbush,
-		FloatValue: 0.04 * float64(rogue.Talents.Opportunity),
+		FloatValue: spellData.Opportunity.Effect(shared.A_ADD_PCT_MODIFIER, shared.SPELLMOD_DAMAGE).FractionAt(rogue.Talents.Opportunity),
 	})
 }
 
@@ -71,7 +72,7 @@ func (rogue *Rogue) registerInitiative() {
 		ActionID:       core.ActionID{SpellID: 13980},
 		ProcChance:     0.25 * float64(rogue.Talents.Initiative),
 		Callback:       core.CallbackOnSpellHitDealt,
-		Outcome:        core.OutcomeCrit,
+		Outcome:        core.OutcomeLanded,
 		ClassSpellMask: RogueSpellGarrote | RogueSpellAmbush,
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			rogue.AddComboPoints(sim, 1, initMetrics)
@@ -89,6 +90,7 @@ func (rogue *Rogue) registerGhostlyStrike() {
 		ActionID:       core.ActionID{SpellID: 14278},
 		ClassSpellMask: RogueSpellGhostlyStrike,
 		SpellSchool:    core.SpellSchoolPhysical,
+		DefenseType:    core.DefenseTypeMelee,
 		Flags:          core.SpellFlagAPL | core.SpellFlagMeleeMetrics,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
 		MaxRange:       core.MaxMeleeRange,
@@ -109,7 +111,6 @@ func (rogue *Rogue) registerGhostlyStrike() {
 		},
 
 		DamageMultiplier: 1.25,
-		CritMultiplier:   rogue.DefaultMeleeCritMultiplier(),
 		ThreatMultiplier: 1,
 
 		BonusCoefficient: 1,
@@ -119,7 +120,7 @@ func (rogue *Rogue) registerGhostlyStrike() {
 
 			// Dodge Aura NYI
 
-			baseDamage := rogue.MHNormalizedWeaponDamage(sim, spell.MeleeAttackPower(target))
+			baseDamage := rogue.MHWeaponDamage(sim, spell.MeleeAttackPower(target))
 			result := spell.CalcAndDealDamage(sim, target, baseDamage, spell.OutcomeMeleeSpecialHitAndCrit)
 			if result.Landed() {
 				rogue.AddComboPoints(sim, 1, pointMetric)
@@ -136,7 +137,7 @@ func (rogue *Rogue) registerImprovedAmbush() {
 	rogue.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
 		ClassMask:  RogueSpellAmbush,
-		FloatValue: 15 * float64(rogue.Talents.ImprovedAmbush),
+		FloatValue: spellData.ImprovedAmbush.ValueAt(rogue.Talents.ImprovedAmbush),
 	})
 }
 
@@ -161,7 +162,7 @@ func (rogue *Rogue) registerSerratedBlades() {
 	rogue.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
 		ClassMask:  RogueSpellRupture,
-		FloatValue: 0.1 * float64(rogue.Talents.SerratedBlades),
+		FloatValue: spellData.SerratedBlades.Effect(shared.A_ADD_PCT_MODIFIER, shared.SPELLMOD_DOT).FractionAt(rogue.Talents.SerratedBlades),
 	})
 }
 
@@ -212,6 +213,12 @@ func (rogue *Rogue) registerDirtyDeeds() {
 		return
 	}
 
+	rogue.AddStaticMod(core.SpellModConfig{
+		Kind:      core.SpellMod_PowerCost_Flat,
+		ClassMask: RogueSpellGarrote,
+		IntValue:  -10 * rogue.Talents.DirtyDeeds,
+	})
+
 	ddAura := rogue.GetOrRegisterAura(core.Aura{
 		Label:    "Dirty Deeds",
 		ActionID: core.ActionID{SpellID: 14083},
@@ -232,36 +239,38 @@ func (rogue *Rogue) registerDirtyDeeds() {
 	})
 }
 
+var hemorrhageRank = spellData.Hemorrhage.BySpellID(26864)
+
 func (rogue *Rogue) registerHemorrhage() {
 	if !rogue.Talents.Hemorrhage {
 		return
 	}
 
-	pointMetric := rogue.NewComboPointMetrics(core.ActionID{SpellID: 26864})
+	pointMetric := rogue.NewComboPointMetrics(core.ActionID{SpellID: hemorrhageRank.SpellID})
 	rogue.Hemorrhage = rogue.GetOrRegisterSpell(core.SpellConfig{
-		ActionID:       core.ActionID{SpellID: 26864},
+		ActionID:       core.ActionID{SpellID: hemorrhageRank.SpellID},
 		ClassSpellMask: RogueSpellHemorrhage,
-		SpellSchool:    core.SpellSchoolPhysical,
+		SpellSchool:    hemorrhageRank.SpellSchool,
+		DefenseType:    hemorrhageRank.DefenseType,
 		Flags:          core.SpellFlagAPL | core.SpellFlagMeleeMetrics | SpellFlagBuilder,
 		ProcMask:       core.ProcMaskMeleeMHSpecial,
 		MaxRange:       core.MaxMeleeRange,
 
 		Cast: core.CastConfig{
 			DefaultCast: core.Cast{
-				GCD: time.Second,
+				GCD: hemorrhageRank.GCD,
 			},
 			IgnoreHaste: true,
 		},
 		EnergyCost: core.EnergyCostOptions{
-			Cost:   35,
+			Cost:   hemorrhageRank.Cost,
 			Refund: 0.8,
 		},
 
 		DamageMultiplier: 1.1,
-		CritMultiplier:   rogue.DefaultMeleeCritMultiplier(),
 		ThreatMultiplier: 1,
 
-		BonusCoefficient: 1,
+		BonusCoefficient: hemorrhageRank.Direct.BonusCoefficient(),
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
 			rogue.BreakStealth(sim)
@@ -294,7 +303,7 @@ func (rogue *Rogue) registerDeadliness() {
 		return
 	}
 
-	rogue.MultiplyStat(stats.AttackPower, 1+0.02*float64(rogue.Talents.Deadliness))
+	rogue.MultiplyStat(stats.AttackPower, spellData.Deadliness.MultiplierAt(rogue.Talents.Deadliness))
 }
 
 func (rogue *Rogue) registerPremeditation() {
@@ -370,11 +379,11 @@ func (rogue *Rogue) registerSinisterCalling() {
 		return
 	}
 
-	rogue.MultiplyStat(stats.Agility, 1+0.03*float64(rogue.Talents.SinisterCalling))
+	rogue.MultiplyStat(stats.Agility, spellData.SinisterCalling.Effect(shared.A_MOD_TOTAL_STAT_PERCENTAGE, 1).MultiplierAt(rogue.Talents.SinisterCalling))
 	rogue.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
 		ClassMask:  RogueSpellHemorrhage | RogueSpellBackstab,
-		FloatValue: 0.01 * float64(rogue.Talents.SinisterCalling),
+		FloatValue: spellData.SinisterCalling.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_EFFECT2).FractionAt(rogue.Talents.SinisterCalling),
 	})
 }
 

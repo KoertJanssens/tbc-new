@@ -89,16 +89,17 @@ var Tier5 = core.NewItemSet(core.ItemSet{
 					}
 				},
 			}).AttachSpellMod(core.SpellModConfig{
-				Kind:       core.SpellMod_PowerCost_Pct,
+				Kind:       core.SpellMod_PowerCost_Pct_Add,
 				ClassMask:  RogueSpellFinisher,
-				FloatValue: -2,
+				FloatValue: -1,
 			})
 			setBonusAura.AttachProcTrigger(core.ProcTrigger{
-				Name:     "Deathmantle Proc Trigger",
-				ProcMask: core.ProcMaskMelee,
-				Outcome:  core.OutcomeLanded,
-				Callback: core.CallbackOnSpellHitDealt,
-				DPM:      rogue.NewLegacyPPMManager(0.5, core.ProcMaskMelee),
+				Name:             "Deathmantle Proc Trigger",
+				CanProcFromProcs: true, // 37171 carries the bit.
+				ProcMask:         core.ProcMaskMelee,
+				Outcome:          core.OutcomeLanded,
+				Callback:         core.CallbackOnSpellHitDealt,
+				DPM:              rogue.NewLegacyPPMManager(0.5, core.ProcMaskMelee),
 				Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 					mod.Activate(sim)
 				},
@@ -145,6 +146,7 @@ func init() {
 			Name:               "Perceived Weakness",
 			ActionID:           core.ActionID{ItemID: 30450},
 			ProcMask:           core.ProcMaskMeleeSpecial,
+			CanProcFromProcs:   true, // 37173 carries the bit.
 			ICD:                time.Second * 30,
 			RequireDamageDealt: true,
 			Outcome:            core.OutcomeLanded,
@@ -164,7 +166,7 @@ func init() {
 
 		aura := rogue.NewTemporaryStatsAura(
 			"Rogue Tier 6 Trinket",
-			core.ActionID{SpellID: 40460},
+			core.ActionID{SpellID: 40461},
 			stats.Stats{stats.MeleeCritRating: 145},
 			time.Second*10,
 		)
@@ -173,10 +175,10 @@ func init() {
 			Name:               "Ashtongue Talisman of Lethality",
 			ActionID:           core.ActionID{ItemID: 32492},
 			RequireDamageDealt: false,
-			Callback:           core.CallbackOnCastComplete,
+			Callback:           core.CallbackOnApplyEffects,
 			ClassSpellMask:     RogueSpellFinisher,
 			Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
-				chance := 0.2 * float64(rogue.ComboPoints())
+				chance := 0.2 * float64(rogue.LastFinisherPointSpend)
 				if chance == 1 || sim.Proc(chance, "Ashtongue Talisman of Lethality") {
 					aura.Activate(sim)
 				}

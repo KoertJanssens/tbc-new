@@ -3,6 +3,7 @@ package rogue
 import (
 	"time"
 
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 )
 
@@ -13,6 +14,7 @@ func (rogue *Rogue) registerEnvenom() {
 	rogue.Envenom = rogue.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 32645},
 		SpellSchool:    core.SpellSchoolNature,
+		DefenseType:    core.DefenseTypeMelee,
 		ProcMask:       core.ProcMaskMeleeMHSpecial, // not core.ProcMaskSpellDamage
 		Flags:          core.SpellFlagMeleeMetrics | SpellFlagFinisher | core.SpellFlagAPL,
 		MetricSplits:   6,
@@ -20,7 +22,7 @@ func (rogue *Rogue) registerEnvenom() {
 
 		EnergyCost: core.EnergyCostOptions{
 			Cost:          35,
-			Refund:        0.4 * float64(rogue.Talents.QuickRecovery),
+			Refund:        spellData.QuickRecovery.Effect(shared.A_DUMMY, 0).FractionAt(rogue.Talents.QuickRecovery),
 			RefundMetrics: rogue.EnergyRefundMetrics,
 		},
 		Cast: core.CastConfig{
@@ -38,7 +40,6 @@ func (rogue *Rogue) registerEnvenom() {
 
 		DamageMultiplier:         1,
 		DamageMultiplierAdditive: 1,
-		CritMultiplier:           rogue.DefaultMeleeCritMultiplier(),
 		ThreatMultiplier:         1,
 
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {

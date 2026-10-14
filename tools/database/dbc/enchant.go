@@ -28,6 +28,19 @@ type Enchant struct {
 	EffectName         string
 }
 
+// Reports whether spellID is cast by this enchant as a combat spell (Effect 1), which the game
+// rolls off every eligible weapon hit, rather than as an equip aura (Effect 3). Checked per slot:
+// Deathfrost carries one of each, and only the combat slot's spell is a weapon proc.
+func (enchant *Enchant) IsCombatSpell(spellID int) bool {
+	for idx, effect := range enchant.Effects {
+		if effect == ITEM_ENCHANTMENT_COMBAT_SPELL && idx < len(enchant.EffectArgs) && enchant.EffectArgs[idx] == spellID {
+			return true
+		}
+	}
+
+	return false
+}
+
 func (enchant *Enchant) HasEnchantEffect() bool {
 	for idx, effect := range enchant.Effects {
 		if effect == ITEM_ENCHANTMENT_COMBAT_SPELL {
@@ -39,8 +52,7 @@ func (enchant *Enchant) HasEnchantEffect() bool {
 			spellId := enchant.EffectArgs[idx]
 			spellEffects := dbcInstance.SpellEffects[spellId]
 			for _, spellEffect := range spellEffects {
-				if spellEffect.EffectAura == A_PROC_TRIGGER_SPELL ||
-					spellEffect.EffectAura == A_PROC_TRIGGER_SPELL_WITH_VALUE {
+				if spellEffect.IsProcTrigger() {
 					return true
 				}
 			}
@@ -98,7 +110,8 @@ func (enchant *Enchant) ToProto() *proto.UIEnchant {
 			uiEnchant.EnchantType = proto.EnchantType_EnchantTypeOffHand
 			uiEnchant.Type = proto.ItemType_ItemTypeWeapon
 		}
-		if enchant.SubClassMask == ITEM_SUBCLASS_BIT_ARMOR_SHIELD || enchant.SubClassMask == 64 { // idk where the 64 comes from but shield spikes are this
+		// Shield enchants target the shield subclass alone; shield spikes also set the obsolete buckler bit (mask 96).
+		if enchant.SubClassMask&ITEM_SUBCLASS_BIT_ARMOR_SHIELD != 0 {
 			uiEnchant.EnchantType = proto.EnchantType_EnchantTypeShield
 			uiEnchant.Type = proto.ItemType_ItemTypeWeapon
 		}

@@ -3,22 +3,17 @@ package druid
 import (
 	"time"
 
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/stats"
 )
-
-// FeralCritMultiplier returns the melee crit multiplier for cat/bear form abilities,
-// including the bonus from Predatory Instincts (+2% crit damage per rank).
-func (druid *Druid) FeralCritMultiplier() float64 {
-	return druid.DefaultMeleeCritMultiplier() * (1 + 0.02*float64(druid.Talents.PredatoryInstincts))
-}
 
 func (druid *Druid) ApplyTalents() {
 	// Balance
 	druid.applyStarlightWrath()
 	druid.applyFocusedStarlight()
 	druid.applyImprovedMoonfire()
-	druid.applyBrambles()
+	// Brambles: applied as Thorns aura points in thorns.go
 	druid.applyInsectSwarm()
 	druid.applyNaturesReach()
 	druid.applyVengeance()
@@ -38,6 +33,7 @@ func (druid *Druid) ApplyTalents() {
 	druid.applyFerocity()
 	druid.applyFeralAggression()
 	druid.applyFeralInstincts()
+	druid.applyPredatoryInstincts()
 	druid.applyThickHide()
 	druid.applyFeralSwiftness()
 	druid.applySharpenedClaws()
@@ -72,6 +68,21 @@ func (druid *Druid) applyThickHide() {
 	druid.ApplyEquipScaling(stats.BonusArmor, 1.0+bonus)
 }
 
+// Predatory Instincts: +2% melee critical strike damage per rank while in Cat or Bear form.
+// The client aura (33859 and its ranks) is school-masked to Physical, so it covers every
+// physical attack in form (abilities and auto attacks, Ravage included) and nothing else.
+func (druid *Druid) applyPredatoryInstincts() {
+	if druid.Talents.PredatoryInstincts == 0 {
+		return
+	}
+
+	druid.AddStaticMod(core.SpellModConfig{
+		Kind:       core.SpellMod_CritMultiplier_Pct,
+		School:     core.SpellSchoolPhysical,
+		FloatValue: spellData.PredatoryInstincts.Effect(shared.A_MOD_CRIT_DAMAGE_BONUS, 1).FractionAt(druid.Talents.PredatoryInstincts),
+	})
+}
+
 func (druid *Druid) applyForceOfNature() {
 	if !druid.Talents.ForceOfNature {
 		return
@@ -88,7 +99,7 @@ func (druid *Druid) applyWrathOfCenarius() {
 	druid.AddStaticMod(core.SpellModConfig{
 		ClassMask:  DruidSpellWrath,
 		Kind:       core.SpellMod_BonusCoeffecient_Flat,
-		FloatValue: 0.02 * float64(druid.Talents.WrathOfCenarius),
+		FloatValue: spellData.WrathOfCenarius.EffectAt(1).FractionAt(druid.Talents.WrathOfCenarius),
 	})
 
 	druid.AddStaticMod(core.SpellModConfig{
@@ -147,7 +158,7 @@ func (druid *Druid) applyMoonfury() {
 	druid.AddStaticMod(core.SpellModConfig{
 		ClassMask:  DruidSpellWrath | DruidSpellStarfire | DruidSpellMoonfire,
 		Kind:       core.SpellMod_DamageDone_Flat,
-		FloatValue: 0.02 * float64(druid.Talents.Moonfury),
+		FloatValue: spellData.Moonfury.Effect(shared.A_ADD_PCT_MODIFIER, shared.SPELLMOD_DAMAGE).FractionAt(druid.Talents.Moonfury),
 	})
 }
 
@@ -159,7 +170,7 @@ func (druid *Druid) applyMoonglow() {
 	druid.AddStaticMod(core.SpellModConfig{
 		ClassMask:  DruidSpellMoonfire | DruidSpellStarfire | DruidSpellWrath | DruidSpellHealingTouch | DruidSpellRegrowth | DruidSpellRejuvenation,
 		FloatValue: -0.03 * float64(druid.Talents.Moonglow),
-		Kind:       core.SpellMod_PowerCost_Pct,
+		Kind:       core.SpellMod_PowerCost_Pct_Add,
 	})
 }
 
@@ -168,12 +179,27 @@ func (druid *Druid) applyNaturesGrace() {
 		return
 	}
 
+	lastProcAt := time.Duration(-1)
+
 	aura := druid.RegisterAura(core.Aura{
 		Label:    "Nature's Grace",
 		ActionID: core.ActionID{SpellID: 16886},
-		Duration: time.Second * 3,
+		Duration: time.Second * 15,
+		OnReset: func(aura *core.Aura, sim *core.Simulation) {
+			lastProcAt = -1
+		},
 		OnCastComplete: func(aura *core.Aura, sim *core.Simulation, spell *core.Spell) {
 			if spell.CurCast.CastTime == 0 {
+				return
+			}
+			// Only consume if the aura was already active when this cast started;
+			// a cast in flight when the proc landed did not benefit from it.
+			if aura.TimeActive(sim) < spell.CurCast.CastTime {
+				return
+			}
+			// A proc that landed during this cast re-arms the buff for the next
+			// cast instead of being consumed by this one.
+			if lastProcAt > sim.CurrentTime-spell.CurCast.CastTime {
 				return
 			}
 
@@ -182,15 +208,17 @@ func (druid *Druid) applyNaturesGrace() {
 	}).AttachSpellMod(core.SpellModConfig{
 		ClassMask: DruidSpellStarfire | DruidSpellWrath,
 		Kind:      core.SpellMod_CastTime_Flat,
-		TimeValue: time.Millisecond * time.Duration(-500),
+		TimeValue: time.Millisecond * -500,
 	})
 
 	druid.MakeProcTriggerAura(core.ProcTrigger{
-		Name:           "Nature's Grace Trigger",
-		Duration:       core.NeverExpires,
-		ClassSpellMask: DruidSpellWrath | DruidSpellStarfire,
-		Outcome:        core.OutcomeCrit,
+		Name:               "Nature's Grace Trigger",
+		Callback:           core.CallbackOnSpellHitDealt,
+		ClassSpellMask:     DruidSpellWrath | DruidSpellStarfire,
+		Outcome:            core.OutcomeCrit,
+		TriggerImmediately: true,
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
+			lastProcAt = sim.CurrentTime
 			aura.Activate(sim)
 		},
 	})
@@ -219,7 +247,7 @@ func (druid *Druid) applyVengeance() {
 	druid.AddStaticMod(core.SpellModConfig{
 		ClassMask:  DruidSpellWrath | DruidSpellStarfire | DruidSpellMoonfire,
 		Kind:       core.SpellMod_CritMultiplier_Flat,
-		FloatValue: 0.2 * float64(druid.Talents.Vengeance),
+		FloatValue: spellData.Vengeance.FractionAt(druid.Talents.Vengeance),
 	})
 }
 
@@ -241,18 +269,6 @@ func (druid *Druid) applyInsectSwarm() {
 	}
 
 	druid.registerInsectSwarmSpell()
-}
-
-func (druid *Druid) applyBrambles() {
-	if druid.Talents.Brambles == 0 {
-		return
-	}
-
-	druid.AddStaticMod(core.SpellModConfig{
-		ClassMask:  DruidSpellThorns | DruidSpellEntanglingRoots,
-		Kind:       core.SpellMod_DamageDone_Pct,
-		FloatValue: 0.25 * float64(druid.Talents.Brambles),
-	})
 }
 
 func (druid *Druid) applyStarlightWrath() {
@@ -285,7 +301,7 @@ func (druid *Druid) applyIntensity() {
 	}
 
 	// Allows 10% per rank of mana regeneration to continue while casting
-	druid.PseudoStats.SpiritRegenRateCasting += 0.10 * float64(druid.Talents.Intensity)
+	druid.PseudoStats.SpiritRegenRateCasting += spellData.Intensity.Effect(shared.A_MOD_MANA_REGEN_INTERRUPT, 0).FractionAt(druid.Talents.Intensity)
 	druid.UpdateManaRegenRates()
 
 	// Enrage instantly generates additional rage per rank (4/7/10)
@@ -301,14 +317,14 @@ func (druid *Druid) applyImprovedMoonfire() {
 	druid.AddStaticMod(core.SpellModConfig{
 		ClassMask:  DruidSpellMoonfire,
 		Kind:       core.SpellMod_DamageDone_Flat,
-		FloatValue: 0.05 * float64(druid.Talents.ImprovedMoonfire),
+		FloatValue: spellData.ImprovedMoonfire.Effect(shared.A_ADD_PCT_MODIFIER, shared.SPELLMOD_DAMAGE).FractionAt(druid.Talents.ImprovedMoonfire),
 	})
 
 	// 5% per point chance to crit with Moonfire
 	druid.AddStaticMod(core.SpellModConfig{
 		ClassMask:  DruidSpellMoonfire,
 		Kind:       core.SpellMod_BonusCrit_Percent,
-		FloatValue: 5 * float64(druid.Talents.ImprovedMoonfire),
+		FloatValue: spellData.ImprovedMoonfire.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_CRITICAL_CHANCE).ValueAt(druid.Talents.ImprovedMoonfire),
 	})
 }
 
@@ -319,7 +335,7 @@ func (druid *Druid) applyNaturalShapeshifter() {
 
 	druid.AddStaticMod(core.SpellModConfig{
 		ClassMask:  DruidSpellCatForm | DruidSpellBearForm,
-		Kind:       core.SpellMod_PowerCost_Pct,
+		Kind:       core.SpellMod_PowerCost_Pct_Add,
 		FloatValue: -0.1 * float64(druid.Talents.NaturalShapeshifter),
 	})
 }
@@ -329,7 +345,7 @@ func (druid *Druid) applyNaturalist() {
 		return
 	}
 
-	druid.PseudoStats.SchoolDamageDealtMultiplier[stats.SchoolIndexPhysical] *= 1 + 0.02*float64(druid.Talents.Naturalist)
+	druid.PseudoStats.SchoolDamageDealtMultiplier[stats.SchoolIndexPhysical] *= spellData.Naturalist.Effect(shared.A_MOD_DAMAGE_PERCENT_DONE, 1).MultiplierAt(druid.Talents.Naturalist)
 }
 
 func (druid *Druid) applyHeartOfTheWild() {
@@ -340,7 +356,7 @@ func (druid *Druid) applyHeartOfTheWild() {
 	// +4% Intellect per rank (all forms, always active).
 	// The Cat/Bear form-specific bonuses (+2% AP, +4% Stamina) are handled
 	// dynamically in RegisterCatFormAura / RegisterBearFormAura.
-	druid.MultiplyStat(stats.Intellect, 1+0.04*float64(druid.Talents.HeartOfTheWild))
+	druid.MultiplyStat(stats.Intellect, spellData.HeartOfTheWild.Effect(shared.A_MOD_TOTAL_STAT_PERCENTAGE, 3).MultiplierAt(druid.Talents.HeartOfTheWild))
 }
 
 func (druid *Druid) applySurvivalOfTheFittest() {
@@ -348,11 +364,11 @@ func (druid *Druid) applySurvivalOfTheFittest() {
 		return
 	}
 
-	mult := 1 + 0.01*float64(druid.Talents.SurvivalOfTheFittest)
+	mult := spellData.SurvivalOfTheFittest.Effect(shared.A_MOD_TOTAL_STAT_PERCENTAGE, -1).MultiplierAt(druid.Talents.SurvivalOfTheFittest)
 	for _, s := range []stats.Stat{stats.Stamina, stats.Strength, stats.Agility, stats.Intellect, stats.Spirit} {
 		druid.MultiplyStat(s, mult)
 	}
-	druid.AddReducedCritTakenPercent(0.01 * float64(druid.Talents.SurvivalOfTheFittest))
+	druid.AddReducedCritTakenPercent(-spellData.SurvivalOfTheFittest.Effect(shared.A_MOD_ATTACKER_MELEE_CRIT_CHANCE, 0).FractionAt(druid.Talents.SurvivalOfTheFittest))
 }
 
 func (druid *Druid) applySharpenedClaws() {
@@ -395,7 +411,7 @@ func (druid *Druid) applyFuror() {
 		return
 	}
 
-	druid.FurorProcChance = 0.2 * float64(druid.Talents.Furor)
+	druid.FurorProcChance = spellData.Furor.FractionAt(druid.Talents.Furor)
 }
 
 func (druid *Druid) applyFerocity() {
@@ -424,7 +440,7 @@ func (druid *Druid) applySavageFury() {
 	druid.AddStaticMod(core.SpellModConfig{
 		ClassMask:  DruidSpellMangleCat | DruidSpellRake,
 		Kind:       core.SpellMod_DamageDone_Flat,
-		FloatValue: 0.1 * float64(druid.Talents.SavageFury),
+		FloatValue: spellData.SavageFury.Effect(shared.A_ADD_PCT_MODIFIER, shared.SPELLMOD_DAMAGE).FractionAt(druid.Talents.SavageFury),
 	})
 }
 
@@ -436,7 +452,7 @@ func (druid *Druid) applyFeralAggression() {
 	druid.AddStaticMod(core.SpellModConfig{
 		ClassMask:  DruidSpellFerociousBite,
 		Kind:       core.SpellMod_DamageDone_Flat,
-		FloatValue: 0.03 * float64(druid.Talents.FeralAggression),
+		FloatValue: spellData.FeralAggression.Effect(shared.A_ADD_PCT_MODIFIER, shared.SPELLMOD_DAMAGE).FractionAt(druid.Talents.FeralAggression),
 	})
 }
 
@@ -476,30 +492,20 @@ func (druid *Druid) applyPrimalFury() {
 		ClassSpellMask: DruidSpellBuilder,
 		Outcome:        core.OutcomeCrit,
 		ProcChance:     procChance,
+		ExtraCondition: func(_ *core.Simulation, _ *core.Spell, _ *core.SpellResult) bool {
+			return druid.InForm(Cat)
+		},
 		Handler: func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) {
 			druid.AddComboPoints(sim, 1, cpMetrics)
 		},
 	})
 
-	// Bear form: +5 rage on Mangle crits.
-	druid.MakeProcTriggerAura(core.ProcTrigger{
-		Name:           "Primal Fury (Bear Mangle)",
-		ActionID:       actionID,
-		Callback:       core.CallbackOnSpellHitDealt,
-		ClassSpellMask: DruidSpellMangleBear,
-		Outcome:        core.OutcomeCrit,
-		ProcChance:     procChance,
-		Handler: func(sim *core.Simulation, _ *core.Spell, _ *core.SpellResult) {
-			druid.AddRage(sim, 5, rageMetrics)
-		},
-	})
-
 	// Bear form: +5 rage on auto-attack crits.
 	druid.MakeProcTriggerAura(core.ProcTrigger{
-		Name:       "Primal Fury (Bear Auto)",
+		Name:       "Primal Fury (Bear)",
 		ActionID:   actionID,
 		Callback:   core.CallbackOnSpellHitDealt,
-		ProcMask:   core.ProcMaskMeleeMHAuto,
+		ProcMask:   core.ProcMaskMelee,
 		Outcome:    core.OutcomeCrit,
 		ProcChance: procChance,
 		ExtraCondition: func(_ *core.Simulation, _ *core.Spell, _ *core.SpellResult) bool {
@@ -551,7 +557,7 @@ func (druid *Druid) applyFeralInstincts() {
 	}
 
 	// Increases threat caused in Dire Bear Form by 5/10/15% per rank.
-	druid.BearFormAura.AttachMultiplicativePseudoStatBuff(&druid.PseudoStats.ThreatMultiplier, 1+0.05*float64(druid.Talents.FeralInstinct))
+	druid.BearFormAura.AttachMultiplicativePseudoStatBuff(&druid.PseudoStats.ThreatMultiplier, spellData.FeralInstinct.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_ALL_EFFECTS).MultiplierAt(druid.Talents.FeralInstinct))
 }
 
 func (druid *Druid) applySubtlety() {
@@ -573,7 +579,7 @@ func (druid *Druid) applyLivingSpirit() {
 	}
 
 	// Increases total Spirit by 5/10/15% per rank.
-	druid.MultiplyStat(stats.Spirit, 1+0.05*float64(druid.Talents.LivingSpirit))
+	druid.MultiplyStat(stats.Spirit, spellData.LivingSpirit.MultiplierAt(druid.Talents.LivingSpirit))
 }
 
 func (druid *Druid) applyNaturalPerfection() {

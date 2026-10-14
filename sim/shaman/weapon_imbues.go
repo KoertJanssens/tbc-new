@@ -61,12 +61,12 @@ func (shaman *Shaman) newWindfuryImbueSpell(isMH bool) *core.Spell {
 	spellConfig := core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 25505, Tag: int32(tag)},
 		SpellSchool:    core.SpellSchoolPhysical,
+		DefenseType:    core.DefenseTypeMelee, // Windfury Attack (25504)
 		ProcMask:       procMask,
 		ClassSpellMask: SpellMaskWindfuryWeapon,
 		Flags:          core.SpellFlagMeleeMetrics | core.SpellFlagPassiveSpell,
 
 		DamageMultiplier: 1,
-		CritMultiplier:   shaman.DefaultMeleeCritMultiplier(),
 		ThreatMultiplier: 1,
 		BonusCoefficient: 1,
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
@@ -93,6 +93,7 @@ func (shaman *Shaman) makeWFProcTriggerAura(dpm *core.DynamicProcManager, procMa
 		Name:               "Windfury Imbue",
 		Callback:           core.CallbackOnSpellHitDealt,
 		ProcMask:           *procMask,
+		IsWeaponProc:       true,
 		Outcome:            core.OutcomeLanded,
 		ICD:                time.Second * 3,
 		DPM:                dpm,
@@ -156,13 +157,15 @@ func (shaman *Shaman) RegisterWindfuryImbue(procMask core.ProcMask) {
 
 func (shaman *Shaman) newFlametongueImbueSpell(weapon *core.Item) *core.Spell {
 	return shaman.RegisterSpell(core.SpellConfig{
-		ActionID:         core.ActionID{SpellID: 25489},
-		SpellSchool:      core.SpellSchoolFire,
+		ActionID:    core.ActionID{SpellID: 25489},
+		SpellSchool: core.SpellSchoolFire,
+		// The damage logs as Flametongue Attack (10444), Magic in SpellCategories; it crits for 1.5x
+		// (2.0x with Elemental Fury, see talents_elemental.go).
+		DefenseType:      core.DefenseTypeMagic,
 		ProcMask:         core.ProcMaskSpellDamageProc,
 		ClassSpellMask:   SpellMaskFlametongueWeapon,
-		Flags:            core.SpellFlagPassiveSpell | SpellFlagShamanSpell,
+		Flags:            core.SpellFlagPassiveSpell | core.SpellFlagProc | SpellFlagShamanSpell,
 		DamageMultiplier: 1,
-		CritMultiplier:   shaman.DefaultMeleeCritMultiplier(),
 		ThreatMultiplier: 1,
 		BonusCoefficient: 0.10000000149,
 
@@ -179,6 +182,7 @@ func (shaman *Shaman) makeFTProcTriggerAura(itemSlot proto.ItemSlot, triggerProc
 	aura := shaman.MakeProcTriggerAura(core.ProcTrigger{
 		Name:               fmt.Sprintf("Flametongue Imbue %s", itemSlot),
 		ProcMask:           triggerProcMask,
+		IsWeaponProc:       true,
 		Outcome:            core.OutcomeLanded,
 		Callback:           core.CallbackOnSpellHitDealt,
 		TriggerImmediately: true,
@@ -234,7 +238,7 @@ func (shaman *Shaman) RegisterFlametongueImbue(procMask core.ProcMask) {
 		switch {
 		case shaman.SelfBuffs.ImbueMH == proto.ShamanImbue_FlametongueWeapon && itemSlot == proto.ItemSlot_ItemSlotMainHand:
 			weapon = shaman.MainHand()
-			triggerProcMask = core.ProcMaskMeleeMH | core.ProcMaskMeleeProc
+			triggerProcMask = core.ProcMaskMeleeMH
 		case shaman.SelfBuffs.ImbueOH == proto.ShamanImbue_FlametongueWeapon && itemSlot == proto.ItemSlot_ItemSlotOffHand:
 			weapon = shaman.OffHand()
 			triggerProcMask = core.ProcMaskMeleeOH
@@ -266,12 +270,12 @@ func (shaman *Shaman) newFrostbrandImbueSpell() *core.Spell {
 	return shaman.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 8033},
 		SpellSchool:    core.SpellSchoolFrost,
+		DefenseType:    core.DefenseTypeMagic, // Frostbrand Attack (25501 / 38617) is Magic in SpellCategories
 		ClassSpellMask: SpellMaskFrostbrandWeapon,
 		ProcMask:       core.ProcMaskEmpty,
-		Flags:          core.SpellFlagPassiveSpell | SpellFlagShamanSpell,
+		Flags:          core.SpellFlagPassiveSpell | core.SpellFlagProc | SpellFlagShamanSpell,
 
 		DamageMultiplier: 1,
-		CritMultiplier:   shaman.DefaultMeleeCritMultiplier(),
 		ThreatMultiplier: 1,
 		BonusCoefficient: 0.10000000149,
 		ApplyEffects: func(sim *core.Simulation, target *core.Unit, spell *core.Spell) {
@@ -310,6 +314,7 @@ func (shaman *Shaman) RegisterFrostbrandImbue(procMask core.ProcMask) {
 	aura := shaman.MakeProcTriggerAura(core.ProcTrigger{
 		Name:               "Frostbrand Imbue",
 		Callback:           core.CallbackOnSpellHitDealt,
+		IsWeaponProc:       true,
 		Outcome:            core.OutcomeLanded,
 		DPM:                dpm,
 		TriggerImmediately: true,

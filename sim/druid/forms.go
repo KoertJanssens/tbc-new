@@ -56,28 +56,26 @@ func (druid *Druid) weaponImbueFlatDamage() float64 {
 }
 
 func (druid *Druid) GetCatWeapon() core.Weapon {
-	unscaledWeapon := druid.WeaponFromMainHand(0)
+	unscaledWeapon := druid.WeaponFromMainHand()
 	imbueBonus := druid.weaponImbueFlatDamage()
 	return core.Weapon{
 		BaseDamageMin:        (unscaledWeapon.BaseDamageMin + imbueBonus) / unscaledWeapon.SwingSpeed,
 		BaseDamageMax:        (unscaledWeapon.BaseDamageMax + imbueBonus) / unscaledWeapon.SwingSpeed,
 		SwingSpeed:           1.0,
 		NormalizedSwingSpeed: 1.0,
-		CritMultiplier:       druid.FeralCritMultiplier(),
 		AttackPowerPerDPS:    core.DefaultAttackPowerPerDPS,
 		MaxRange:             core.MaxMeleeRange,
 	}
 }
 
 func (druid *Druid) GetBearWeapon() core.Weapon {
-	unscaledWeapon := druid.WeaponFromMainHand(0)
+	unscaledWeapon := druid.WeaponFromMainHand()
 	imbueBonus := druid.weaponImbueFlatDamage()
 	return core.Weapon{
 		BaseDamageMin:        (unscaledWeapon.BaseDamageMin + imbueBonus) / unscaledWeapon.SwingSpeed * 2.5,
 		BaseDamageMax:        (unscaledWeapon.BaseDamageMax + imbueBonus) / unscaledWeapon.SwingSpeed * 2.5,
 		SwingSpeed:           2.5,
 		NormalizedSwingSpeed: 2.5,
-		CritMultiplier:       druid.FeralCritMultiplier(),
 		AttackPowerPerDPS:    core.DefaultAttackPowerPerDPS,
 		MaxRange:             core.MaxMeleeRange,
 	}
@@ -171,7 +169,7 @@ func (druid *Druid) RegisterCatFormAura() {
 			}
 
 			if !druid.Env.MeasuringStats {
-				druid.AutoAttacks.SetMH(druid.WeaponFromMainHand(druid.DefaultMeleeCritMultiplier()))
+				druid.AutoAttacks.SetMH(druid.WeaponFromMainHand())
 				druid.AutoAttacks.EnableAutoSwing(sim)
 				druid.UpdateManaRegenRates()
 			}
@@ -218,6 +216,9 @@ func (druid *Druid) RegisterBearFormAura() {
 	feralApDep := druid.NewDynamicStatDependency(stats.FeralAttackPower, stats.AttackPower, 1)
 	stamDep := druid.NewDynamicMultiplyStat(stats.Stamina, 1.25)
 	// Talent: Heart of the Wild — +4% Stamina per rank while in Bear form.
+	// Stays a literal: the talent states no Stamina effect. Its two effects are +4%/rank Intellect
+	// (A_MOD_TOTAL_STAT_PERCENTAGE misc 3) and an E_DUMMY worth 2/rank for the Cat attack power, so
+	// reading either here would be picking the effect by which number matches.
 	var hotWBearStamDep *stats.StatDependency
 	if druid.Talents.HeartOfTheWild > 0 {
 		hotWBearStamDep = druid.NewDynamicMultiplyStat(stats.Stamina, 1+0.04*float64(druid.Talents.HeartOfTheWild))
@@ -280,7 +281,7 @@ func (druid *Druid) RegisterBearFormAura() {
 
 			if !druid.Env.MeasuringStats {
 				druid.RemoveHealth(sim, druid.CurrentHealth()-healthFrac*druid.MaxHealth())
-				druid.AutoAttacks.SetMH(druid.WeaponFromMainHand(druid.DefaultMeleeCritMultiplier()))
+				druid.AutoAttacks.SetMH(druid.WeaponFromMainHand())
 				druid.AutoAttacks.EnableAutoSwing(sim)
 				druid.UpdateManaRegenRates()
 			}
@@ -308,18 +309,22 @@ func (druid *Druid) registerBearFormSpell() {
 		},
 
 		ApplyEffects: func(sim *core.Simulation, _ *core.Unit, _ *core.Spell) {
-			if cur := druid.CurrentRage(); cur > 0 {
-				// Resets rage to 0 when entering bear form
-				druid.SpendRage(sim, cur, rageMetrics)
-			}
-			// Wolfshead Helm: +5 rage on shift into Bear.
-			rageGain := druid.WolfsheadRageBonus
-			// Furor: 20% chance per rank (rank 5 = 100%) to gain 10 rage on shift.
-			if druid.FurorProcChance == 1 || (druid.FurorProcChance > 0 && sim.RandomFloat("Furor") < druid.FurorProcChance) {
-				rageGain += 10.0
-			}
-			if rageGain > 0 {
-				druid.AddRage(sim, rageGain, rageMetrics)
+			// Shifting before the pull keeps the configured starting rage: the
+			// rage wipe and the on-shift gains only model an in-combat shift.
+			if sim.CurrentTime > 0 {
+				if cur := druid.CurrentRage(); cur > 0 {
+					// Resets rage to 0 when entering bear form
+					druid.SpendRage(sim, cur, rageMetrics)
+				}
+				// Wolfshead Helm: +5 rage on shift into Bear.
+				rageGain := druid.WolfsheadRageBonus
+				// Furor: 20% chance per rank (rank 5 = 100%) to gain 10 rage on shift.
+				if druid.FurorProcChance == 1 || (druid.FurorProcChance > 0 && sim.RandomFloat("Furor") < druid.FurorProcChance) {
+					rageGain += 10.0
+				}
+				if rageGain > 0 {
+					druid.AddRage(sim, rageGain, rageMetrics)
+				}
 			}
 			druid.BearFormAura.Activate(sim)
 		},

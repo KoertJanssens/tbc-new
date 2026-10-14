@@ -6,9 +6,6 @@
 			"about": "About",
 			"toggle": "Toggle navigation"
 		},
-		"simulations": {
-			"full_raid": "Full Raid Sim"
-		},
 		"home": {
 			"title": "WoWSims - The Burning Crusade",
 			"description": "A powerful simulation tool for World of Warcraft: The Burning Crusade",
@@ -27,6 +24,16 @@
 		"search": "Search",
 		"filter": "Filter",
 		"elapsed_time": "Elapsed Time",
+		"ok": "OK",
+		"cancel": "Cancel",
+		"confirm": "Confirm",
+		"delete": "Delete",
+		"saved_data": {
+			"delete_title": "Delete saved {{label}}",
+			"delete_confirm": "Delete saved {{label}} '{{name}}'?",
+			"choose_name": "Choose a label for your saved {{label}}!",
+			"name_exists": "{{label}} with name {{name}} already exists."
+		},
 		"melee": "Melee",
 		"any": "Any",
 		"phases": {
@@ -44,7 +51,6 @@
 			"5": "Phase 5"
 		},
 		"tanks": {
-			"title": "Tanks",
 			"main_tank": "Main Tank",
 			"tank_2": "Tank 2",
 			"tank_3": "Tank 3",
@@ -52,6 +58,7 @@
 		},
 		"status": {
 			"unlaunched": "Not Yet Supported",
+			"gear_planner": "Gear Planner",
 			"alpha": "Alpha",
 			"beta": "Beta",
 			"launched": "Launched"
@@ -269,7 +276,7 @@
 		"description": "{{spec}} {{class}} simulations for World of Warcraft® The Burning Crusade Classic.",
 		"basic_bis_disclaimer": "<p>Preset gear lists are intended as rough approximations of BIS, and will often not be the absolute highest-DPS setup for you. Your optimal gear setup will depend on many factors; that's why we have a sim!</p><p>Items may also be omitted from the presets if they are highly contested and clearly better utilized on other classes, to encourage equitable gearing for the raid as a whole.</p>",
 		"healing_sim_disclaimer": "*** WARNING - USE AT YOUR OWN RISK ***\n\nThe entire concept of a healing sim is EXPERIMENTAL. All results should be taken with an EXTREMELY large grain of salt.\n\nThis tool is currently more similar to a spreadsheet than a true sim. Options for specifying incoming damage profiles in order to have proper reactive rotations have not yet been added.",
-		"notice_local_download": {
+		"notice_native_download": {
 			"title": "Did you know?",
 			"message": "You can download our local sim to speed up your simulations significantly?",
 			"download_button": "Download"
@@ -278,6 +285,10 @@
 			"title": "Extra Crash Information",
 			"header": "Please append the following complete link to the issue you just created. This will simplify debugging the issue."
 		},
+		"gear_planner": {
+			"title": "Gear planning only.",
+			"message": "Gear, gems, enchants, talents and the gem optimizer work for this spec. There's no simulation planned."
+		},
 		"unlaunched": {
 			"title": "This sim is currently not supported.",
 			"contribute_message": "Want to contribute?",
@@ -285,7 +296,7 @@
 			"old_sim_message": "You can find the old Sim for this spec here:"
 		},
 		"notifications": {
-			"raid_sim_cancelled": "Raid sim cancelled.",
+			"sim_cancelled": "Sim cancelled.",
 			"simulation_failed": "The Simulation failed. Generated an error report.",
 			"failed_to_file_report": "Failed to file report... try again another time:"
 		},
@@ -446,10 +457,6 @@
 		},
 		"other": {
 			"title": "Other",
-			"challenge_mode": {
-				"label": "Challenge Mode",
-				"tooltip": "Enables Challenge Mode"
-			},
 			"input_delay": {
 				"label": "Input Delay",
 				"tooltip": "Player input delay, in milliseconds. Specifies the maximum delay on actions that cannot be spell queued, such as spell casts that are waiting on resource gains or waiting for a cooldown to expire. Also used with certain APL values (such as 'Aura Is Active With Reaction Time'). Roughly models the sum of reaction time + server latency."
@@ -497,6 +504,30 @@
 			"hp_percent_for_defensives": {
 				"label": "HP % for Defensive CDs",
 				"tooltip": "% of Maximum Health, below which defensive cooldowns are allowed to be used. If set to 0, this restriction is disabled."
+			},
+			"isb_uptime": {
+				"label": "ISB Uptime",
+				"tooltip": "Amount of uptime for ISB"
+			},
+			"hemo_uptime": {
+				"label": "Hemorrhage Uptime",
+				"tooltip": "Amount of time hemorrhage is on the boss from a subtely rogue"
+			},
+			"shadow_priest_dps": {
+				"label": "Shadow Priest DPS",
+				"tooltip": "Shadow Priest DPS for Mana Battery purposes. 1000 DPS = 50 mana/sec(250 MP5)."
+			},
+			"expose_weakness_uptime": {
+				"label": "Expose Weakness Uptime",
+				"tooltip": "Uptime of Expose Weakness in %."
+			},
+			"expose_weakness_hunter_agility": {
+				"label": "Expose Weakness Hunter Agility",
+				"tooltip": "The amount of Agility provided by your Hunter. Used for calculating the value of Expose Weakness."
+			},
+			"totem_twisting": {
+				"label": "Totem Twisting",
+				"tooltip": "If both Windfury and Grace of Air are active will alternate between them to keep up both buffs."
 			},
 			"pet_uptime": {
 				"label": "Pet Uptime (%)",
@@ -645,7 +676,8 @@
 				"combat": "Combat Potion"
 			},
 			"elixirs": {
-				"title": "Elixirs"
+				"title": "Elixirs",
+				"separator": "or"
 			},
 			"food": {
 				"title": "Food"
@@ -715,6 +747,10 @@
 				"adds_spawn_delay": {
 					"label": "Add(s) spawn delay",
 					"tooltip": "Initial delay before the add(s) spawn (in seconds)"
+				},
+				"fear_duration": {
+					"label": "Fear Duration",
+					"tooltip": "Time (in seconds) that Fear keeps players from acting. Fear lasts 8s, but is usually broken after ~3s. Set to 0 to disable."
 				}
 			},
 			"duration": {
@@ -750,10 +786,6 @@
 				"tooltip": "Selects a preset encounter configuration."
 			},
 			"advanced": "Advanced",
-			"use_health": {
-				"label": "Use Health",
-				"tooltip": "Uses a damage limit in place of a duration limit. Damage limit is equal to sum of all targets health."
-			},
 			"target": "Target",
 			"num_allies": {
 				"label": "Num Allies",
@@ -826,10 +858,6 @@
 			"settings": "Settings",
 			"settings_name": "Settings Name",
 			"save_settings": "Save Settings"
-		},
-		"external_buffs": {
-			"title": "External Buffs",
-			"tooltip": "Buffs provided by <strong>other</strong> party/raid members."
 		}
 	},
 	"talents_tab": {
@@ -854,12 +882,18 @@
 				"choose_name": "Choose a label for your saved talents!",
 				"name_exists": "Talents with name {{name}} already exists."
 			}
+		},
+		"points_remaining": "Points Remaining",
+		"carousel": {
+			"previous": "Previous",
+			"next": "Next"
 		}
 	},
 	"bulk_tab": {
-		"title": "Batch (<span class=\"text-success\">New</span>)",
+		"title": "Batch",
+		"title_badge": "New",
 		"description": "<span className=\"bold\">Batch Simming</span> is a new feature akin to the <span className=\"bold\">Top Gear</span> sim on <a href=\"https://raidbots.com\" target=\"_blank\">Raidbots.com</a> that allows you to select multiple items and sim them find the best combinations.<br />This is an <span className=\"text-brand\">Alpha</span> feature, so if you have feedback or find a bug, please report it!",
-		"download_local": "Download the local sim for faster results.",
+		"download_native": "Download the local sim for faster results.",
 		"tabs": {
 			"setup": "Setup",
 			"results": "Results"
@@ -883,13 +917,18 @@
 			"item_unique": "{{itemName}} is unique and already added."
 		},
 		"settings": {
-			"combinations_count": "{{count}} Combinations",
+			"combinations_count": "{{amount}} Combinations",
 			"combination_singular": "1 Combination",
+			"groups": {
+				"options": "Batch options",
+				"frozen_slots": "Frozen slots",
+				"reforge": "Gem settings",
+				"reforge_description": "These are the same settings the Suggest Gems button uses. The batch sim applies them to every gear set it simulates."
+			},
 			"iterations": "Iterations",
-			"fallback_gems": "Fallback Gems",
-			"inherit_upgrades": {
-				"label": "Inherit Upgrades",
-				"tooltip": "When enabled, items will inherit upgrades from the equipped item. Otherwise, items will be simmed without any upgrades."
+			"use_legacy_bulk_sim": {
+				"label": "Use legacy single-stage sim",
+				"tooltip": "By default, Bulk Sim runs large batches in multiple stages: a low-iteration pass to find likely contenders, a medium-iteration refinement pass, and a final high-iteration pass for the best remaining gear sets. Enable this only to force the legacy high-stage-only behavior."
 			},
 			"freeze_ring": {
 				"label": "Freeze ring slot",
@@ -907,15 +946,32 @@
 				"mainhand_label": "Freeze MH weapon type",
 				"offhand_label": "Freeze OH weapon type",
 				"tooltip": "Leave all unchecked to allow any weapon type for this slot."
+			},
+			"stat_constraints": {
+				"label": "Stat constraints",
+				"tooltip": "Only combinations whose final stats (as shown in the Stats panel) satisfy every row will be simulated.",
+				"empty": "No constraints. All combinations will be simulated.",
+				"add": "Add constraint",
+				"remove": "Remove constraint",
+				"crit_reduction_hint": "Defense, resilience and talents combined; 5.6% or more is crit immune against a level 73 boss",
+				"defense_hint": "Defense rating, the first number in the Stats panel, not the defense skill in parentheses. For crit immunity, constrain Reduced Crit Taken instead."
 			}
 		},
 		"progress": {
 			"total_combinations": "{{count}} total combinations.",
-			"reforging_rounds": "Optimizing gems",
+			"restoring_reforges_from_cache": "Restoring gemmed gear sets from cache",
+			"building_candidate_gear_sets": "Building candidate gear sets",
+			"reforging_iteration_rounds": "Optimizing gems",
+			"checking_constraints": "Checking stat constraints",
 			"baseline_round": "Running baseline round",
 			"refining_rounds": "Running refining rounds",
+			"low_iteration_rounds": "Running low iteration rounds",
+			"medium_iteration_rounds": "Running medium iteration rounds",
+			"high_iteration_rounds": "Running high iteration rounds",
 			"iterations_complete": "{{completed}} / {{total}}<br />iterations complete",
-			"seconds_remaining": "{{seconds}} seconds remaining"
+			"seconds_remaining": "{{seconds}} seconds remaining",
+			"time_remaining": "{{time}} remaining",
+			"finalist_iteration_rounds": "Running finalist tie-breaker rounds"
 		},
 		"notifications": {
 			"bulk_sim_cancelled": "Bulk sim cancelled.",
@@ -934,10 +990,10 @@
 			"run_simulation": "Run a simulation to view results",
 			"equip_button": "Equip",
 			"gear_equipped": "Batch gear equipped!",
-			"current_gear": "Current Gear"
-		},
-		"gem_selector": {
-			"title": "Choose fallback Gem"
+			"current_gear": "Current Gear",
+			"margin_of_error": "95% confidence interval of the mean DPS. Rankings closer than this can change between runs.",
+			"tied_group": "Statistically tied — the order within this group can change between runs",
+			"skipped_by_constraints": "{{skipped}} of {{total}} gear sets skipped for failing a stat constraint."
 		},
 		"import_modal": {
 			"title": "Bag Item Import",
@@ -1503,7 +1559,8 @@
 				},
 				"aura_duration": {
 					"label": "Aura Duration",
-					"tooltip": "The full cooldown duration of the aura"
+					"tooltip": "The full cooldown duration of the aura",
+					"full_description": "<p>Returns the full duration the aura is set to when it is (re)applied, not the time remaining on the current application.</p>"
 				},
 				"all_item_stat_procs_active": {
 					"label": "All Item Proc Buffs Active",
@@ -1543,7 +1600,8 @@
 				},
 				"any_stat_buff_cooldowns_min_duration": {
 					"label": "Any Stat Buff Cooldowns Min Remaining Time",
-					"tooltip": "Shortest remaining duration on any registered Major Cooldown that buff the specified stat type(s), or infinity if none are currently active."
+					"tooltip": "Shortest remaining duration on any registered Major Cooldown that buff the specified stat type(s), or infinity if none are currently active.",
+					"full_description": "<p>Both manually casted cooldowns as well as cooldowns controlled by \"Cast All Stat Buff Cooldowns\" and \"Autocast Other Cooldowns\" actions are checked.</p>"
 				},
 				"dot_is_active": {
 					"label": "Dot Is Active",
@@ -1626,6 +1684,14 @@
 					"target_spell_tooltip": "The spell (ie. Death Wish) you want to fit within the cooldown of the Base Spell.",
 					"align_cd_end": "Align target spell to encounter end",
 					"align_cd_end_tooltip": "When checked will try to align the CD usage to the end of the encounter. This is useful for cooldowns/specs that benefit for example from execute."
+				},
+				"selected_potion": {
+					"label": "Selected Potion",
+					"tooltip": "Returns <b>True</b> if the selected potion is the character's default potion."
+				},
+				"selected_conjured": {
+					"label": "Selected Conjured",
+					"tooltip": "Returns <b>True</b> if the selected conjured item is the character's default conjured item."
 				},
 				"offset": {
 					"label": "Offset",
@@ -1951,7 +2017,6 @@
 			"sim_1_iteration": "Sim 1 Iteration",
 			"sim_1_death": "Simulate a Death",
 			"all_targets": "All Targets",
-			"all_players": "All Players",
 			"target_number": "Target {{number}}",
 			"damage": {
 				"dps_histogram": "DPS Histogram"
@@ -1967,7 +2032,14 @@
 				"show_gcd": "Show GCD",
 				"chart_options": {
 					"time_axis": "Time (s)",
-					"waiting_for_data": "Waiting for data..."
+					"waiting_for_data": "Waiting for data...",
+					"reset": "Reset zoom",
+					"zoom_in": "Zoom in",
+					"zoom_out": "Zoom out",
+					"fit": "Fit to width",
+					"pan_left": "Pan left",
+					"pan_right": "Pan right",
+					"chart_label": "DPS, threat and resources over time"
 				},
 				"tooltips": {
 					"dps": "DPS",
@@ -1979,13 +2051,30 @@
 					"after": "After",
 					"threat": "Threat",
 					"active_auras": "Active Auras"
+				},
+				"floatingActionBar": {
+					"allShown": "All rows shown",
+					"hidden": "{{count}} hidden",
+					"showAll": "Show all",
+					"toggle": "Toggle hidden rows"
 				}
 			},
 			"logs": {
 				"top_button": "Top",
+				"export_button": "Export Log",
 				"time_column": "Time",
 				"event_column": "Event",
-				"show_debug": "Show Debug Statements"
+				"show_debug": "Show Debug Statements",
+				"search_placeholder": "Search logs…",
+				"search_add_filter": "Add filter",
+				"search_add_value": "Add value",
+				"no_matches": "No log lines match the current search or filters.",
+				"floatingActionBar": {
+					"toggle": "Toggle filters",
+					"none": "No filters",
+					"active": "{{count}} active",
+					"clear": "Clear filters"
+				}
 			},
 			"tabs": {
 				"damage": "Damage",
@@ -2056,8 +2145,6 @@
 			},
 			"tooltips": {
 				"damage_avg_cast": "Average damage per cast",
-				"player_damage": "Player Damage / Raid Damage",
-				"player_damage_taken": "Player Damage Taken / Raid Damage Taken",
 				"damage_taken_per_encounter": "Damage Taken / Encounter Duration",
 				"healing_per_encounter": "Healing / Encounter Duration",
 				"threat_per_encounter": "Threat / Encounter Duration",
@@ -2207,6 +2294,7 @@
 		"github": "Contribute on GitHub",
 		"status": {
 			"unlaunched": "This sim is a WORK IN PROGRESS. It is not fully developed and should not be used for general purposes.",
+			"gear_planner": "This sim is a GEAR PLANNER only. Gear, gems, enchants, talents and the gem optimizer work. There's no simulation planned for this spec.",
 			"alpha": "This sim is in ALPHA. Bugs are expected; please let us know if you find one!",
 			"beta": "This sim is in BETA. There may still be a few bugs; please let us know if you find one!"
 		},
@@ -2239,6 +2327,7 @@
 	"sidebar": {
 		"iterations": "Iterations",
 		"warnings": {
+			"label": "Warnings",
 			"meta_gem_disabled": "Meta gem disabled ({{gemName}}): {{description}}",
 			"profession_requirement": "{{itemName}} requires {{professionName}}, but it is not selected.",
 			"too_many_jc_gems": "Only 2 Jewelcrafting Gems are allowed, but {{count}} are equipped.",
@@ -2253,6 +2342,7 @@
 					"title": "Calculate Stat Weights",
 					"ep": "EP",
 					"weights": "Weights",
+					"stats_type": "Stat display type",
 					"show_all_stats": "Show All Stats",
 					"dps_tps_reference": "DPS/TPS reference:",
 					"healing_reference": "Healing reference:",
@@ -2363,7 +2453,7 @@
 				"enable_modification": "This will enable modification of the default EP weights and setting custom stat caps.",
 				"modify_in_editor": "Ep weights can be modified in the Stat Weights editor.",
 				"hard_cap_info": "If you want to hard cap a stat make sure to put the EP for that stat higher.",
-				"edit_weights": "Edit weights",
+				"edit_weights": "Change weights",
 				"freeze_item_slots": "Freeze item slots",
 				"max_gem_phase": "Max Gem Phase",
 				"max_gem_quality": "Max Gem Quality",
@@ -2375,6 +2465,8 @@
 			"phase": "{{phase}} - {{status}}"
 		},
 		"results": {
+			"stop": "Stop",
+			"stopping": "Stopping...",
 			"progress": {
 				"presim_running": "presimulations running",
 				"iterations_complete": "iterations complete"
@@ -2469,6 +2561,20 @@
 				"exact": "Exact",
 				"over_by": "Over by",
 				"under_by": "Under by"
+			},
+			"tank_caps": {
+				"miss_label": "Miss",
+				"avoidance_label": "Total avoidance",
+				"crit_immunity_label": "Crit Immunity",
+				"miss": "Miss:",
+				"dodge": "Dodge:",
+				"parry": "Parry:",
+				"block": "Block:",
+				"defense": "Defense:",
+				"resilience": "Resilience:",
+				"crush": "Crush (102.4%):",
+				"shear": "Shear (101.8%):",
+				"with_holy_shield": " (with HS)"
 			},
 			"bonus_prefix": "Bonus",
 			"points_suffix": "Points",

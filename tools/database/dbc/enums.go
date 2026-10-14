@@ -1133,12 +1133,42 @@ const (
 		PROC_FLAG_DEAL_HELPFUL_SPELL
 )
 
+// Spell attribute flags, named after the Attributes column they live in: ATTR_EX_3 is a flag
+// in Attributes[3]. Read them through the Spell helpers rather than indexing Attributes.
 const (
+	ATTR_EX_2_CANT_CRIT int = 0x20000000
+
+	// On a triggered spell: aura listeners treat its hits like a normal ability hit. Seal of
+	// Command damage, every Judgement, Stormstrike's bonus hits and Sweeping Strikes carry it.
+	ATTR_EX_3_NOT_A_PROC          int = 0x200
 	ATTR_EX_3_CAN_PROC_FROM_PROCS int = 0x4000000
-)
-const (
+
+	// Weapon procs (Player::CastItemCombatSpell) ignore hits of this spell, as do auras marked
+	// ATTR_EX_6_AURA_IS_WEAPON_PROC. In TBC that is the Seal of Blood, Righteousness and Martyr
+	// damage spells plus Gouge, Sap, Scatter Shot and Maim.
+	ATTR_EX_4_SUPPRESS_WEAPON_PROCS int = 0x800000
+
+	// An aura proc that honours ATTR_EX_4_SUPPRESS_WEAPON_PROCS anyway: Black Bow of the Betrayer
+	// and the Sunwell melee neck.
+	ATTR_EX_6_AURA_IS_WEAPON_PROC int = 0x80
+
+	ATTR_EX_11_SCALES_WITH_ITEM_LEVEL int = 0x4
+
 	ATTR_EX_12_ONLY_PROC_FROM_CLASS_ABILITIES int = 0x80000000
 )
+
+// Attributes index each ATTR_EX_ flag above belongs to.
+const (
+	ATTR_INDEX_EX_2  int = 2
+	ATTR_INDEX_EX_3  int = 3
+	ATTR_INDEX_EX_4  int = 4
+	ATTR_INDEX_EX_6  int = 6
+	ATTR_INDEX_EX_11 int = 11
+	ATTR_INDEX_EX_12 int = 12
+)
+
+// Power type in EffectMiscValue_0 of A_MOD_INCREASE_ENERGY. Only mana maps to a stat.
+const POWER_TYPE_MANA int = 0
 
 const (
 	NORMAL_DUNGEON = 1 << iota

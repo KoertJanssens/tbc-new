@@ -3,6 +3,7 @@ package priest
 import (
 	"time"
 
+	"github.com/wowsims/tbc/sim/common/shared"
 	"github.com/wowsims/tbc/sim/core"
 	"github.com/wowsims/tbc/sim/core/stats"
 )
@@ -14,13 +15,13 @@ func (priest *Priest) applyForceOfWill() {
 	// +1% damage per rank
 	priest.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
-		FloatValue: 0.01 * float64(priest.Talents.ForceOfWill),
+		FloatValue: spellData.ForceOfWill.Effect(shared.A_ADD_PCT_MODIFIER, shared.SPELLMOD_DAMAGE).FractionAt(priest.Talents.ForceOfWill),
 		ClassMask:  PriestSpellsAll,
 	})
 	// +1% crit per rank
 	priest.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
-		FloatValue: 1.0 * float64(priest.Talents.ForceOfWill),
+		FloatValue: spellData.ForceOfWill.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_CRITICAL_CHANCE).ValueAt(priest.Talents.ForceOfWill),
 		ClassMask:  PriestSpellsAll,
 	})
 }
@@ -67,7 +68,7 @@ func (priest *Priest) applyFocusedPower() {
 	// +2% hit per rank (2 ranks = 4%)
 	priest.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusHit_Percent,
-		FloatValue: 2.0 * float64(priest.Talents.FocusedPower),
+		FloatValue: spellData.FocusedPower.Effect(shared.A_ADD_FLAT_MODIFIER, shared.SPELLMOD_RESIST_MISS_CHANCE).ValueAt(priest.Talents.FocusedPower),
 		ClassMask:  PriestSpellSmite | PriestSpellMindBlast,
 	})
 }
@@ -83,12 +84,20 @@ func (priest *Priest) applyEnlightenment() {
 	priest.MultiplyStat(stats.Spirit, multiplier)
 }
 
+// Spirit of Redemption's passive half: +5% total Spirit. The on-death form is not modelled.
+func (priest *Priest) applySpiritOfRedemption() {
+	if !priest.Talents.SpiritOfRedemption {
+		return
+	}
+	priest.MultiplyStat(stats.Spirit, 1.05)
+}
+
 func (priest *Priest) applyMentalStrength() {
 	if priest.Talents.MentalStrength == 0 {
 		return
 	}
 	// +2% mana per rank
-	priest.MultiplyStat(stats.Mana, 1.0+0.02*float64(priest.Talents.MentalStrength))
+	priest.MultiplyStat(stats.Mana, spellData.MentalStrength.MultiplierAt(priest.Talents.MentalStrength))
 }
 
 func (priest *Priest) applySpiritualGuidance() {
@@ -96,7 +105,7 @@ func (priest *Priest) applySpiritualGuidance() {
 		return
 	}
 	// 5% of Spirit added to spell damage per rank
-	coeff := 0.05 * float64(priest.Talents.SpiritualGuidance)
+	coeff := spellData.SpiritualGuidance.Effect(shared.A_MOD_SPELL_DAMAGE_OF_STAT_PERCENT, 126).FractionAt(priest.Talents.SpiritualGuidance)
 	priest.AddStatDependency(stats.Spirit, stats.SpellDamage, coeff) // Only scaling damage for now since no healing sim....yet!
 }
 
@@ -119,7 +128,7 @@ func (priest *Priest) applySearingLight() {
 	// +5% damage per rank
 	priest.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
-		FloatValue: 0.05 * float64(priest.Talents.SearingLight),
+		FloatValue: spellData.SearingLight.Effect(shared.A_ADD_PCT_MODIFIER, shared.SPELLMOD_DAMAGE).FractionAt(priest.Talents.SearingLight),
 		ClassMask:  PriestSpellSmite | PriestSpellHolyFire,
 	})
 }
@@ -136,7 +145,7 @@ func (priest *Priest) applySurgeOfLight() {
 		ClassMask:  PriestSpellSmite,
 	})
 	manaCostMod := priest.AddDynamicMod(core.SpellModConfig{
-		Kind:       core.SpellMod_PowerCost_Pct,
+		Kind:       core.SpellMod_PowerCost_Pct_Add,
 		FloatValue: -1.0, // -100% = free
 		ClassMask:  PriestSpellSmite,
 	})
@@ -172,10 +181,11 @@ func (priest *Priest) applySurgeOfLight() {
 	procChance := 0.25 * float64(priest.Talents.SurgeOfLight)
 
 	priest.MakeProcTriggerAura(core.ProcTrigger{
-		Name:       "Surge of Light Trigger",
-		Callback:   core.CallbackOnSpellHitDealt,
-		Outcome:    core.OutcomeCrit,
-		ProcChance: procChance,
+		Name:            "Surge of Light Trigger",
+		ClassSpellsOnly: true,
+		Outcome:         core.OutcomeCrit,
+		ProcChance:      procChance,
+		Callback:        core.CallbackOnSpellHitDealt,
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			solAura.Activate(sim)
 		},
@@ -263,6 +273,7 @@ func (priest *Priest) applyInnerFocus() {
 
 	innerFocusSpell = priest.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 14751},
+		DefenseType:    core.DefenseTypeMagic,
 		Flags:          core.SpellFlagNoOnCastComplete | core.SpellFlagAPL,
 		ClassSpellMask: PriestSpellFlagNone,
 		Cast: core.CastConfig{
@@ -291,7 +302,7 @@ func (priest *Priest) applyMeditation() {
 		return
 	}
 
-	priest.PseudoStats.SpiritRegenRateCasting += 0.10 * float64(priest.Talents.Meditation)
+	priest.PseudoStats.SpiritRegenRateCasting += spellData.Meditation.FractionAt(priest.Talents.Meditation)
 	priest.UpdateManaRegenRates()
 }
 
@@ -301,7 +312,7 @@ func (priest *Priest) applyMentalAgility() {
 	}
 
 	priest.AddStaticMod(core.SpellModConfig{
-		Kind:       core.SpellMod_PowerCost_Pct,
+		Kind:       core.SpellMod_PowerCost_Pct_Add,
 		FloatValue: -0.02 * float64(priest.Talents.MentalAgility),
 		ClassMask:  PriestSpellInstant,
 	})
@@ -314,7 +325,7 @@ func (priest *Priest) applyDarkness() {
 
 	priest.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_DamageDone_Flat,
-		FloatValue: 0.02 * float64(priest.Talents.Darkness),
+		FloatValue: spellData.Darkness.Effect(shared.A_ADD_PCT_MODIFIER, shared.SPELLMOD_DOT).FractionAt(priest.Talents.Darkness),
 		ClassMask:  PriestShadowSpells,
 	})
 }
@@ -324,7 +335,7 @@ func (priest *Priest) applyShadowFocus() {
 		return
 	}
 
-	priest.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexShadow] += 2 * float64(priest.Talents.ShadowFocus)
+	priest.PseudoStats.SchoolBonusHitChance[stats.SchoolIndexShadow] += spellData.ShadowFocus.ValueAt(priest.Talents.ShadowFocus)
 
 }
 
@@ -346,7 +357,7 @@ func (priest *Priest) applyFocusedMind() {
 	}
 
 	priest.AddStaticMod(core.SpellModConfig{
-		Kind:       core.SpellMod_PowerCost_Pct,
+		Kind:       core.SpellMod_PowerCost_Pct_Add,
 		FloatValue: -0.05 * float64(priest.Talents.FocusedMind),
 		ClassMask:  PriestSpellMindBlast | PriestSpellMindFlay,
 	})
@@ -373,7 +384,7 @@ func (priest *Priest) applyShadowPower() {
 
 	priest.AddStaticMod(core.SpellModConfig{
 		Kind:       core.SpellMod_BonusCrit_Percent,
-		FloatValue: 3.0 * float64(priest.Talents.ShadowPower),
+		FloatValue: spellData.ShadowPower.ValueAt(priest.Talents.ShadowPower),
 		ClassMask:  PriestSpellMindBlast | PriestSpellShadowWordDeath,
 	})
 }
@@ -386,11 +397,12 @@ func (priest *Priest) applyShadowWeaving() {
 	swAuras := priest.NewEnemyAuraArray(core.ShadowWeavingAura)
 
 	priest.MakeProcTriggerAura(core.ProcTrigger{
-		Name:           "Shadow Weaving Trigger",
-		ClassSpellMask: PriestShadowSpells,
-		Callback:       core.CallbackOnSpellHitDealt,
-		Outcome:        core.OutcomeLanded,
-		ProcChance:     0.20 * float64(priest.Talents.ShadowWeaving),
+		Name:             "Shadow Weaving Trigger",
+		CanProcFromProcs: true, // 15257, 15331-15334 carry the bit.
+		ClassSpellMask:   PriestShadowSpells,
+		Callback:         core.CallbackOnSpellHitDealt,
+		Outcome:          core.OutcomeLanded,
+		ProcChance:       spellData.ShadowWeaving.FractionAt(priest.Talents.ShadowWeaving),
 		Handler: func(sim *core.Simulation, spell *core.Spell, result *core.SpellResult) {
 			swAuras.Get(result.Target).Activate(sim)
 			swAuras.Get(result.Target).AddStack(sim)
@@ -482,7 +494,7 @@ func (priest *Priest) applyVampiricEmbrace() {
 		return
 	}
 
-	healPct := 0.15 + 0.05*float64(priest.Talents.ImprovedVampiricEmbrace)
+	healPct := 0.15 + spellData.ImprovedVampiricEmbrace.FractionAt(priest.Talents.ImprovedVampiricEmbrace)
 	healthMetrics := priest.NewHealthMetrics(core.ActionID{SpellID: 15286})
 
 	veDebuffAuras := priest.NewEnemyAuraArray(func(target *core.Unit) *core.Aura {
@@ -505,6 +517,7 @@ func (priest *Priest) applyVampiricEmbrace() {
 
 	priest.VampiricEmbrace = priest.RegisterSpell(core.SpellConfig{
 		ActionID:       core.ActionID{SpellID: 15286},
+		DefenseType:    core.DefenseTypeMagic,
 		ProcMask:       core.ProcMaskEmpty,
 		Flags:          core.SpellFlagAPL,
 		ClassSpellMask: PriestSpellVampiricEmbrace,

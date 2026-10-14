@@ -251,6 +251,21 @@ func (sdm *StatDependencyManager) IsFinalized() bool {
 	return sdm.finalized
 }
 
+// ApplyStatDependenciesInPlace is ApplyStatDependencies without copying the array.
+func (sdm *StatDependencyManager) ApplyStatDependenciesInPlace(s *Stats) {
+	for _, dep := range sdm.deps {
+		if dep.enabled {
+			if dep.src == dep.dst {
+				s[dep.dst] *= dep.amount
+			} else if isFlooredGameStat[dep.src] {
+				s[dep.dst] += math.Floor(s[dep.src]) * dep.amount
+			} else {
+				s[dep.dst] += s[dep.src] * dep.amount
+			}
+		}
+	}
+}
+
 func (sdm *StatDependencyManager) ApplyStatDependencies(s Stats) Stats {
 	for _, dep := range sdm.deps {
 		if dep.enabled {
@@ -272,6 +287,17 @@ func (sdm *StatDependencyManager) ApplyStatDependencies(s Stats) Stats {
 func (sdm *StatDependencyManager) SortAndApplyStatDependencies(s Stats) Stats {
 	sdm.sortDeps()
 	return sdm.ApplyStatDependencies(s)
+}
+
+// GetStatDependencyCoeff returns the combined linear coefficient for how much of dst
+// is gained per unit of src from all currently-enabled dependencies.
+func (sdm *StatDependencyManager) GetStatDependencyCoeff(src, dst Stat) float64 {
+	for _, dep := range sdm.deps {
+		if dep.enabled && dep.src == src && dep.dst == dst {
+			return dep.amount
+		}
+	}
+	return 0
 }
 
 // Returns whether the state changed.

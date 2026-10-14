@@ -144,7 +144,7 @@ const (
 	DruidSpellHoT                = DruidSpellRejuvenation | DruidSpellLifebloom | DruidSpellRegrowth
 	DruidSpellInstant            = DruidSpellMoonfire | DruidSpellFaerieFire
 	DruidSpellMangle             = DruidSpellMangleBear | DruidSpellMangleCat
-	DruidSpellBuilder            = DruidSpellMangleCat | DruidSpellShred | DruidSpellRake | DruidSpellRavage
+	DruidSpellBuilder            = DruidSpellMangle | DruidSpellShred | DruidSpellRake | DruidSpellRavage
 	DruidSpellFinisher           = DruidSpellFerociousBite | DruidSpellRip
 	DruidArcaneSpells            = DruidSpellMoonfire | DruidSpellMoonfireDoT | DruidSpellStarfire
 	DruidNatureSpells            = DruidSpellWrath | DruidSpellHurricane | DruidSpellInsectSwarm
@@ -220,6 +220,7 @@ func (druid *Druid) Initialize() {
 
 func (druid *Druid) RegisterBaselineSpells() {
 	druid.registerInnervateCD()
+	druid.registerThornsSpell()
 	druid.registerFormBreakingConsumes()
 }
 
