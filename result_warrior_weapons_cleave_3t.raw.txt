@@ -1,0 +1,170 @@
+=== RUN   TestWarriorHyjalBTSRAdaptive
+ITERATIONS adaptive | baseline 100000 | batch 5000 | cap 25000 | z 1.96 | targets 3
+2026/10/14 10:39:19 running 10000 iterations took 30.345270625s
+2026/10/14 10:39:20 running 10000 iterations took 30.547034625s
+2026/10/14 10:39:20 running 10000 iterations took 30.555150125s
+2026/10/14 10:39:20 running 10000 iterations took 30.559928042s
+2026/10/14 10:39:20 running 10000 iterations took 30.605424875s
+2026/10/14 10:39:20 running 10000 iterations took 30.697996709s
+2026/10/14 10:39:20 running 10000 iterations took 30.767252125s
+2026/10/14 10:39:20 running 10000 iterations took 30.898724625s
+2026/10/14 10:39:20 running 10000 iterations took 30.947479333s
+2026/10/14 10:39:20 running 10000 iterations took 31.077336459s
+2026/10/14 10:39:51 running 10000 iterations took 30.77223225s
+2026/10/14 10:39:51 running 10000 iterations took 30.784518333s
+2026/10/14 10:39:51 running 10000 iterations took 30.807440334s
+2026/10/14 10:39:51 running 10000 iterations took 30.8750975s
+2026/10/14 10:39:51 running 10000 iterations took 30.979897083s
+2026/10/14 10:39:51 running 10000 iterations took 30.987044125s
+2026/10/14 10:39:51 running 10000 iterations took 31.003896333s
+2026/10/14 10:39:51 running 10000 iterations took 31.070218042s
+2026/10/14 10:39:51 running 10000 iterations took 31.364619625s
+2026/10/14 10:39:52 running 10000 iterations took 31.4114635s
+WSRBASE | Oct13T5R@3t | Oct13T5 + Band of the Eternal Champion, 3 targets | DPS 3967.6 (se 0.55, 100000 iterations) | AP 3941 hit 126 crit 402 exp 0
+WSRSET | Oct13T5R@3t | Destroyer set bonuses removed | DPS 3916.5 | -51.2
+WSRTIER | Oct13T5R@3t | 5 | Head,Shoulder,Chest,Hands,Legs
+WSRSTEP | Oct13T5R@3t | MainHand | Tracker's Blade | 30865 | 5000 | -538.04 | 3.90 | Hyjal | Rage Winterchill
+WSR | Oct13T5R@3t | Hyjal    | Rage Winterchill   | MainHand  | Tracker's Blade                    |  30865 |   3429.6 |  -538.0 |  | dagger 1.5 | n=5000 | ±3.9 | worse
+WSRSTEP | Oct13T5R@3t | OffHand | Tracker's Blade | 30865 | 5000 | -110.57 | 4.82 | Hyjal | Rage Winterchill
+WSR | Oct13T5R@3t | Hyjal    | Rage Winterchill   | OffHand   | Tracker's Blade                    |  30865 |   3857.1 |  -110.6 |  | dagger 1.5 | n=5000 | ±4.8 | worse
+WSRSTEP | Oct13T5R@3t | MainHand | Blade of Infamy | 30881 | 5000 | -86.91 | 4.66 | Hyjal | Anetheron
+WSR | Oct13T5R@3t | Hyjal    | Anetheron          | MainHand  | Blade of Infamy                    |  30881 |   3880.7 |   -86.9 |  | sword 2.6 | n=5000 | ±4.7 | worse
+WSRSTEP | Oct13T5R@3t | OffHand | Blade of Infamy | 30881 | 5000 | 18.82 | 5.03 | Hyjal | Anetheron
+WSRSTEP | Oct13T5R@3t | MainHand | Boundless Agony | 30901 | 5000 | -434.65 | 4.02 | Hyjal | Azgalor
+WSR | Oct13T5R@3t | Hyjal    | Azgalor            | MainHand  | Boundless Agony                    |  30901 |   3533.0 |  -434.7 |  | dagger 1.8 | n=5000 | ±4.0 | worse
+WSRSTEP | Oct13T5R@3t | OffHand | Boundless Agony | 30901 | 5000 | -72.70 | 4.93 | Hyjal | Azgalor
+WSR | Oct13T5R@3t | Hyjal    | Azgalor            | OffHand   | Boundless Agony                    |  30901 |   3894.9 |   -72.7 |  | dagger 1.8 | n=5000 | ±4.9 | worse
+WSRSTEP | Oct13T5R@3t | MainHand | Claw of Molten Fury | 32946 | 5000 | -85.88 | 4.84 | Hyjal | Trash
+WSR | Oct13T5R@3t | Hyjal    | Trash              | MainHand  | Claw of Molten Fury                |  32946 |   3881.8 |   -85.9 |  | fist 2.7, MH only | n=5000 | ±4.8 | worse
+WSRSTEP | Oct13T5R@3t | OffHand | Fist of Molten Fury | 32945 | 5000 | -92.89 | 4.88 | Hyjal | Trash
+WSR | Oct13T5R@3t | Hyjal    | Trash              | OffHand   | Fist of Molten Fury                |  32945 |   3874.8 |   -92.9 |  | fist 1.5, OH only | n=5000 | ±4.9 | worse
+WSRSTEP | Oct13T5R@3t | MainHand | Rising Tide | 32236 | 5000 | -63.03 | 4.74 | BT | Naj'entus
+WSR | Oct13T5R@3t | BT       | Naj'entus          | MainHand  | Rising Tide                        |  32236 |   3904.6 |   -63.0 |  | axe 2.6 | n=5000 | ±4.7 | worse
+WSRSTEP | Oct13T5R@3t | OffHand | Rising Tide | 32236 | 5000 | 5.64 | 4.98 | BT | Naj'entus
+WSRSTEP | Oct13T5R@3t | MainHand | Syphon of the Nathrezim | 32262 | 5000 | -51.49 | 4.92 | BT | Supremus
+WSR | Oct13T5R@3t | BT       | Supremus           | MainHand  | Syphon of the Nathrezim            |  32262 |   3916.2 |   -51.5 |  | mace 2.8 | n=5000 | ±4.9 | worse
+WSRSTEP | Oct13T5R@3t | OffHand | Syphon of the Nathrezim | 32262 | 5000 | 12.01 | 5.15 | BT | Supremus
+WSRSTEP | Oct13T5R@3t | MainHand | The Brutalizer | 32254 | 5000 | -367.19 | 3.95 | BT | Supremus
+WSR | Oct13T5R@3t | BT       | Supremus           | MainHand  | The Brutalizer                     |  32254 |   3600.5 |  -367.2 |  | axe 1.6, tank | n=5000 | ±3.9 | worse
+WSRSTEP | Oct13T5R@3t | OffHand | The Brutalizer | 32254 | 5000 | -42.07 | 4.81 | BT | Supremus
+WSR | Oct13T5R@3t | BT       | Supremus           | OffHand   | The Brutalizer                     |  32254 |   3925.6 |   -42.1 |  | axe 1.6, tank | n=5000 | ±4.8 | worse
+WSRSTEP | Oct13T5R@3t | MainHand | Messenger of Fate | 32269 | 5000 | -591.15 | 3.78 | BT | Gurtogg Bloodboil
+WSR | Oct13T5R@3t | BT       | Gurtogg Bloodboil  | MainHand  | Messenger of Fate                  |  32269 |   3376.5 |  -591.1 |  | dagger 1.4 | n=5000 | ±3.8 | worse
+WSRSTEP | Oct13T5R@3t | OffHand | Messenger of Fate | 32269 | 5000 | -150.57 | 4.81 | BT | Gurtogg Bloodboil
+WSR | Oct13T5R@3t | BT       | Gurtogg Bloodboil  | OffHand   | Messenger of Fate                  |  32269 |   3817.1 |  -150.6 |  | dagger 1.4 | n=5000 | ±4.8 | worse
+WSRSTEP | Oct13T5R@3t | MainHand | Blade of Savagery | 32369 | 5000 | -438.76 | 3.77 | BT | Mother Shahraz
+WSR | Oct13T5R@3t | BT       | Mother Shahraz     | MainHand  | Blade of Savagery                  |  32369 |   3528.9 |  -438.8 |  | sword 1.4 | n=5000 | ±3.8 | worse
+WSRSTEP | Oct13T5R@3t | OffHand | Blade of Savagery | 32369 | 5000 | -69.59 | 4.83 | BT | Mother Shahraz
+WSR | Oct13T5R@3t | BT       | Mother Shahraz     | OffHand   | Blade of Savagery                  |  32369 |   3898.1 |   -69.6 |  | sword 1.4 | n=5000 | ±4.8 | worse
+WSRSTEP | Oct13T5R@3t | MainHand | Shard of Azzinoth | 32471 | 5000 | -425.49 | 4.17 | BT | Illidan Stormrage
+WSR | Oct13T5R@3t | BT       | Illidan Stormrage  | MainHand  | Shard of Azzinoth                  |  32471 |   3542.2 |  -425.5 |  | dagger 1.9 | n=5000 | ±4.2 | worse
+WSRSTEP | Oct13T5R@3t | OffHand | Shard of Azzinoth | 32471 | 5000 | -102.91 | 4.84 | BT | Illidan Stormrage
+WSR | Oct13T5R@3t | BT       | Illidan Stormrage  | OffHand   | Shard of Azzinoth                  |  32471 |   3864.7 |  -102.9 |  | dagger 1.9 | n=5000 | ±4.8 | worse
+WSRSTEP | Oct13T5R@3t | MainHand | Warglaive of Azzinoth (MH) | 32837 | 5000 | 14.65 | 4.94 | BT | Illidan Stormrage
+WSRSTEP | Oct13T5R@3t | OffHand | Warglaive of Azzinoth (OH) | 32838 | 5000 | -30.78 | 4.87 | BT | Illidan Stormrage
+WSR | Oct13T5R@3t | BT       | Illidan Stormrage  | OffHand   | Warglaive of Azzinoth (OH)         |  32838 |   3936.9 |   -30.8 |  | legendary, OH only | n=5000 | ±4.9 | worse
+WSRSTEP | Oct13T5R@3t | MainHand | Swiftsteel Bludgeon | 32943 | 5000 | -416.19 | 3.91 | BT | Trash
+WSR | Oct13T5R@3t | BT       | Trash              | MainHand  | Swiftsteel Bludgeon                |  32943 |   3551.5 |  -416.2 |  | mace 1.5 | n=5000 | ±3.9 | worse
+WSRSTEP | Oct13T5R@3t | OffHand | Swiftsteel Bludgeon | 32943 | 5000 | -59.11 | 4.84 | BT | Trash
+WSR | Oct13T5R@3t | BT       | Trash              | OffHand   | Swiftsteel Bludgeon                |  32943 |   3908.5 |   -59.1 |  | mace 1.5 | n=5000 | ±4.8 | worse
+WSRSTEP | Oct13T5R@3t | OffHand | Fury | 33640 | 5000 | -20.55 | 4.96 | ZA | Nalorakk
+WSR | Oct13T5R@3t | ZA       | Nalorakk           | OffHand   | Fury                               |  33640 |   3947.1 |   -20.6 |  | fist 2.6, OH only | n=5000 | ±5.0 | worse
+WSRSTEP | Oct13T5R@3t | MainHand | Akil'zon's Talonblade | 33214 | 5000 | -455.16 | 3.83 | ZA | Akil'zon
+WSR | Oct13T5R@3t | ZA       | Akil'zon           | MainHand  | Akil'zon's Talonblade              |  33214 |   3512.5 |  -455.2 |  | sword 1.5 | n=5000 | ±3.8 | worse
+WSRSTEP | Oct13T5R@3t | OffHand | Akil'zon's Talonblade | 33214 | 5000 | -92.88 | 4.86 | ZA | Akil'zon
+WSR | Oct13T5R@3t | ZA       | Akil'zon           | OffHand   | Akil'zon's Talonblade              |  33214 |   3874.8 |   -92.9 |  | sword 1.5 | n=5000 | ±4.9 | worse
+WSRSTEP | Oct13T5R@3t | MainHand | Heartless | 33388 | 5000 | -133.22 | 4.71 | ZA | Hex Lord Malacrass
+WSR | Oct13T5R@3t | ZA       | Hex Lord Malacrass | MainHand  | Heartless                          |  33388 |   3834.4 |  -133.2 |  | sword 2.6 | n=5000 | ±4.7 | worse
+WSRSTEP | Oct13T5R@3t | OffHand | Heartless | 33388 | 5000 | -22.29 | 4.89 | ZA | Hex Lord Malacrass
+WSR | Oct13T5R@3t | ZA       | Hex Lord Malacrass | OffHand   | Heartless                          |  33388 |   3945.4 |   -22.3 |  | sword 2.6 | n=5000 | ±4.9 | worse
+WSRSTEP | Oct13T5R@3t | MainHand | Prowler's Strikeblade | 33298 | 5000 | -576.59 | 3.89 | ZA | Hex Lord Malacrass
+WSR | Oct13T5R@3t | ZA       | Hex Lord Malacrass | MainHand  | Prowler's Strikeblade              |  33298 |   3391.1 |  -576.6 |  | dagger 1.5 | n=5000 | ±3.9 | worse
+WSRSTEP | Oct13T5R@3t | OffHand | Prowler's Strikeblade | 33298 | 5000 | -139.58 | 4.88 | ZA | Hex Lord Malacrass
+WSR | Oct13T5R@3t | ZA       | Hex Lord Malacrass | OffHand   | Prowler's Strikeblade              |  33298 |   3828.1 |  -139.6 |  | dagger 1.5 | n=5000 | ±4.9 | worse
+WSRSTEP | Oct13T5R@3t | OffHand | Dagger of Bad Mojo | 33389 | 5000 | -88.99 | 4.99 | ZA | Hex Lord Malacrass
+WSR | Oct13T5R@3t | ZA       | Hex Lord Malacrass | OffHand   | Dagger of Bad Mojo                 |  33389 |   3878.7 |   -89.0 |  | dagger 1.8 | n=5000 | ±5.0 | worse
+WSRSTEP | Oct13T5R@3t | MainHand | Rage | 33495 | 5000 | -127.19 | 4.69 | ZA | Timed chest
+WSR | Oct13T5R@3t | ZA       | Timed chest        | MainHand  | Rage                               |  33495 |   3840.5 |  -127.2 |  | fist 2.6, MH only | n=5000 | ±4.7 | worse
+WSRSTEP | Oct13T5R@3t | MainHand | Vengeful Gladiator's Cleaver | 33669 | 5000 | -13.86 | 4.77 | S3 | Arena
+WSR | Oct13T5R@3t | S3       | Arena              | MainHand  | Vengeful Gladiator's Cleaver       |  33669 |   3953.8 |   -13.9 |  | axe 2.6 | n=5000 | ±4.8 | worse
+WSRSTEP | Oct13T5R@3t | OffHand | Vengeful Gladiator's Cleaver | 33669 | 5000 | 42.51 | 5.03 | S3 | Arena
+WSRSTEP | Oct13T5R@3t | MainHand | Vengeful Gladiator's Slicer | 33762 | 5000 | -65.63 | 4.71 | S3 | Arena
+WSR | Oct13T5R@3t | S3       | Arena              | MainHand  | Vengeful Gladiator's Slicer        |  33762 |   3902.0 |   -65.6 |  | sword 2.6 | n=5000 | ±4.7 | worse
+WSRSTEP | Oct13T5R@3t | OffHand | Vengeful Gladiator's Slicer | 33762 | 5000 | 25.96 | 4.98 | S3 | Arena
+WSRSTEP | Oct13T5R@3t | MainHand | Vengeful Gladiator's Pummeler | 33733 | 5000 | -67.36 | 4.75 | S3 | Arena
+WSR | Oct13T5R@3t | S3       | Arena              | MainHand  | Vengeful Gladiator's Pummeler      |  33733 |   3900.3 |   -67.4 |  | mace 2.6 | n=5000 | ±4.7 | worse
+WSRSTEP | Oct13T5R@3t | OffHand | Vengeful Gladiator's Pummeler | 33733 | 5000 | 26.76 | 4.95 | S3 | Arena
+WSRSTEP | Oct13T5R@3t | MainHand | Vengeful Gladiator's Right Ripper | 33737 | 5000 | -67.36 | 4.75 | S3 | Arena
+WSR | Oct13T5R@3t | S3       | Arena              | MainHand  | Vengeful Gladiator's Right Ripper  |  33737 |   3900.3 |   -67.4 |  | fist 2.6, MH only | n=5000 | ±4.7 | worse
+WSRSTEP | Oct13T5R@3t | MainHand | Vengeful Gladiator's Shanker | 33754 | 5000 | -438.70 | 4.09 | S3 | Arena
+WSR | Oct13T5R@3t | S3       | Arena              | MainHand  | Vengeful Gladiator's Shanker       |  33754 |   3528.9 |  -438.7 |  | dagger 1.8 | n=5000 | ±4.1 | worse
+WSRSTEP | Oct13T5R@3t | OffHand | Vengeful Gladiator's Shanker | 33754 | 5000 | -83.60 | 4.94 | S3 | Arena
+WSR | Oct13T5R@3t | S3       | Arena              | OffHand   | Vengeful Gladiator's Shanker       |  33754 |   3884.0 |   -83.6 |  | dagger 1.8 | n=5000 | ±4.9 | worse
+WSRSTEP | Oct13T5R@3t | OffHand | Vengeful Gladiator's Hacker | 33689 | 5000 | -33.55 | 4.84 | S3 | Arena
+WSR | Oct13T5R@3t | S3       | Arena              | OffHand   | Vengeful Gladiator's Hacker        |  33689 |   3934.1 |   -33.6 |  | axe 1.5, OH only | n=5000 | ±4.8 | worse
+WSRSTEP | Oct13T5R@3t | OffHand | Vengeful Gladiator's Quickblade | 33734 | 5000 | -52.86 | 4.84 | S3 | Arena
+WSR | Oct13T5R@3t | S3       | Arena              | OffHand   | Vengeful Gladiator's Quickblade    |  33734 |   3914.8 |   -52.9 |  | sword 1.5, OH only | n=5000 | ±4.8 | worse
+WSRSTEP | Oct13T5R@3t | OffHand | Vengeful Gladiator's Bonecracker | 33662 | 5000 | -52.86 | 4.84 | S3 | Arena
+WSR | Oct13T5R@3t | S3       | Arena              | OffHand   | Vengeful Gladiator's Bonecracker   |  33662 |   3914.8 |   -52.9 |  | mace 1.5, OH only | n=5000 | ±4.8 | worse
+WSRSTEP | Oct13T5R@3t | OffHand | Vengeful Gladiator's Left Ripper | 33705 | 5000 | -52.86 | 4.84 | S3 | Arena
+WSR | Oct13T5R@3t | S3       | Arena              | OffHand   | Vengeful Gladiator's Left Ripper   |  33705 |   3914.8 |   -52.9 |  | fist 1.5, OH only | n=5000 | ±4.8 | worse
+WSRSTEP | Oct13T5R@3t | OffHand | Vengeful Gladiator's Shiv | 33756 | 5000 | -120.10 | 4.75 | S3 | Arena
+WSR | Oct13T5R@3t | S3       | Arena              | OffHand   | Vengeful Gladiator's Shiv          |  33756 |   3847.5 |  -120.1 |  | dagger 1.4, OH only | n=5000 | ±4.7 | worse
+WSRSTEP | Oct13T5R@3t | OffHand | Vengeful Gladiator's Mutilator | 33801 | 5000 | -81.00 | 4.92 | S3 | Arena
+WSR | Oct13T5R@3t | S3       | Arena              | OffHand   | Vengeful Gladiator's Mutilator     |  33801 |   3886.7 |   -81.0 |  | dagger 1.8, OH only | n=5000 | ±4.9 | worse
+WSRSTEP | Oct13T5R@3t | OffHand | Vengeful Gladiator's Chopper | 34015 | 5000 | 42.51 | 5.03 | S3 | Arena
+WSRSTEP | Oct13T5R@3t | OffHand | Vengeful Gladiator's Left Render | 34016 | 5000 | 26.76 | 4.95 | S3 | Arena
+WSRROUND | Oct13T5R@3t | round 1 | 5000 iterations each | decided 41 | open 9
+WSRSTEP | Oct13T5R@3t | OffHand | Blade of Infamy | 30881 | 10000 | 16.79 | 3.66 | Hyjal | Anetheron
+WSRSTEP | Oct13T5R@3t | OffHand | Rising Tide | 32236 | 10000 | 6.76 | 3.59 | BT | Naj'entus
+WSRSTEP | Oct13T5R@3t | OffHand | Syphon of the Nathrezim | 32262 | 10000 | 10.46 | 3.68 | BT | Supremus
+WSRSTEP | Oct13T5R@3t | MainHand | Warglaive of Azzinoth (MH) | 32837 | 10000 | 16.09 | 3.57 | BT | Illidan Stormrage
+WSRSTEP | Oct13T5R@3t | OffHand | Vengeful Gladiator's Cleaver | 33669 | 10000 | 46.18 | 3.62 | S3 | Arena
+WSRSTEP | Oct13T5R@3t | OffHand | Vengeful Gladiator's Slicer | 33762 | 10000 | 27.40 | 3.60 | S3 | Arena
+WSRSTEP | Oct13T5R@3t | OffHand | Vengeful Gladiator's Pummeler | 33733 | 10000 | 27.09 | 3.61 | S3 | Arena
+WSRSTEP | Oct13T5R@3t | OffHand | Vengeful Gladiator's Chopper | 34015 | 10000 | 46.18 | 3.62 | S3 | Arena
+WSRSTEP | Oct13T5R@3t | OffHand | Vengeful Gladiator's Left Render | 34016 | 10000 | 27.09 | 3.61 | S3 | Arena
+WSRROUND | Oct13T5R@3t | round 2 | 10000 iterations each | decided 41 | open 9
+WSRSTEP | Oct13T5R@3t | OffHand | Blade of Infamy | 30881 | 15000 | 15.69 | 3.06 | Hyjal | Anetheron
+WSRSTEP | Oct13T5R@3t | OffHand | Rising Tide | 32236 | 15000 | 6.85 | 3.00 | BT | Naj'entus
+WSRSTEP | Oct13T5R@3t | OffHand | Syphon of the Nathrezim | 32262 | 15000 | 9.58 | 3.07 | BT | Supremus
+WSRSTEP | Oct13T5R@3t | MainHand | Warglaive of Azzinoth (MH) | 32837 | 15000 | 16.92 | 2.98 | BT | Illidan Stormrage
+WSRSTEP | Oct13T5R@3t | OffHand | Vengeful Gladiator's Cleaver | 33669 | 15000 | 45.09 | 3.05 | S3 | Arena
+WSRSTEP | Oct13T5R@3t | OffHand | Vengeful Gladiator's Slicer | 33762 | 15000 | 26.31 | 3.01 | S3 | Arena
+WSRSTEP | Oct13T5R@3t | OffHand | Vengeful Gladiator's Pummeler | 33733 | 15000 | 25.77 | 3.02 | S3 | Arena
+WSRSTEP | Oct13T5R@3t | OffHand | Vengeful Gladiator's Chopper | 34015 | 15000 | 45.09 | 3.05 | S3 | Arena
+WSRSTEP | Oct13T5R@3t | OffHand | Vengeful Gladiator's Left Render | 34016 | 15000 | 25.77 | 3.02 | S3 | Arena
+WSRROUND | Oct13T5R@3t | round 3 | 15000 iterations each | decided 41 | open 9
+WSRSTEP | Oct13T5R@3t | OffHand | Blade of Infamy | 30881 | 20000 | 16.20 | 2.70 | Hyjal | Anetheron
+WSRSTEP | Oct13T5R@3t | OffHand | Rising Tide | 32236 | 20000 | 6.61 | 2.66 | BT | Naj'entus
+WSRSTEP | Oct13T5R@3t | OffHand | Syphon of the Nathrezim | 32262 | 20000 | 10.37 | 2.71 | BT | Supremus
+WSRSTEP | Oct13T5R@3t | MainHand | Warglaive of Azzinoth (MH) | 32837 | 20000 | 16.72 | 2.63 | BT | Illidan Stormrage
+WSRSTEP | Oct13T5R@3t | OffHand | Vengeful Gladiator's Cleaver | 33669 | 20000 | 46.90 | 2.69 | S3 | Arena
+WSRSTEP | Oct13T5R@3t | OffHand | Vengeful Gladiator's Slicer | 33762 | 20000 | 28.18 | 2.67 | S3 | Arena
+WSRSTEP | Oct13T5R@3t | OffHand | Vengeful Gladiator's Pummeler | 33733 | 20000 | 27.38 | 2.66 | S3 | Arena
+WSRSTEP | Oct13T5R@3t | OffHand | Vengeful Gladiator's Chopper | 34015 | 20000 | 46.90 | 2.69 | S3 | Arena
+WSRSTEP | Oct13T5R@3t | OffHand | Vengeful Gladiator's Left Render | 34016 | 20000 | 27.38 | 2.66 | S3 | Arena
+WSRROUND | Oct13T5R@3t | round 4 | 20000 iterations each | decided 41 | open 9
+WSRSTEP | Oct13T5R@3t | OffHand | Blade of Infamy | 30881 | 25000 | 16.83 | 2.46 | Hyjal | Anetheron
+WSR | Oct13T5R@3t | Hyjal    | Anetheron          | OffHand   | Blade of Infamy                    |  30881 |   3984.5 |   +16.8 |  | sword 2.6 | n=25000 | ±2.5 | better
+WSRSTEP | Oct13T5R@3t | OffHand | Rising Tide | 32236 | 25000 | 6.68 | 2.42 | BT | Naj'entus
+WSR | Oct13T5R@3t | BT       | Naj'entus          | OffHand   | Rising Tide                        |  32236 |   3974.3 |    +6.7 |  | axe 2.6 | n=25000 | ±2.4 | better
+WSRSTEP | Oct13T5R@3t | OffHand | Syphon of the Nathrezim | 32262 | 25000 | 9.96 | 2.47 | BT | Supremus
+WSR | Oct13T5R@3t | BT       | Supremus           | OffHand   | Syphon of the Nathrezim            |  32262 |   3977.6 |   +10.0 |  | mace 2.8 | n=25000 | ±2.5 | better
+WSRSTEP | Oct13T5R@3t | MainHand | Warglaive of Azzinoth (MH) | 32837 | 25000 | 16.94 | 2.40 | BT | Illidan Stormrage
+WSR | Oct13T5R@3t | BT       | Illidan Stormrage  | MainHand  | Warglaive of Azzinoth (MH)         |  32837 |   3984.6 |   +16.9 |  | legendary, MH only | n=25000 | ±2.4 | better
+WSRSTEP | Oct13T5R@3t | OffHand | Vengeful Gladiator's Cleaver | 33669 | 25000 | 46.56 | 2.46 | S3 | Arena
+WSR | Oct13T5R@3t | S3       | Arena              | OffHand   | Vengeful Gladiator's Cleaver       |  33669 |   4014.2 |   +46.6 |  | axe 2.6 | n=25000 | ±2.5 | better
+WSRSTEP | Oct13T5R@3t | OffHand | Vengeful Gladiator's Slicer | 33762 | 25000 | 28.04 | 2.44 | S3 | Arena
+WSR | Oct13T5R@3t | S3       | Arena              | OffHand   | Vengeful Gladiator's Slicer        |  33762 |   3995.7 |   +28.0 |  | sword 2.6 | n=25000 | ±2.4 | better
+WSRSTEP | Oct13T5R@3t | OffHand | Vengeful Gladiator's Pummeler | 33733 | 25000 | 27.57 | 2.45 | S3 | Arena
+WSR | Oct13T5R@3t | S3       | Arena              | OffHand   | Vengeful Gladiator's Pummeler      |  33733 |   3995.2 |   +27.6 |  | mace 2.6 | n=25000 | ±2.4 | better
+WSRSTEP | Oct13T5R@3t | OffHand | Vengeful Gladiator's Chopper | 34015 | 25000 | 46.56 | 2.46 | S3 | Arena
+WSR | Oct13T5R@3t | S3       | Arena              | OffHand   | Vengeful Gladiator's Chopper       |  34015 |   4014.2 |   +46.6 |  | axe 2.6, OH only | n=25000 | ±2.5 | better
+WSRSTEP | Oct13T5R@3t | OffHand | Vengeful Gladiator's Left Render | 34016 | 25000 | 27.57 | 2.45 | S3 | Arena
+WSR | Oct13T5R@3t | S3       | Arena              | OffHand   | Vengeful Gladiator's Left Render   |  34016 |   3995.2 |   +27.6 |  | fist 2.6, OH only | n=25000 | ±2.4 | better
+WSRROUND | Oct13T5R@3t | round 5 | 25000 iterations each | decided 50 | open 0
+WSRSUMMARY | Oct13T5R@3t | 50 candidates | better 9 | worse 41 | inconclusive 0 | 430000 iterations
+--- PASS: TestWarriorHyjalBTSRAdaptive (200.09s)
+PASS
+ok  	github.com/wowsims/tbc/sim	200.752s

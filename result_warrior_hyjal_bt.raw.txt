@@ -1,0 +1,343 @@
+=== RUN   TestWarriorHyjalBTSR
+ITERATIONS 20000
+WSRBASE | T5 | 5/5 Destroyer (T5 helm) | DPS 2220.0 (stdev 102.9) | AP 3801 hit 136 crit 417 exp 20
+WSRSET | T5 | Destroyer set bonuses removed | DPS 2193.3 | -26.7
+WSR | T5 | Hyjal    | Rage Winterchill   | Wrist     | Deadly Cuffs                       |  30863 |   2232.6 |   +12.6 |  | leather
+WSR | T5 | Hyjal    | Rage Winterchill   | Wrist     | Furious Shackles                   |  30861 |   2226.1 |    +6.1 |  | plate
+WSR | T5 | Hyjal    | Rage Winterchill   | Wrist     | Bracers of the Pathfinder          |  30864 |   2208.8 |   -11.2 |  | mail
+WSR | T5 | Hyjal    | Rage Winterchill   | Shoulder  | Blood-stained Pauldrons            |  30866 |   2230.6 |   +10.6 |  | plate
+WSR | T5 | Hyjal    | Rage Winterchill   | MainHand  | Tracker's Blade                    |  30865 |   2191.7 |   -28.3 |  | dagger 1.5
+WSR | T5 | Hyjal    | Rage Winterchill   | OffHand   | Tracker's Blade                    |  30865 |   2242.6 |   +22.6 |  | dagger 1.5
+WSR | T5 | Hyjal    | Anetheron          | Waist     | Don Alejandro's Money Belt         |  30879 |   2225.8 |    +5.8 |  | leather
+WSR | T5 | Hyjal    | Anetheron          | Feet      | Quickstrider Moccasins             |  30880 |   2226.6 |    +6.7 |  | mail
+WSR | T5 | Hyjal    | Anetheron          | MainHand  | Blade of Infamy                    |  30881 |   2234.6 |   +14.6 |  | sword 2.6
+WSR | T5 | Hyjal    | Anetheron          | OffHand   | Blade of Infamy                    |  30881 |   2231.0 |   +11.1 |  | sword 2.6
+WSR | T5 | Hyjal    | Kaz'rogal          | Waist     | Belt of Seething Fury              |  30915 |   2214.8 |    -5.2 |  | plate
+WSR | T5 | Hyjal    | Kaz'rogal          | Waist     | Valestalker Girdle                 |  30919 |   2219.9 |    -0.1 |  | mail
+WSR | T5 | Hyjal    | Kaz'rogal          | Feet      | Black Featherlight Boots           |  30891 |   2213.4 |    -6.6 |  | leather
+WSR | T5 | Hyjal    | Kaz'rogal          | Shoulder  | Razorfury Mantle                   |  30917 |   2215.9 |    -4.0 |  | leather
+WSR | T5 | Hyjal    | Azgalor            | Legs      | Shady Dealer's Pantaloons          |  30898 |   2225.1 |    +5.1 |  | leather
+WSR | T5 | Hyjal    | Azgalor            | Legs      | Bow-stitched Leggings              |  30900 |   2238.7 |   +18.7 |  | mail
+WSR | T5 | Hyjal    | Azgalor            | MainHand  | Boundless Agony                    |  30901 |   2189.3 |   -30.7 |  | dagger 1.8
+WSR | T5 | Hyjal    | Azgalor            | OffHand   | Boundless Agony                    |  30901 |   2240.4 |   +20.4 |  | dagger 1.8
+WSR | T5 | Hyjal    | Azgalor            | Hands     | Onslaught Gauntlets (T6)           |  30969 |   2234.5 |   +14.5 | Gloves of the Forgotten Protector | token 31094
+WSR | T5 | Hyjal    | Archimonde         | Chest     | Midnight Chestguard                |  30905 |   2242.2 |   +22.2 |  | leather
+WSR | T5 | Hyjal    | Archimonde         | Chest     | Mail of Fevered Pursuit            |  30907 |   2216.3 |    -3.6 |  | mail
+WSR | T5 | Hyjal    | Archimonde         | Legs      | Legguards of Endless Rage          |  30903 |   2240.7 |   +20.7 |  | plate
+WSR | T5 | Hyjal    | Archimonde         | Ranged    | Bristleblitz Striker               |  30906 |   2215.0 |    -5.0 |  | bow
+WSR | T5 | Hyjal    | Archimonde         | Head      | Onslaught Battle-Helm (T6)         |  30972 |   2232.0 |   +12.0 | Helm of the Forgotten Protector | token 31095
+WSR | T5 | Hyjal+BT | Trash              | Neck      | Choker of Serrated Blades          |  32591 |   2224.7 |    +4.7 |  | 
+WSR | T5 | Hyjal    | Trash              | MainHand  | Claw of Molten Fury                |  32946 |   2221.4 |    +1.4 |  | fist 2.7, MH only
+WSR | T5 | Hyjal    | Trash              | OffHand   | Fist of Molten Fury                |  32945 |   2237.8 |   +17.8 |  | fist 1.5, OH only
+WSR | T5 | BT       | Naj'entus          | Shoulder  | Mantle of Darkness                 |  32377 |   2226.6 |    +6.7 |  | leather
+WSR | T5 | BT       | Naj'entus          | Hands     | Fists of Mukoa                     |  32234 |   2233.8 |   +13.9 |  | mail
+WSR | T5 | BT       | Naj'entus          | MainHand  | Rising Tide                        |  32236 |   2241.5 |   +21.5 |  | axe 2.6
+WSR | T5 | BT       | Naj'entus          | OffHand   | Rising Tide                        |  32236 |   2221.7 |    +1.7 |  | axe 2.6
+WSR | T5 | BT       | Supremus           | Neck      | Choker of Endless Nightmares       |  32260 |   2235.2 |   +15.2 |  | 
+WSR | T5 | BT       | Supremus           | Chest     | Nether Shadow Tunic                |  32252 |   2216.5 |    -3.4 |  | leather
+WSR | T5 | BT       | Supremus           | Wrist     | Wraps of Precise Flight            |  32251 |   2220.2 |    +0.2 |  | mail
+WSR | T5 | BT       | Supremus           | MainHand  | Syphon of the Nathrezim            |  32262 |   2225.6 |    +5.6 |  | mace 2.8
+WSR | T5 | BT       | Supremus           | OffHand   | Syphon of the Nathrezim            |  32262 |   2214.3 |    -5.6 |  | mace 2.8
+WSR | T5 | BT       | Supremus           | MainHand  | The Brutalizer                     |  32254 |   2222.4 |    +2.4 |  | axe 1.6, tank
+WSR | T5 | BT       | Supremus           | OffHand   | The Brutalizer                     |  32254 |   2232.7 |   +12.7 |  | axe 1.6, tank
+WSR | T5 | BT       | Supremus           | Ranged    | Legionkiller                       |  32253 |   2205.1 |   -14.9 |  | crossbow
+WSR | T5 | BT       | Shade of Akama     | Hands     | Grips of Silent Justice            |  32278 |   2242.4 |   +22.5 |  | plate
+WSR | T5 | BT       | Shade of Akama     | Shoulder  | Shoulders of the Hidden Predator   |  32264 |   2226.4 |    +6.5 |  | mail
+WSR | T5 | BT       | Shade of Akama     | Waist     | Shadow-walker's Cord               |  32265 |   2220.8 |    +0.8 |  | leather
+WSR | T5 | BT       | Shade of Akama     | Finger1   | Ring of Deceitful Intent           |  32266 |   2224.1 |    +4.1 |  | 
+WSR | T5 | BT       | Shade of Akama     | Finger2   | Ring of Deceitful Intent           |  32266 |   2227.1 |    +7.1 |  | 
+WSR | T5 | BT       | Teron Gorefiend    | Back      | Shadowmoon Destroyer's Drape       |  32323 |   2236.0 |   +16.0 |  | 
+WSR | T5 | BT       | Teron Gorefiend    | Wrist     | Insidious Bands                    |  32324 |   2227.1 |    +7.2 |  | leather
+WSR | T5 | BT       | Teron Gorefiend    | Feet      | Softstep Boots of Tracking         |  32510 |   2239.0 |   +19.1 |  | mail
+WSR | T5 | BT       | Teron Gorefiend    | Ranged    | Twisted Blades of Zarak            |  32326 |   2222.3 |    +2.3 |  | thrown
+WSR | T5 | BT       | Gurtogg Bloodboil  | Legs      | Leggings of Divine Retribution     |  32341 |   2257.4 |   +37.4 |  | plate
+WSR | T5 | BT       | Gurtogg Bloodboil  | Chest     | Vest of Mounting Assault           |  32334 |   2198.1 |   -21.9 |  | mail
+WSR | T5 | BT       | Gurtogg Bloodboil  | Finger1   | Unstoppable Aggressor's Ring       |  32335 |   2237.8 |   +17.8 |  | 
+WSR | T5 | BT       | Gurtogg Bloodboil  | Finger2   | Unstoppable Aggressor's Ring       |  32335 |   2240.6 |   +20.6 |  | 
+WSR | T5 | BT       | Gurtogg Bloodboil  | MainHand  | Messenger of Fate                  |  32269 |   2176.0 |   -44.0 |  | dagger 1.4
+WSR | T5 | BT       | Gurtogg Bloodboil  | OffHand   | Messenger of Fate                  |  32269 |   2229.5 |    +9.6 |  | dagger 1.4
+WSR | T5 | BT       | Reliquary of the Lost | Feet      | Dreadboots of the Legion           |  32345 |   2250.6 |   +30.6 |  | plate
+WSR | T5 | BT       | Reliquary of the Lost | Hands     | Grips of Damnation                 |  32347 |   2235.3 |   +15.4 |  | leather
+WSR | T5 | BT       | Reliquary of the Lost | Waist     | Boneweave Girdle                   |  32346 |   2227.0 |    +7.0 |  | mail
+WSR | T5 | BT       | Mother Shahraz     | Chest     | Heartshatter Breastplate           |  32365 |   2227.6 |    +7.6 |  | plate
+WSR | T5 | BT       | Mother Shahraz     | Feet      | Shadowmaster's Boots               |  32366 |   2246.7 |   +26.7 |  | leather
+WSR | T5 | BT       | Mother Shahraz     | MainHand  | Blade of Savagery                  |  32369 |   2231.9 |   +12.0 |  | sword 1.4
+WSR | T5 | BT       | Mother Shahraz     | OffHand   | Blade of Savagery                  |  32369 |   2260.6 |   +40.6 |  | sword 1.4
+WSR | T5 | BT       | Mother Shahraz     | Shoulder  | Onslaught Shoulderblades (T6)      |  30979 |   2240.0 |   +20.1 | Pauldrons of the Forgotten Protector | token 31103
+WSR | T5 | BT       | Illidari Council   | Head      | Helm of the Illidari Shatterer     |  32373 |   2237.5 |   +17.5 |  | plate
+WSR | T5 | BT       | Illidari Council   | Head      | Forest Prowler's Helm              |  32376 |   2221.2 |    +1.2 |  | mail
+WSR | T5 | BT       | Illidari Council   | Trinket1  | Madness of the Betrayer            |  32505 |   2256.7 |   +36.8 |  | replaces Badge of the Swarmguard
+WSR | T5 | BT       | Illidari Council   | Legs      | Onslaught Greaves (T6)             |  30977 |   2237.9 |   +17.9 | Leggings of the Forgotten Protector | token 31100
+WSR | T5 | BT       | Illidan Stormrage  | Head      | Cursed Vision of Sargeras          |  32235 |   2253.2 |   +33.2 |  | leather
+WSR | T5 | BT       | Illidan Stormrage  | Finger1   | Stormrage Signet Ring              |  32497 |   2238.9 |   +18.9 |  | 
+WSR | T5 | BT       | Illidan Stormrage  | Finger2   | Stormrage Signet Ring              |  32497 |   2242.7 |   +22.7 |  | 
+WSR | T5 | BT       | Illidan Stormrage  | MainHand  | Shard of Azzinoth                  |  32471 |   2177.2 |   -42.7 |  | dagger 1.9
+WSR | T5 | BT       | Illidan Stormrage  | OffHand   | Shard of Azzinoth                  |  32471 |   2216.5 |    -3.5 |  | dagger 1.9
+WSR | T5 | BT       | Illidan Stormrage  | MainHand  | Warglaive of Azzinoth (MH)         |  32837 |   2263.8 |   +43.8 |  | legendary, MH only
+WSR | T5 | BT       | Illidan Stormrage  | OffHand   | Warglaive of Azzinoth (OH)         |  32838 |   2281.8 |   +61.8 |  | legendary, OH only
+WSR | T5 | BT       | Illidan Stormrage  | Chest     | Onslaught Breastplate (T6)         |  30975 |   2234.9 |   +15.0 | Chestguard of the Forgotten Protector | token 31091
+WSR | T5 | BT       | Trash              | Finger1   | Band of Devastation                |  32526 |   2231.8 |   +11.8 |  | 
+WSR | T5 | BT       | Trash              | Finger2   | Band of Devastation                |  32526 |   2232.8 |   +12.8 |  | 
+WSR | T5 | BT       | Trash              | Hands     | Pillager's Gauntlets               |  32608 |   2228.8 |    +8.8 |  | plate
+WSR | T5 | BT       | Trash              | Waist     | Girdle of the Lightbearer          |  32606 |   2209.8 |   -10.1 |  | plate
+WSR | T5 | BT       | Trash              | Feet      | Treads of the Den Mother           |  32593 |   2210.9 |    -9.0 |  | leather
+WSR | T5 | BT       | Trash              | MainHand  | Swiftsteel Bludgeon                |  32943 |   2231.5 |   +11.6 |  | mace 1.5
+WSR | T5 | BT       | Trash              | OffHand   | Swiftsteel Bludgeon                |  32943 |   2261.1 |   +41.1 |  | mace 1.5
+WSRPAIR | T5 | BT       | Illidan Stormrage  | Warglaives of Azzinoth (pair)      |  32837+32838 |   2418.2 |  +198.2
+WSRPAIR | T5 | Hyjal    | Trash              | Claw + Fist of Molten Fury (pair)  |  32946+32945 |   2239.3 |   +19.3
+
+=== RANKED (T5) ===
+WSRRANK | T5 |  1 | BT       | Illidan Stormrage  | OffHand   | Warglaive of Azzinoth (OH)         |   +61.8
+WSRRANK | T5 |  2 | BT       | Illidan Stormrage  | MainHand  | Warglaive of Azzinoth (MH)         |   +43.8
+WSRRANK | T5 |  3 | BT       | Trash              | OffHand   | Swiftsteel Bludgeon                |   +41.1
+WSRRANK | T5 |  4 | BT       | Mother Shahraz     | OffHand   | Blade of Savagery                  |   +40.6
+WSRRANK | T5 |  5 | BT       | Gurtogg Bloodboil  | Legs      | Leggings of Divine Retribution     |   +37.4
+WSRRANK | T5 |  6 | BT       | Illidari Council   | Trinket1  | Madness of the Betrayer            |   +36.8
+WSRRANK | T5 |  7 | BT       | Illidan Stormrage  | Head      | Cursed Vision of Sargeras          |   +33.2
+WSRRANK | T5 |  8 | BT       | Reliquary of the Lost | Feet      | Dreadboots of the Legion           |   +30.6
+WSRRANK | T5 |  9 | BT       | Mother Shahraz     | Feet      | Shadowmaster's Boots               |   +26.7
+WSRRANK | T5 | 10 | BT       | Illidan Stormrage  | Finger2   | Stormrage Signet Ring              |   +22.7
+WSRRANK | T5 | 11 | Hyjal    | Rage Winterchill   | OffHand   | Tracker's Blade                    |   +22.6
+WSRRANK | T5 | 12 | BT       | Shade of Akama     | Hands     | Grips of Silent Justice            |   +22.5
+WSRRANK | T5 | 13 | Hyjal    | Archimonde         | Chest     | Midnight Chestguard                |   +22.2
+WSRRANK | T5 | 14 | BT       | Naj'entus          | MainHand  | Rising Tide                        |   +21.5
+WSRRANK | T5 | 15 | Hyjal    | Archimonde         | Legs      | Legguards of Endless Rage          |   +20.7
+WSRRANK | T5 | 16 | BT       | Gurtogg Bloodboil  | Finger2   | Unstoppable Aggressor's Ring       |   +20.6
+WSRRANK | T5 | 17 | Hyjal    | Azgalor            | OffHand   | Boundless Agony                    |   +20.4
+WSRRANK | T5 | 18 | BT       | Mother Shahraz     | Shoulder  | Onslaught Shoulderblades (T6)      |   +20.1
+WSRRANK | T5 | 19 | BT       | Teron Gorefiend    | Feet      | Softstep Boots of Tracking         |   +19.1
+WSRRANK | T5 | 20 | BT       | Illidan Stormrage  | Finger1   | Stormrage Signet Ring              |   +18.9
+WSRRANK | T5 | 21 | Hyjal    | Azgalor            | Legs      | Bow-stitched Leggings              |   +18.7
+WSRRANK | T5 | 22 | BT       | Illidari Council   | Legs      | Onslaught Greaves (T6)             |   +17.9
+WSRRANK | T5 | 23 | BT       | Gurtogg Bloodboil  | Finger1   | Unstoppable Aggressor's Ring       |   +17.8
+WSRRANK | T5 | 24 | Hyjal    | Trash              | OffHand   | Fist of Molten Fury                |   +17.8
+WSRRANK | T5 | 25 | BT       | Illidari Council   | Head      | Helm of the Illidari Shatterer     |   +17.5
+WSRRANK | T5 | 26 | BT       | Teron Gorefiend    | Back      | Shadowmoon Destroyer's Drape       |   +16.0
+WSRRANK | T5 | 27 | BT       | Reliquary of the Lost | Hands     | Grips of Damnation                 |   +15.4
+WSRRANK | T5 | 28 | BT       | Supremus           | Neck      | Choker of Endless Nightmares       |   +15.2
+WSRRANK | T5 | 29 | BT       | Illidan Stormrage  | Chest     | Onslaught Breastplate (T6)         |   +15.0
+WSRRANK | T5 | 30 | Hyjal    | Anetheron          | MainHand  | Blade of Infamy                    |   +14.6
+WSRRANK | T5 | 31 | Hyjal    | Azgalor            | Hands     | Onslaught Gauntlets (T6)           |   +14.5
+WSRRANK | T5 | 32 | BT       | Naj'entus          | Hands     | Fists of Mukoa                     |   +13.9
+WSRRANK | T5 | 33 | BT       | Trash              | Finger2   | Band of Devastation                |   +12.8
+WSRRANK | T5 | 34 | BT       | Supremus           | OffHand   | The Brutalizer                     |   +12.7
+WSRRANK | T5 | 35 | Hyjal    | Rage Winterchill   | Wrist     | Deadly Cuffs                       |   +12.6
+WSRRANK | T5 | 36 | Hyjal    | Archimonde         | Head      | Onslaught Battle-Helm (T6)         |   +12.0
+WSRRANK | T5 | 37 | BT       | Mother Shahraz     | MainHand  | Blade of Savagery                  |   +12.0
+WSRRANK | T5 | 38 | BT       | Trash              | Finger1   | Band of Devastation                |   +11.8
+WSRRANK | T5 | 39 | BT       | Trash              | MainHand  | Swiftsteel Bludgeon                |   +11.6
+WSRRANK | T5 | 40 | Hyjal    | Anetheron          | OffHand   | Blade of Infamy                    |   +11.1
+WSRRANK | T5 | 41 | Hyjal    | Rage Winterchill   | Shoulder  | Blood-stained Pauldrons            |   +10.6
+WSRRANK | T5 | 42 | BT       | Gurtogg Bloodboil  | OffHand   | Messenger of Fate                  |    +9.6
+WSRRANK | T5 | 43 | BT       | Trash              | Hands     | Pillager's Gauntlets               |    +8.8
+WSRRANK | T5 | 44 | BT       | Mother Shahraz     | Chest     | Heartshatter Breastplate           |    +7.6
+WSRRANK | T5 | 45 | BT       | Teron Gorefiend    | Wrist     | Insidious Bands                    |    +7.2
+WSRRANK | T5 | 46 | BT       | Shade of Akama     | Finger2   | Ring of Deceitful Intent           |    +7.1
+WSRRANK | T5 | 47 | BT       | Reliquary of the Lost | Waist     | Boneweave Girdle                   |    +7.0
+WSRRANK | T5 | 48 | Hyjal    | Anetheron          | Feet      | Quickstrider Moccasins             |    +6.7
+WSRRANK | T5 | 49 | BT       | Naj'entus          | Shoulder  | Mantle of Darkness                 |    +6.7
+WSRRANK | T5 | 50 | BT       | Shade of Akama     | Shoulder  | Shoulders of the Hidden Predator   |    +6.5
+WSRRANK | T5 | 51 | Hyjal    | Rage Winterchill   | Wrist     | Furious Shackles                   |    +6.1
+WSRRANK | T5 | 52 | Hyjal    | Anetheron          | Waist     | Don Alejandro's Money Belt         |    +5.8
+WSRRANK | T5 | 53 | BT       | Supremus           | MainHand  | Syphon of the Nathrezim            |    +5.6
+WSRRANK | T5 | 54 | Hyjal    | Azgalor            | Legs      | Shady Dealer's Pantaloons          |    +5.1
+WSRRANK | T5 | 55 | Hyjal+BT | Trash              | Neck      | Choker of Serrated Blades          |    +4.7
+WSRRANK | T5 | 56 | BT       | Shade of Akama     | Finger1   | Ring of Deceitful Intent           |    +4.1
+WSRRANK | T5 | 57 | BT       | Supremus           | MainHand  | The Brutalizer                     |    +2.4
+WSRRANK | T5 | 58 | BT       | Teron Gorefiend    | Ranged    | Twisted Blades of Zarak            |    +2.3
+WSRRANK | T5 | 59 | BT       | Naj'entus          | OffHand   | Rising Tide                        |    +1.7
+WSRRANK | T5 | 60 | Hyjal    | Trash              | MainHand  | Claw of Molten Fury                |    +1.4
+WSRRANK | T5 | 61 | BT       | Illidari Council   | Head      | Forest Prowler's Helm              |    +1.2
+WSRRANK | T5 | 62 | BT       | Shade of Akama     | Waist     | Shadow-walker's Cord               |    +0.8
+WSRRANK | T5 | 63 | BT       | Supremus           | Wrist     | Wraps of Precise Flight            |    +0.2
+WSRRANK | T5 | 64 | Hyjal    | Kaz'rogal          | Waist     | Valestalker Girdle                 |    -0.1
+WSRRANK | T5 | 65 | BT       | Supremus           | Chest     | Nether Shadow Tunic                |    -3.4
+WSRRANK | T5 | 66 | BT       | Illidan Stormrage  | OffHand   | Shard of Azzinoth                  |    -3.5
+WSRRANK | T5 | 67 | Hyjal    | Archimonde         | Chest     | Mail of Fevered Pursuit            |    -3.6
+WSRRANK | T5 | 68 | Hyjal    | Kaz'rogal          | Shoulder  | Razorfury Mantle                   |    -4.0
+WSRRANK | T5 | 69 | Hyjal    | Archimonde         | Ranged    | Bristleblitz Striker               |    -5.0
+WSRRANK | T5 | 70 | Hyjal    | Kaz'rogal          | Waist     | Belt of Seething Fury              |    -5.2
+WSRRANK | T5 | 71 | BT       | Supremus           | OffHand   | Syphon of the Nathrezim            |    -5.6
+WSRRANK | T5 | 72 | Hyjal    | Kaz'rogal          | Feet      | Black Featherlight Boots           |    -6.6
+WSRRANK | T5 | 73 | BT       | Trash              | Feet      | Treads of the Den Mother           |    -9.0
+WSRRANK | T5 | 74 | BT       | Trash              | Waist     | Girdle of the Lightbearer          |   -10.1
+WSRRANK | T5 | 75 | Hyjal    | Rage Winterchill   | Wrist     | Bracers of the Pathfinder          |   -11.2
+WSRRANK | T5 | 76 | BT       | Supremus           | Ranged    | Legionkiller                       |   -14.9
+WSRRANK | T5 | 77 | BT       | Gurtogg Bloodboil  | Chest     | Vest of Mounting Assault           |   -21.9
+WSRRANK | T5 | 78 | Hyjal    | Rage Winterchill   | MainHand  | Tracker's Blade                    |   -28.3
+WSRRANK | T5 | 79 | Hyjal    | Azgalor            | MainHand  | Boundless Agony                    |   -30.7
+WSRRANK | T5 | 80 | BT       | Illidan Stormrage  | MainHand  | Shard of Azzinoth                  |   -42.7
+WSRRANK | T5 | 81 | BT       | Gurtogg Bloodboil  | MainHand  | Messenger of Fate                  |   -44.0
+
+WSRBASE | 4/5 | 4/5 Destroyer (Furious Gizmatic Goggles) | DPS 2217.9 (stdev 102.9) | AP 3791 hit 128 crit 423 exp 20
+WSRSET | 4/5 | Destroyer set bonuses removed | DPS 2190.9 | -26.9
+WSR | 4/5 | Hyjal    | Rage Winterchill   | Wrist     | Deadly Cuffs                       |  30863 |   2229.9 |   +12.0 |  | leather
+WSR | 4/5 | Hyjal    | Rage Winterchill   | Wrist     | Furious Shackles                   |  30861 |   2224.3 |    +6.4 |  | plate
+WSR | 4/5 | Hyjal    | Rage Winterchill   | Wrist     | Bracers of the Pathfinder          |  30864 |   2205.5 |   -12.4 |  | mail
+WSR | 4/5 | Hyjal    | Rage Winterchill   | Shoulder  | Blood-stained Pauldrons            |  30866 |   2206.4 |   -11.5 |  | plate
+WSR | 4/5 | Hyjal    | Rage Winterchill   | MainHand  | Tracker's Blade                    |  30865 |   2188.1 |   -29.7 |  | dagger 1.5
+WSR | 4/5 | Hyjal    | Rage Winterchill   | OffHand   | Tracker's Blade                    |  30865 |   2240.6 |   +22.7 |  | dagger 1.5
+WSR | 4/5 | Hyjal    | Anetheron          | Waist     | Don Alejandro's Money Belt         |  30879 |   2224.7 |    +6.9 |  | leather
+WSR | 4/5 | Hyjal    | Anetheron          | Feet      | Quickstrider Moccasins             |  30880 |   2224.3 |    +6.4 |  | mail
+WSR | 4/5 | Hyjal    | Anetheron          | MainHand  | Blade of Infamy                    |  30881 |   2232.6 |   +14.7 |  | sword 2.6
+WSR | 4/5 | Hyjal    | Anetheron          | OffHand   | Blade of Infamy                    |  30881 |   2228.9 |   +11.0 |  | sword 2.6
+WSR | 4/5 | Hyjal    | Kaz'rogal          | Waist     | Belt of Seething Fury              |  30915 |   2212.6 |    -5.3 |  | plate
+WSR | 4/5 | Hyjal    | Kaz'rogal          | Waist     | Valestalker Girdle                 |  30919 |   2216.0 |    -1.8 |  | mail
+WSR | 4/5 | Hyjal    | Kaz'rogal          | Feet      | Black Featherlight Boots           |  30891 |   2210.5 |    -7.4 |  | leather
+WSR | 4/5 | Hyjal    | Kaz'rogal          | Shoulder  | Razorfury Mantle                   |  30917 |   2193.3 |   -24.6 |  | leather
+WSR | 4/5 | Hyjal    | Azgalor            | Legs      | Shady Dealer's Pantaloons          |  30898 |   2200.3 |   -17.6 |  | leather
+WSR | 4/5 | Hyjal    | Azgalor            | Legs      | Bow-stitched Leggings              |  30900 |   2215.3 |    -2.6 |  | mail
+WSR | 4/5 | Hyjal    | Azgalor            | MainHand  | Boundless Agony                    |  30901 |   2186.6 |   -31.3 |  | dagger 1.8
+WSR | 4/5 | Hyjal    | Azgalor            | OffHand   | Boundless Agony                    |  30901 |   2238.0 |   +20.1 |  | dagger 1.8
+WSR | 4/5 | Hyjal    | Azgalor            | Hands     | Onslaught Gauntlets (T6)           |  30969 |   2212.0 |    -5.9 | Gloves of the Forgotten Protector | token 31094
+WSR | 4/5 | Hyjal    | Archimonde         | Chest     | Midnight Chestguard                |  30905 |   2220.2 |    +2.3 |  | leather
+WSR | 4/5 | Hyjal    | Archimonde         | Chest     | Mail of Fevered Pursuit            |  30907 |   2193.6 |   -24.2 |  | mail
+WSR | 4/5 | Hyjal    | Archimonde         | Legs      | Legguards of Endless Rage          |  30903 |   2216.0 |    -1.9 |  | plate
+WSR | 4/5 | Hyjal    | Archimonde         | Ranged    | Bristleblitz Striker               |  30906 |   2211.4 |    -6.5 |  | bow
+WSR | 4/5 | Hyjal    | Archimonde         | Head      | Onslaught Battle-Helm (T6)         |  30972 |   2232.0 |   +14.1 | Helm of the Forgotten Protector | token 31095
+WSR | 4/5 | Hyjal+BT | Trash              | Neck      | Choker of Serrated Blades          |  32591 |   2221.5 |    +3.6 |  | 
+WSR | 4/5 | Hyjal    | Trash              | MainHand  | Claw of Molten Fury                |  32946 |   2217.8 |    -0.1 |  | fist 2.7, MH only
+WSR | 4/5 | Hyjal    | Trash              | OffHand   | Fist of Molten Fury                |  32945 |   2234.7 |   +16.8 |  | fist 1.5, OH only
+WSR | 4/5 | BT       | Naj'entus          | Shoulder  | Mantle of Darkness                 |  32377 |   2201.5 |   -16.4 |  | leather
+WSR | 4/5 | BT       | Naj'entus          | Hands     | Fists of Mukoa                     |  32234 |   2210.9 |    -7.0 |  | mail
+WSR | 4/5 | BT       | Naj'entus          | MainHand  | Rising Tide                        |  32236 |   2239.2 |   +21.3 |  | axe 2.6
+WSR | 4/5 | BT       | Naj'entus          | OffHand   | Rising Tide                        |  32236 |   2219.5 |    +1.6 |  | axe 2.6
+WSR | 4/5 | BT       | Supremus           | Neck      | Choker of Endless Nightmares       |  32260 |   2233.0 |   +15.1 |  | 
+WSR | 4/5 | BT       | Supremus           | Chest     | Nether Shadow Tunic                |  32252 |   2193.2 |   -24.7 |  | leather
+WSR | 4/5 | BT       | Supremus           | Wrist     | Wraps of Precise Flight            |  32251 |   2216.4 |    -1.5 |  | mail
+WSR | 4/5 | BT       | Supremus           | MainHand  | Syphon of the Nathrezim            |  32262 |   2224.0 |    +6.1 |  | mace 2.8
+WSR | 4/5 | BT       | Supremus           | OffHand   | Syphon of the Nathrezim            |  32262 |   2213.1 |    -4.8 |  | mace 2.8
+WSR | 4/5 | BT       | Supremus           | MainHand  | The Brutalizer                     |  32254 |   2219.7 |    +1.8 |  | axe 1.6, tank
+WSR | 4/5 | BT       | Supremus           | OffHand   | The Brutalizer                     |  32254 |   2231.5 |   +13.6 |  | axe 1.6, tank
+WSR | 4/5 | BT       | Supremus           | Ranged    | Legionkiller                       |  32253 |   2202.8 |   -15.1 |  | crossbow
+WSR | 4/5 | BT       | Shade of Akama     | Hands     | Grips of Silent Justice            |  32278 |   2219.9 |    +2.0 |  | plate
+WSR | 4/5 | BT       | Shade of Akama     | Shoulder  | Shoulders of the Hidden Predator   |  32264 |   2203.0 |   -14.9 |  | mail
+WSR | 4/5 | BT       | Shade of Akama     | Waist     | Shadow-walker's Cord               |  32265 |   2218.2 |    +0.3 |  | leather
+WSR | 4/5 | BT       | Shade of Akama     | Finger1   | Ring of Deceitful Intent           |  32266 |   2221.2 |    +3.3 |  | 
+WSR | 4/5 | BT       | Shade of Akama     | Finger2   | Ring of Deceitful Intent           |  32266 |   2224.6 |    +6.7 |  | 
+WSR | 4/5 | BT       | Teron Gorefiend    | Back      | Shadowmoon Destroyer's Drape       |  32323 |   2233.2 |   +15.4 |  | 
+WSR | 4/5 | BT       | Teron Gorefiend    | Wrist     | Insidious Bands                    |  32324 |   2223.5 |    +5.6 |  | leather
+WSR | 4/5 | BT       | Teron Gorefiend    | Feet      | Softstep Boots of Tracking         |  32510 |   2235.4 |   +17.5 |  | mail
+WSR | 4/5 | BT       | Teron Gorefiend    | Ranged    | Twisted Blades of Zarak            |  32326 |   2219.9 |    +2.1 |  | thrown
+WSR | 4/5 | BT       | Gurtogg Bloodboil  | Legs      | Leggings of Divine Retribution     |  32341 |   2234.1 |   +16.2 |  | plate
+WSR | 4/5 | BT       | Gurtogg Bloodboil  | Chest     | Vest of Mounting Assault           |  32334 |   2174.8 |   -43.1 |  | mail
+WSR | 4/5 | BT       | Gurtogg Bloodboil  | Finger1   | Unstoppable Aggressor's Ring       |  32335 |   2235.0 |   +17.1 |  | 
+WSR | 4/5 | BT       | Gurtogg Bloodboil  | Finger2   | Unstoppable Aggressor's Ring       |  32335 |   2237.9 |   +20.0 |  | 
+WSR | 4/5 | BT       | Gurtogg Bloodboil  | MainHand  | Messenger of Fate                  |  32269 |   2172.0 |   -45.9 |  | dagger 1.4
+WSR | 4/5 | BT       | Gurtogg Bloodboil  | OffHand   | Messenger of Fate                  |  32269 |   2227.1 |    +9.3 |  | dagger 1.4
+WSR | 4/5 | BT       | Reliquary of the Lost | Feet      | Dreadboots of the Legion           |  32345 |   2249.7 |   +31.8 |  | plate
+WSR | 4/5 | BT       | Reliquary of the Lost | Hands     | Grips of Damnation                 |  32347 |   2212.2 |    -5.7 |  | leather
+WSR | 4/5 | BT       | Reliquary of the Lost | Waist     | Boneweave Girdle                   |  32346 |   2224.2 |    +6.3 |  | mail
+WSR | 4/5 | BT       | Mother Shahraz     | Chest     | Heartshatter Breastplate           |  32365 |   2203.8 |   -14.1 |  | plate
+WSR | 4/5 | BT       | Mother Shahraz     | Feet      | Shadowmaster's Boots               |  32366 |   2243.9 |   +26.0 |  | leather
+WSR | 4/5 | BT       | Mother Shahraz     | MainHand  | Blade of Savagery                  |  32369 |   2228.8 |   +10.9 |  | sword 1.4
+WSR | 4/5 | BT       | Mother Shahraz     | OffHand   | Blade of Savagery                  |  32369 |   2258.4 |   +40.5 |  | sword 1.4
+WSR | 4/5 | BT       | Mother Shahraz     | Shoulder  | Onslaught Shoulderblades (T6)      |  30979 |   2215.3 |    -2.6 | Pauldrons of the Forgotten Protector | token 31103
+WSR | 4/5 | BT       | Illidari Council   | Head      | Helm of the Illidari Shatterer     |  32373 |   2237.5 |   +19.6 |  | plate
+WSR | 4/5 | BT       | Illidari Council   | Head      | Forest Prowler's Helm              |  32376 |   2221.2 |    +3.3 |  | mail
+WSR | 4/5 | BT       | Illidari Council   | Trinket1  | Madness of the Betrayer            |  32505 |   2254.4 |   +36.5 |  | replaces Badge of the Swarmguard
+WSR | 4/5 | BT       | Illidari Council   | Legs      | Onslaught Greaves (T6)             |  30977 |   2213.5 |    -4.3 | Leggings of the Forgotten Protector | token 31100
+WSR | 4/5 | BT       | Illidan Stormrage  | Head      | Cursed Vision of Sargeras          |  32235 |   2253.2 |   +35.3 |  | leather
+WSR | 4/5 | BT       | Illidan Stormrage  | Finger1   | Stormrage Signet Ring              |  32497 |   2236.0 |   +18.1 |  | 
+WSR | 4/5 | BT       | Illidan Stormrage  | Finger2   | Stormrage Signet Ring              |  32497 |   2240.6 |   +22.7 |  | 
+WSR | 4/5 | BT       | Illidan Stormrage  | MainHand  | Shard of Azzinoth                  |  32471 |   2175.2 |   -42.7 |  | dagger 1.9
+WSR | 4/5 | BT       | Illidan Stormrage  | OffHand   | Shard of Azzinoth                  |  32471 |   2215.4 |    -2.5 |  | dagger 1.9
+WSR | 4/5 | BT       | Illidan Stormrage  | MainHand  | Warglaive of Azzinoth (MH)         |  32837 |   2261.7 |   +43.9 |  | legendary, MH only
+WSR | 4/5 | BT       | Illidan Stormrage  | OffHand   | Warglaive of Azzinoth (OH)         |  32838 |   2280.8 |   +62.9 |  | legendary, OH only
+WSR | 4/5 | BT       | Illidan Stormrage  | Chest     | Onslaught Breastplate (T6)         |  30975 |   2212.6 |    -5.2 | Chestguard of the Forgotten Protector | token 31091
+WSR | 4/5 | BT       | Trash              | Finger1   | Band of Devastation                |  32526 |   2228.6 |   +10.7 |  | 
+WSR | 4/5 | BT       | Trash              | Finger2   | Band of Devastation                |  32526 |   2230.8 |   +12.9 |  | 
+WSR | 4/5 | BT       | Trash              | Hands     | Pillager's Gauntlets               |  32608 |   2205.2 |   -12.7 |  | plate
+WSR | 4/5 | BT       | Trash              | Waist     | Girdle of the Lightbearer          |  32606 |   2207.9 |   -10.0 |  | plate
+WSR | 4/5 | BT       | Trash              | Feet      | Treads of the Den Mother           |  32593 |   2207.4 |   -10.5 |  | leather
+WSR | 4/5 | BT       | Trash              | MainHand  | Swiftsteel Bludgeon                |  32943 |   2229.3 |   +11.4 |  | mace 1.5
+WSR | 4/5 | BT       | Trash              | OffHand   | Swiftsteel Bludgeon                |  32943 |   2258.2 |   +40.3 |  | mace 1.5
+WSRPAIR | 4/5 | BT       | Illidan Stormrage  | Warglaives of Azzinoth (pair)      |  32837+32838 |   2415.2 |  +197.3
+WSRPAIR | 4/5 | Hyjal    | Trash              | Claw + Fist of Molten Fury (pair)  |  32946+32945 |   2237.8 |   +20.0
+
+=== RANKED (4/5) ===
+WSRRANK | 4/5 |  1 | BT       | Illidan Stormrage  | OffHand   | Warglaive of Azzinoth (OH)         |   +62.9
+WSRRANK | 4/5 |  2 | BT       | Illidan Stormrage  | MainHand  | Warglaive of Azzinoth (MH)         |   +43.9
+WSRRANK | 4/5 |  3 | BT       | Mother Shahraz     | OffHand   | Blade of Savagery                  |   +40.5
+WSRRANK | 4/5 |  4 | BT       | Trash              | OffHand   | Swiftsteel Bludgeon                |   +40.3
+WSRRANK | 4/5 |  5 | BT       | Illidari Council   | Trinket1  | Madness of the Betrayer            |   +36.5
+WSRRANK | 4/5 |  6 | BT       | Illidan Stormrage  | Head      | Cursed Vision of Sargeras          |   +35.3
+WSRRANK | 4/5 |  7 | BT       | Reliquary of the Lost | Feet      | Dreadboots of the Legion           |   +31.8
+WSRRANK | 4/5 |  8 | BT       | Mother Shahraz     | Feet      | Shadowmaster's Boots               |   +26.0
+WSRRANK | 4/5 |  9 | Hyjal    | Rage Winterchill   | OffHand   | Tracker's Blade                    |   +22.7
+WSRRANK | 4/5 | 10 | BT       | Illidan Stormrage  | Finger2   | Stormrage Signet Ring              |   +22.7
+WSRRANK | 4/5 | 11 | BT       | Naj'entus          | MainHand  | Rising Tide                        |   +21.3
+WSRRANK | 4/5 | 12 | Hyjal    | Azgalor            | OffHand   | Boundless Agony                    |   +20.1
+WSRRANK | 4/5 | 13 | BT       | Gurtogg Bloodboil  | Finger2   | Unstoppable Aggressor's Ring       |   +20.0
+WSRRANK | 4/5 | 14 | BT       | Illidari Council   | Head      | Helm of the Illidari Shatterer     |   +19.6
+WSRRANK | 4/5 | 15 | BT       | Illidan Stormrage  | Finger1   | Stormrage Signet Ring              |   +18.1
+WSRRANK | 4/5 | 16 | BT       | Teron Gorefiend    | Feet      | Softstep Boots of Tracking         |   +17.5
+WSRRANK | 4/5 | 17 | BT       | Gurtogg Bloodboil  | Finger1   | Unstoppable Aggressor's Ring       |   +17.1
+WSRRANK | 4/5 | 18 | Hyjal    | Trash              | OffHand   | Fist of Molten Fury                |   +16.8
+WSRRANK | 4/5 | 19 | BT       | Gurtogg Bloodboil  | Legs      | Leggings of Divine Retribution     |   +16.2
+WSRRANK | 4/5 | 20 | BT       | Teron Gorefiend    | Back      | Shadowmoon Destroyer's Drape       |   +15.4
+WSRRANK | 4/5 | 21 | BT       | Supremus           | Neck      | Choker of Endless Nightmares       |   +15.1
+WSRRANK | 4/5 | 22 | Hyjal    | Anetheron          | MainHand  | Blade of Infamy                    |   +14.7
+WSRRANK | 4/5 | 23 | Hyjal    | Archimonde         | Head      | Onslaught Battle-Helm (T6)         |   +14.1
+WSRRANK | 4/5 | 24 | BT       | Supremus           | OffHand   | The Brutalizer                     |   +13.6
+WSRRANK | 4/5 | 25 | BT       | Trash              | Finger2   | Band of Devastation                |   +12.9
+WSRRANK | 4/5 | 26 | Hyjal    | Rage Winterchill   | Wrist     | Deadly Cuffs                       |   +12.0
+WSRRANK | 4/5 | 27 | BT       | Trash              | MainHand  | Swiftsteel Bludgeon                |   +11.4
+WSRRANK | 4/5 | 28 | Hyjal    | Anetheron          | OffHand   | Blade of Infamy                    |   +11.0
+WSRRANK | 4/5 | 29 | BT       | Mother Shahraz     | MainHand  | Blade of Savagery                  |   +10.9
+WSRRANK | 4/5 | 30 | BT       | Trash              | Finger1   | Band of Devastation                |   +10.7
+WSRRANK | 4/5 | 31 | BT       | Gurtogg Bloodboil  | OffHand   | Messenger of Fate                  |    +9.3
+WSRRANK | 4/5 | 32 | Hyjal    | Anetheron          | Waist     | Don Alejandro's Money Belt         |    +6.9
+WSRRANK | 4/5 | 33 | BT       | Shade of Akama     | Finger2   | Ring of Deceitful Intent           |    +6.7
+WSRRANK | 4/5 | 34 | Hyjal    | Anetheron          | Feet      | Quickstrider Moccasins             |    +6.4
+WSRRANK | 4/5 | 35 | Hyjal    | Rage Winterchill   | Wrist     | Furious Shackles                   |    +6.4
+WSRRANK | 4/5 | 36 | BT       | Reliquary of the Lost | Waist     | Boneweave Girdle                   |    +6.3
+WSRRANK | 4/5 | 37 | BT       | Supremus           | MainHand  | Syphon of the Nathrezim            |    +6.1
+WSRRANK | 4/5 | 38 | BT       | Teron Gorefiend    | Wrist     | Insidious Bands                    |    +5.6
+WSRRANK | 4/5 | 39 | Hyjal+BT | Trash              | Neck      | Choker of Serrated Blades          |    +3.6
+WSRRANK | 4/5 | 40 | BT       | Illidari Council   | Head      | Forest Prowler's Helm              |    +3.3
+WSRRANK | 4/5 | 41 | BT       | Shade of Akama     | Finger1   | Ring of Deceitful Intent           |    +3.3
+WSRRANK | 4/5 | 42 | Hyjal    | Archimonde         | Chest     | Midnight Chestguard                |    +2.3
+WSRRANK | 4/5 | 43 | BT       | Teron Gorefiend    | Ranged    | Twisted Blades of Zarak            |    +2.1
+WSRRANK | 4/5 | 44 | BT       | Shade of Akama     | Hands     | Grips of Silent Justice            |    +2.0
+WSRRANK | 4/5 | 45 | BT       | Supremus           | MainHand  | The Brutalizer                     |    +1.8
+WSRRANK | 4/5 | 46 | BT       | Naj'entus          | OffHand   | Rising Tide                        |    +1.6
+WSRRANK | 4/5 | 47 | BT       | Shade of Akama     | Waist     | Shadow-walker's Cord               |    +0.3
+WSRRANK | 4/5 | 48 | Hyjal    | Trash              | MainHand  | Claw of Molten Fury                |    -0.1
+WSRRANK | 4/5 | 49 | BT       | Supremus           | Wrist     | Wraps of Precise Flight            |    -1.5
+WSRRANK | 4/5 | 50 | Hyjal    | Kaz'rogal          | Waist     | Valestalker Girdle                 |    -1.8
+WSRRANK | 4/5 | 51 | Hyjal    | Archimonde         | Legs      | Legguards of Endless Rage          |    -1.9
+WSRRANK | 4/5 | 52 | BT       | Illidan Stormrage  | OffHand   | Shard of Azzinoth                  |    -2.5
+WSRRANK | 4/5 | 53 | Hyjal    | Azgalor            | Legs      | Bow-stitched Leggings              |    -2.6
+WSRRANK | 4/5 | 54 | BT       | Mother Shahraz     | Shoulder  | Onslaught Shoulderblades (T6)      |    -2.6
+WSRRANK | 4/5 | 55 | BT       | Illidari Council   | Legs      | Onslaught Greaves (T6)             |    -4.3
+WSRRANK | 4/5 | 56 | BT       | Supremus           | OffHand   | Syphon of the Nathrezim            |    -4.8
+WSRRANK | 4/5 | 57 | BT       | Illidan Stormrage  | Chest     | Onslaught Breastplate (T6)         |    -5.2
+WSRRANK | 4/5 | 58 | Hyjal    | Kaz'rogal          | Waist     | Belt of Seething Fury              |    -5.3
+WSRRANK | 4/5 | 59 | BT       | Reliquary of the Lost | Hands     | Grips of Damnation                 |    -5.7
+WSRRANK | 4/5 | 60 | Hyjal    | Azgalor            | Hands     | Onslaught Gauntlets (T6)           |    -5.9
+WSRRANK | 4/5 | 61 | Hyjal    | Archimonde         | Ranged    | Bristleblitz Striker               |    -6.5
+WSRRANK | 4/5 | 62 | BT       | Naj'entus          | Hands     | Fists of Mukoa                     |    -7.0
+WSRRANK | 4/5 | 63 | Hyjal    | Kaz'rogal          | Feet      | Black Featherlight Boots           |    -7.4
+WSRRANK | 4/5 | 64 | BT       | Trash              | Waist     | Girdle of the Lightbearer          |   -10.0
+WSRRANK | 4/5 | 65 | BT       | Trash              | Feet      | Treads of the Den Mother           |   -10.5
+WSRRANK | 4/5 | 66 | Hyjal    | Rage Winterchill   | Shoulder  | Blood-stained Pauldrons            |   -11.5
+WSRRANK | 4/5 | 67 | Hyjal    | Rage Winterchill   | Wrist     | Bracers of the Pathfinder          |   -12.4
+WSRRANK | 4/5 | 68 | BT       | Trash              | Hands     | Pillager's Gauntlets               |   -12.7
+WSRRANK | 4/5 | 69 | BT       | Mother Shahraz     | Chest     | Heartshatter Breastplate           |   -14.1
+WSRRANK | 4/5 | 70 | BT       | Shade of Akama     | Shoulder  | Shoulders of the Hidden Predator   |   -14.9
+WSRRANK | 4/5 | 71 | BT       | Supremus           | Ranged    | Legionkiller                       |   -15.1
+WSRRANK | 4/5 | 72 | BT       | Naj'entus          | Shoulder  | Mantle of Darkness                 |   -16.4
+WSRRANK | 4/5 | 73 | Hyjal    | Azgalor            | Legs      | Shady Dealer's Pantaloons          |   -17.6
+WSRRANK | 4/5 | 74 | Hyjal    | Archimonde         | Chest     | Mail of Fevered Pursuit            |   -24.2
+WSRRANK | 4/5 | 75 | Hyjal    | Kaz'rogal          | Shoulder  | Razorfury Mantle                   |   -24.6
+WSRRANK | 4/5 | 76 | BT       | Supremus           | Chest     | Nether Shadow Tunic                |   -24.7
+WSRRANK | 4/5 | 77 | Hyjal    | Rage Winterchill   | MainHand  | Tracker's Blade                    |   -29.7
+WSRRANK | 4/5 | 78 | Hyjal    | Azgalor            | MainHand  | Boundless Agony                    |   -31.3
+WSRRANK | 4/5 | 79 | BT       | Illidan Stormrage  | MainHand  | Shard of Azzinoth                  |   -42.7
+WSRRANK | 4/5 | 80 | BT       | Gurtogg Bloodboil  | Chest     | Vest of Mounting Assault           |   -43.1
+WSRRANK | 4/5 | 81 | BT       | Gurtogg Bloodboil  | MainHand  | Messenger of Fate                  |   -45.9
+
+--- PASS: TestWarriorHyjalBTSR (1010.38s)
+PASS
+ok  	github.com/wowsims/tbc/sim	1011.228s

@@ -1,0 +1,706 @@
+=== RUN   TestWarriorHyjalBTSRAdaptive
+ITERATIONS adaptive | baseline 100000 | batch 5000 | cap 25000 | z 1.96
+2026/10/14 10:22:57 running 10000 iterations took 26.160696375s
+2026/10/14 10:22:57 running 10000 iterations took 26.200757208s
+2026/10/14 10:22:57 running 10000 iterations took 26.214921708s
+2026/10/14 10:22:57 running 10000 iterations took 26.422393375s
+2026/10/14 10:22:57 running 10000 iterations took 26.495230583s
+2026/10/14 10:22:57 running 10000 iterations took 26.507230875s
+2026/10/14 10:22:57 running 10000 iterations took 26.518375083s
+2026/10/14 10:22:57 running 10000 iterations took 26.584212958s
+2026/10/14 10:22:57 running 10000 iterations took 26.642303s
+2026/10/14 10:22:57 running 10000 iterations took 26.842724375s
+2026/10/14 10:23:24 running 10000 iterations took 27.056634s
+2026/10/14 10:23:25 running 10000 iterations took 27.13498625s
+2026/10/14 10:23:25 running 10000 iterations took 27.1623975s
+2026/10/14 10:23:25 running 10000 iterations took 27.29397875s
+2026/10/14 10:23:25 running 10000 iterations took 27.333007875s
+2026/10/14 10:23:25 running 10000 iterations took 27.355870625s
+2026/10/14 10:23:25 running 10000 iterations took 27.418302125s
+2026/10/14 10:23:25 running 10000 iterations took 27.432114125s
+2026/10/14 10:23:25 running 10000 iterations took 27.476322958s
+2026/10/14 10:23:25 running 10000 iterations took 27.485115542s
+WSRBASE | Oct13T5R | Oct13T5 + Band of the Eternal Champion | DPS 2342.4 (se 0.35, 100000 iterations) | AP 3941 hit 126 crit 402 exp 0
+WSRSET | Oct13T5R | Destroyer set bonuses removed | DPS 2315.1 | -27.3
+WSRTIER | Oct13T5R | 5 | Head,Shoulder,Chest,Hands,Legs
+WSRSTEP | Oct13T5R | Wrist | Deadly Cuffs | 30863 | 5000 | 12.01 | 3.10 | Hyjal | Rage Winterchill
+WSRSTEP | Oct13T5R | Wrist | Furious Shackles | 30861 | 5000 | 4.92 | 3.18 | Hyjal | Rage Winterchill
+WSRSTEP | Oct13T5R | Wrist | Bracers of the Pathfinder | 30864 | 5000 | -14.29 | 3.10 | Hyjal | Rage Winterchill
+WSR | Oct13T5R | Hyjal    | Rage Winterchill   | Wrist     | Bracers of the Pathfinder          |  30864 |   2328.1 |   -14.3 |  | mail | n=5000 | ±3.1 | worse
+WSRSTEP | Oct13T5R | Shoulder | Blood-stained Pauldrons | 30866 | 5000 | 10.80 | 3.18 | Hyjal | Rage Winterchill
+WSRSTEP | Oct13T5R | MainHand | Tracker's Blade | 30865 | 5000 | -73.87 | 2.66 | Hyjal | Rage Winterchill
+WSR | Oct13T5R | Hyjal    | Rage Winterchill   | MainHand  | Tracker's Blade                    |  30865 |   2268.5 |   -73.9 |  | dagger 1.5 | n=5000 | ±2.7 | worse
+WSRSTEP | Oct13T5R | OffHand | Tracker's Blade | 30865 | 5000 | 23.42 | 3.09 | Hyjal | Rage Winterchill
+WSRSTEP | Oct13T5R | Waist | Don Alejandro's Money Belt | 30879 | 5000 | 7.78 | 3.11 | Hyjal | Anetheron
+WSRSTEP | Oct13T5R | Feet | Quickstrider Moccasins | 30880 | 5000 | 8.06 | 3.12 | Hyjal | Anetheron
+WSRSTEP | Oct13T5R | MainHand | Blade of Infamy | 30881 | 5000 | -27.53 | 3.02 | Hyjal | Anetheron
+WSR | Oct13T5R | Hyjal    | Anetheron          | MainHand  | Blade of Infamy                    |  30881 |   2314.9 |   -27.5 |  | sword 2.6 | n=5000 | ±3.0 | worse
+WSRSTEP | Oct13T5R | OffHand | Blade of Infamy | 30881 | 5000 | 11.89 | 3.18 | Hyjal | Anetheron
+WSRSTEP | Oct13T5R | Waist | Belt of Seething Fury | 30915 | 5000 | -5.25 | 3.20 | Hyjal | Kaz'rogal
+WSR | Oct13T5R | Hyjal    | Kaz'rogal          | Waist     | Belt of Seething Fury              |  30915 |   2337.2 |    -5.2 |  | plate | n=5000 | ±3.2 | worse
+WSRSTEP | Oct13T5R | Waist | Valestalker Girdle | 30919 | 5000 | 0.29 | 3.16 | Hyjal | Kaz'rogal
+WSRSTEP | Oct13T5R | Feet | Black Featherlight Boots | 30891 | 5000 | -6.70 | 3.06 | Hyjal | Kaz'rogal
+WSR | Oct13T5R | Hyjal    | Kaz'rogal          | Feet      | Black Featherlight Boots           |  30891 |   2335.7 |    -6.7 |  | leather | n=5000 | ±3.1 | worse
+WSRSTEP | Oct13T5R | Shoulder | Razorfury Mantle | 30917 | 5000 | -4.61 | 3.14 | Hyjal | Kaz'rogal
+WSR | Oct13T5R | Hyjal    | Kaz'rogal          | Shoulder  | Razorfury Mantle                   |  30917 |   2337.8 |    -4.6 |  | leather | n=5000 | ±3.1 | worse
+WSRSTEP | Oct13T5R | Legs | Shady Dealer's Pantaloons | 30898 | 5000 | 4.75 | 3.20 | Hyjal | Azgalor
+WSRSTEP | Oct13T5R | Legs | Bow-stitched Leggings | 30900 | 5000 | 21.06 | 3.18 | Hyjal | Azgalor
+WSRSTEP | Oct13T5R | MainHand | Boundless Agony | 30901 | 5000 | -72.10 | 2.82 | Hyjal | Azgalor
+WSR | Oct13T5R | Hyjal    | Azgalor            | MainHand  | Boundless Agony                    |  30901 |   2270.3 |   -72.1 |  | dagger 1.8 | n=5000 | ±2.8 | worse
+WSRSTEP | Oct13T5R | OffHand | Boundless Agony | 30901 | 5000 | 19.60 | 3.13 | Hyjal | Azgalor
+WSRSTEP | Oct13T5R | Hands | Onslaught Gauntlets (T6) | 30969 | 5000 | 15.05 | 3.18 | Hyjal | Azgalor
+WSRSTEP | Oct13T5R | Chest | Midnight Chestguard | 30905 | 5000 | 22.73 | 3.17 | Hyjal | Archimonde
+WSRSTEP | Oct13T5R | Chest | Mail of Fevered Pursuit | 30907 | 5000 | -3.82 | 3.14 | Hyjal | Archimonde
+WSR | Oct13T5R | Hyjal    | Archimonde         | Chest     | Mail of Fevered Pursuit            |  30907 |   2338.6 |    -3.8 |  | mail | n=5000 | ±3.1 | worse
+WSRSTEP | Oct13T5R | Legs | Legguards of Endless Rage | 30903 | 5000 | 21.57 | 3.18 | Hyjal | Archimonde
+WSRSTEP | Oct13T5R | Ranged | Bristleblitz Striker | 30906 | 5000 | -6.42 | 3.10 | Hyjal | Archimonde
+WSR | Oct13T5R | Hyjal    | Archimonde         | Ranged    | Bristleblitz Striker               |  30906 |   2336.0 |    -6.4 |  | bow | n=5000 | ±3.1 | worse
+WSRSTEP | Oct13T5R | Head | Onslaught Battle-Helm (T6) | 30972 | 5000 | 12.47 | 3.18 | Hyjal | Archimonde
+WSRSTEP | Oct13T5R | Neck | Choker of Serrated Blades | 32591 | 5000 | 3.14 | 3.13 | Hyjal+BT | Trash
+WSRSTEP | Oct13T5R | MainHand | Claw of Molten Fury | 32946 | 5000 | -35.49 | 3.03 | Hyjal | Trash
+WSR | Oct13T5R | Hyjal    | Trash              | MainHand  | Claw of Molten Fury                |  32946 |   2306.9 |   -35.5 |  | fist 2.7, MH only | n=5000 | ±3.0 | worse
+WSRSTEP | Oct13T5R | OffHand | Fist of Molten Fury | 32945 | 5000 | 17.02 | 3.08 | Hyjal | Trash
+WSRSTEP | Oct13T5R | Shoulder | Mantle of Darkness | 32377 | 5000 | 4.35 | 3.16 | BT | Naj'entus
+WSRSTEP | Oct13T5R | Hands | Fists of Mukoa | 32234 | 5000 | 14.52 | 3.16 | BT | Naj'entus
+WSRSTEP | Oct13T5R | MainHand | Rising Tide | 32236 | 5000 | -21.08 | 2.94 | BT | Naj'entus
+WSR | Oct13T5R | BT       | Naj'entus          | MainHand  | Rising Tide                        |  32236 |   2321.3 |   -21.1 |  | axe 2.6 | n=5000 | ±2.9 | worse
+WSRSTEP | Oct13T5R | OffHand | Rising Tide | 32236 | 5000 | 0.06 | 3.13 | BT | Naj'entus
+WSRSTEP | Oct13T5R | Neck | Choker of Endless Nightmares | 32260 | 5000 | 15.44 | 3.12 | BT | Supremus
+WSRSTEP | Oct13T5R | Chest | Nether Shadow Tunic | 32252 | 5000 | -6.09 | 3.05 | BT | Supremus
+WSR | Oct13T5R | BT       | Supremus           | Chest     | Nether Shadow Tunic                |  32252 |   2336.3 |    -6.1 |  | leather | n=5000 | ±3.1 | worse
+WSRSTEP | Oct13T5R | Wrist | Wraps of Precise Flight | 32251 | 5000 | -2.19 | 3.08 | BT | Supremus
+WSRSTEP | Oct13T5R | MainHand | Syphon of the Nathrezim | 32262 | 5000 | -32.37 | 3.09 | BT | Supremus
+WSR | Oct13T5R | BT       | Supremus           | MainHand  | Syphon of the Nathrezim            |  32262 |   2310.0 |   -32.4 |  | mace 2.8 | n=5000 | ±3.1 | worse
+WSRSTEP | Oct13T5R | OffHand | Syphon of the Nathrezim | 32262 | 5000 | -6.88 | 3.18 | BT | Supremus
+WSR | Oct13T5R | BT       | Supremus           | OffHand   | Syphon of the Nathrezim            |  32262 |   2335.5 |    -6.9 |  | mace 2.8 | n=5000 | ±3.2 | worse
+WSRSTEP | Oct13T5R | MainHand | The Brutalizer | 32254 | 5000 | -42.69 | 2.68 | BT | Supremus
+WSR | Oct13T5R | BT       | Supremus           | MainHand  | The Brutalizer                     |  32254 |   2299.7 |   -42.7 |  | axe 1.6, tank | n=5000 | ±2.7 | worse
+WSRSTEP | Oct13T5R | OffHand | The Brutalizer | 32254 | 5000 | 10.03 | 3.05 | BT | Supremus
+WSRSTEP | Oct13T5R | Ranged | Legionkiller | 32253 | 5000 | -15.16 | 3.10 | BT | Supremus
+WSR | Oct13T5R | BT       | Supremus           | Ranged    | Legionkiller                       |  32253 |   2327.2 |   -15.2 |  | crossbow | n=5000 | ±3.1 | worse
+WSRSTEP | Oct13T5R | Hands | Grips of Silent Justice | 32278 | 5000 | 22.61 | 3.12 | BT | Shade of Akama
+WSRSTEP | Oct13T5R | Shoulder | Shoulders of the Hidden Predator | 32264 | 5000 | 4.65 | 3.13 | BT | Shade of Akama
+WSRSTEP | Oct13T5R | Waist | Shadow-walker's Cord | 32265 | 5000 | 0.39 | 3.11 | BT | Shade of Akama
+WSRSTEP | Oct13T5R | Finger1 | Ring of Deceitful Intent | 32266 | 5000 | -11.20 | 3.11 | BT | Shade of Akama
+WSR | Oct13T5R | BT       | Shade of Akama     | Finger1   | Ring of Deceitful Intent           |  32266 |   2331.2 |   -11.2 |  |  | n=5000 | ±3.1 | worse
+WSRSTEP | Oct13T5R | Finger2 | Ring of Deceitful Intent | 32266 | 5000 | -4.38 | 3.05 | BT | Shade of Akama
+WSR | Oct13T5R | BT       | Shade of Akama     | Finger2   | Ring of Deceitful Intent           |  32266 |   2338.0 |    -4.4 |  |  | n=5000 | ±3.0 | worse
+WSRSTEP | Oct13T5R | Back | Shadowmoon Destroyer's Drape | 32323 | 5000 | 16.38 | 3.15 | BT | Teron Gorefiend
+WSRSTEP | Oct13T5R | Wrist | Insidious Bands | 32324 | 5000 | 5.19 | 3.09 | BT | Teron Gorefiend
+WSRSTEP | Oct13T5R | Feet | Softstep Boots of Tracking | 32510 | 5000 | 20.12 | 3.11 | BT | Teron Gorefiend
+WSRSTEP | Oct13T5R | Ranged | Twisted Blades of Zarak | 32326 | 5000 | 2.37 | 3.13 | BT | Teron Gorefiend
+WSRSTEP | Oct13T5R | Legs | Leggings of Divine Retribution | 32341 | 5000 | 39.39 | 3.25 | BT | Gurtogg Bloodboil
+WSRSTEP | Oct13T5R | Chest | Vest of Mounting Assault | 32334 | 5000 | -23.43 | 3.13 | BT | Gurtogg Bloodboil
+WSR | Oct13T5R | BT       | Gurtogg Bloodboil  | Chest     | Vest of Mounting Assault           |  32334 |   2319.0 |   -23.4 |  | mail | n=5000 | ±3.1 | worse
+WSRSTEP | Oct13T5R | Finger1 | Unstoppable Aggressor's Ring | 32335 | 5000 | 2.65 | 3.15 | BT | Gurtogg Bloodboil
+WSRSTEP | Oct13T5R | Finger2 | Unstoppable Aggressor's Ring | 32335 | 5000 | 11.66 | 3.16 | BT | Gurtogg Bloodboil
+WSRSTEP | Oct13T5R | MainHand | Messenger of Fate | 32269 | 5000 | -87.91 | 2.72 | BT | Gurtogg Bloodboil
+WSR | Oct13T5R | BT       | Gurtogg Bloodboil  | MainHand  | Messenger of Fate                  |  32269 |   2254.5 |   -87.9 |  | dagger 1.4 | n=5000 | ±2.7 | worse
+WSRSTEP | Oct13T5R | OffHand | Messenger of Fate | 32269 | 5000 | 8.07 | 3.05 | BT | Gurtogg Bloodboil
+WSRSTEP | Oct13T5R | Feet | Dreadboots of the Legion | 32345 | 5000 | 34.16 | 3.13 | BT | Reliquary of the Lost
+WSRSTEP | Oct13T5R | Hands | Grips of Damnation | 32347 | 5000 | 15.30 | 3.17 | BT | Reliquary of the Lost
+WSRSTEP | Oct13T5R | Waist | Boneweave Girdle | 32346 | 5000 | 5.58 | 3.14 | BT | Reliquary of the Lost
+WSRSTEP | Oct13T5R | Chest | Heartshatter Breastplate | 32365 | 5000 | 4.47 | 3.06 | BT | Mother Shahraz
+WSRSTEP | Oct13T5R | Feet | Shadowmaster's Boots | 32366 | 5000 | 28.76 | 3.19 | BT | Mother Shahraz
+WSRSTEP | Oct13T5R | MainHand | Blade of Savagery | 32369 | 5000 | -23.70 | 2.72 | BT | Mother Shahraz
+WSR | Oct13T5R | BT       | Mother Shahraz     | MainHand  | Blade of Savagery                  |  32369 |   2318.7 |   -23.7 |  | sword 1.4 | n=5000 | ±2.7 | worse
+WSRSTEP | Oct13T5R | OffHand | Blade of Savagery | 32369 | 5000 | 40.47 | 3.03 | BT | Mother Shahraz
+WSRSTEP | Oct13T5R | Shoulder | Onslaught Shoulderblades (T6) | 30979 | 5000 | 21.80 | 3.19 | BT | Mother Shahraz
+WSRSTEP | Oct13T5R | Head | Helm of the Illidari Shatterer | 32373 | 5000 | 20.96 | 3.15 | BT | Illidari Council
+WSRSTEP | Oct13T5R | Head | Forest Prowler's Helm | 32376 | 5000 | 1.97 | 3.17 | BT | Illidari Council
+WSRSTEP | Oct13T5R | Trinket1 | Madness of the Betrayer | 32505 | 5000 | -16.53 | 3.15 | BT | Illidari Council
+WSR | Oct13T5R | BT       | Illidari Council   | Trinket1  | Madness of the Betrayer            |  32505 |   2325.9 |   -16.5 |  |  | n=5000 | ±3.2 | worse
+WSRSTEP | Oct13T5R | Trinket2 | Madness of the Betrayer | 32505 | 5000 | -38.60 | 3.09 | BT | Illidari Council
+WSR | Oct13T5R | BT       | Illidari Council   | Trinket2  | Madness of the Betrayer            |  32505 |   2303.8 |   -38.6 |  |  | n=5000 | ±3.1 | worse
+WSRSTEP | Oct13T5R | Legs | Onslaught Greaves (T6) | 30977 | 5000 | 16.05 | 3.17 | BT | Illidari Council
+WSRSTEP | Oct13T5R | Head | Cursed Vision of Sargeras | 32235 | 5000 | 37.06 | 3.20 | BT | Illidan Stormrage
+WSRSTEP | Oct13T5R | Finger1 | Stormrage Signet Ring | 32497 | 5000 | 7.96 | 3.08 | BT | Illidan Stormrage
+WSRSTEP | Oct13T5R | Finger2 | Stormrage Signet Ring | 32497 | 5000 | 13.74 | 3.10 | BT | Illidan Stormrage
+WSRSTEP | Oct13T5R | MainHand | Shard of Azzinoth | 32471 | 5000 | -87.96 | 2.84 | BT | Illidan Stormrage
+WSR | Oct13T5R | BT       | Illidan Stormrage  | MainHand  | Shard of Azzinoth                  |  32471 |   2254.4 |   -88.0 |  | dagger 1.9 | n=5000 | ±2.8 | worse
+WSRSTEP | Oct13T5R | OffHand | Shard of Azzinoth | 32471 | 5000 | -6.53 | 3.14 | BT | Illidan Stormrage
+WSR | Oct13T5R | BT       | Illidan Stormrage  | OffHand   | Shard of Azzinoth                  |  32471 |   2335.9 |    -6.5 |  | dagger 1.9 | n=5000 | ±3.1 | worse
+WSRSTEP | Oct13T5R | MainHand | Warglaive of Azzinoth (MH) | 32837 | 5000 | 7.86 | 3.06 | BT | Illidan Stormrage
+WSRSTEP | Oct13T5R | OffHand | Warglaive of Azzinoth (OH) | 32838 | 5000 | 62.46 | 3.08 | BT | Illidan Stormrage
+WSRSTEP | Oct13T5R | Chest | Onslaught Breastplate (T6) | 30975 | 5000 | 14.42 | 3.14 | BT | Illidan Stormrage
+WSRSTEP | Oct13T5R | Finger1 | Band of Devastation | 32526 | 5000 | -0.84 | 3.12 | BT | Trash
+WSRSTEP | Oct13T5R | Finger2 | Band of Devastation | 32526 | 5000 | 2.34 | 3.14 | BT | Trash
+WSRSTEP | Oct13T5R | Hands | Pillager's Gauntlets | 32608 | 5000 | 8.93 | 3.10 | BT | Trash
+WSRSTEP | Oct13T5R | Waist | Girdle of the Lightbearer | 32606 | 5000 | -8.04 | 3.13 | BT | Trash
+WSR | Oct13T5R | BT       | Trash              | Waist     | Girdle of the Lightbearer          |  32606 |   2334.4 |    -8.0 |  | plate | n=5000 | ±3.1 | worse
+WSRSTEP | Oct13T5R | Feet | Treads of the Den Mother | 32593 | 5000 | -8.93 | 3.11 | BT | Trash
+WSR | Oct13T5R | BT       | Trash              | Feet      | Treads of the Den Mother           |  32593 |   2333.5 |    -8.9 |  | leather | n=5000 | ±3.1 | worse
+WSRSTEP | Oct13T5R | MainHand | Swiftsteel Bludgeon | 32943 | 5000 | -25.83 | 2.69 | BT | Trash
+WSR | Oct13T5R | BT       | Trash              | MainHand  | Swiftsteel Bludgeon                |  32943 |   2316.6 |   -25.8 |  | mace 1.5 | n=5000 | ±2.7 | worse
+WSRSTEP | Oct13T5R | OffHand | Swiftsteel Bludgeon | 32943 | 5000 | 41.93 | 3.06 | BT | Trash
+WSRSTEP | Oct13T5R | Shoulder | Pauldrons of Primal Fury | 33206 | 5000 | -3.66 | 3.13 | ZA | Nalorakk
+WSR | Oct13T5R | ZA       | Nalorakk           | Shoulder  | Pauldrons of Primal Fury           |  33206 |   2338.7 |    -3.7 |  | mail | n=5000 | ±3.1 | worse
+WSRSTEP | Oct13T5R | Waist | Bladeangel's Money Belt | 33211 | 5000 | -4.46 | 3.12 | ZA | Nalorakk
+WSR | Oct13T5R | ZA       | Nalorakk           | Waist     | Bladeangel's Money Belt            |  33211 |   2337.9 |    -4.5 |  | leather | n=5000 | ±3.1 | worse
+WSRSTEP | Oct13T5R | OffHand | Fury | 33640 | 5000 | -7.72 | 3.07 | ZA | Nalorakk
+WSR | Oct13T5R | ZA       | Nalorakk           | OffHand   | Fury                               |  33640 |   2334.7 |    -7.7 |  | fist 2.6, OH only | n=5000 | ±3.1 | worse
+WSRSTEP | Oct13T5R | Chest | Bloodstained Elven Battlevest | 33215 | 5000 | -12.55 | 3.20 | ZA | Akil'zon
+WSR | Oct13T5R | ZA       | Akil'zon           | Chest     | Bloodstained Elven Battlevest      |  33215 |   2329.9 |   -12.6 |  | plate | n=5000 | ±3.2 | worse
+WSRSTEP | Oct13T5R | MainHand | Akil'zon's Talonblade | 33214 | 5000 | -51.56 | 2.70 | ZA | Akil'zon
+WSR | Oct13T5R | ZA       | Akil'zon           | MainHand  | Akil'zon's Talonblade              |  33214 |   2290.8 |   -51.6 |  | sword 1.5 | n=5000 | ±2.7 | worse
+WSRSTEP | Oct13T5R | OffHand | Akil'zon's Talonblade | 33214 | 5000 | 20.90 | 3.10 | ZA | Akil'zon
+WSRSTEP | Oct13T5R | Chest | Shadowtooth Trollskin Cuirass | 33329 | 5000 | -8.98 | 3.20 | ZA | Jan'alai
+WSR | Oct13T5R | ZA       | Jan'alai           | Chest     | Shadowtooth Trollskin Cuirass      |  33329 |   2333.4 |    -9.0 |  | leather | n=5000 | ±3.2 | worse
+WSRSTEP | Oct13T5R | Feet | Skullshatter Warboots | 33303 | 5000 | 5.07 | 3.13 | ZA | Halazzi
+WSRSTEP | Oct13T5R | Neck | The Savage's Choker | 33297 | 5000 | -7.65 | 3.15 | ZA | Halazzi
+WSR | Oct13T5R | ZA       | Halazzi            | Neck      | The Savage's Choker                |  33297 |   2334.8 |    -7.6 |  |  | n=5000 | ±3.1 | worse
+WSRSTEP | Oct13T5R | Shoulder | Shoulderpads of Dancing Blades | 33300 | 5000 | -19.03 | 3.14 | ZA | Halazzi
+WSR | Oct13T5R | ZA       | Halazzi            | Shoulder  | Shoulderpads of Dancing Blades     |  33300 |   2323.4 |   -19.0 |  | leather | n=5000 | ±3.1 | worse
+WSRSTEP | Oct13T5R | MainHand | Heartless | 33388 | 5000 | -46.31 | 3.01 | ZA | Hex Lord Malacrass
+WSR | Oct13T5R | ZA       | Hex Lord Malacrass | MainHand  | Heartless                          |  33388 |   2296.1 |   -46.3 |  | sword 2.6 | n=5000 | ±3.0 | worse
+WSRSTEP | Oct13T5R | OffHand | Heartless | 33388 | 5000 | -4.36 | 3.12 | ZA | Hex Lord Malacrass
+WSR | Oct13T5R | ZA       | Hex Lord Malacrass | OffHand   | Heartless                          |  33388 |   2338.0 |    -4.4 |  | sword 2.6 | n=5000 | ±3.1 | worse
+WSRSTEP | Oct13T5R | MainHand | Prowler's Strikeblade | 33298 | 5000 | -98.87 | 2.73 | ZA | Hex Lord Malacrass
+WSR | Oct13T5R | ZA       | Hex Lord Malacrass | MainHand  | Prowler's Strikeblade              |  33298 |   2243.5 |   -98.9 |  | dagger 1.5 | n=5000 | ±2.7 | worse
+WSRSTEP | Oct13T5R | OffHand | Prowler's Strikeblade | 33298 | 5000 | 3.86 | 3.07 | ZA | Hex Lord Malacrass
+WSRSTEP | Oct13T5R | OffHand | Dagger of Bad Mojo | 33389 | 5000 | 8.59 | 3.08 | ZA | Hex Lord Malacrass
+WSRSTEP | Oct13T5R | Head | Grimgrin Faceguard | 33479 | 5000 | -58.59 | 3.01 | ZA | Zul'jin
+WSR | Oct13T5R | ZA       | Zul'jin            | Head      | Grimgrin Faceguard                 |  33479 |   2283.8 |   -58.6 |  | leather | n=5000 | ±3.0 | worse
+WSRSTEP | Oct13T5R | Trinket1 | Berserker's Call | 33831 | 5000 | -9.01 | 3.11 | ZA | Zul'jin
+WSR | Oct13T5R | ZA       | Zul'jin            | Trinket1  | Berserker's Call                   |  33831 |   2333.4 |    -9.0 |  |  | n=5000 | ±3.1 | worse
+WSRSTEP | Oct13T5R | Trinket2 | Berserker's Call | 33831 | 5000 | -49.63 | 3.06 | ZA | Zul'jin
+WSR | Oct13T5R | ZA       | Zul'jin            | Trinket2  | Berserker's Call                   |  33831 |   2292.8 |   -49.6 |  |  | n=5000 | ±3.1 | worse
+WSRSTEP | Oct13T5R | Ranged | Ancient Amani Longbow | 33474 | 5000 | 8.05 | 3.16 | ZA | Zul'jin
+WSRSTEP | Oct13T5R | Finger1 | Signet of Primal Wrath | 33496 | 5000 | 5.76 | 3.18 | ZA | Timed chest
+WSRSTEP | Oct13T5R | Finger2 | Signet of Primal Wrath | 33496 | 5000 | 11.66 | 3.19 | ZA | Timed chest
+WSRSTEP | Oct13T5R | Back | Cloak of Fiends | 33590 | 5000 | 10.03 | 3.14 | ZA | Timed chest
+WSRSTEP | Oct13T5R | MainHand | Rage | 33495 | 5000 | -43.78 | 3.01 | ZA | Timed chest
+WSR | Oct13T5R | ZA       | Timed chest        | MainHand  | Rage                               |  33495 |   2298.6 |   -43.8 |  | fist 2.6, MH only | n=5000 | ±3.0 | worse
+WSRSTEP | Oct13T5R | Ranged | Tuskbreaker | 33491 | 5000 | 4.15 | 3.12 | ZA | Timed chest
+WSRSTEP | Oct13T5R | Head | Amani Mask of Death | 33810 | 5000 | -75.03 | 3.04 | P4 | ?
+WSR | Oct13T5R | P4       | ?                  | Head      | Amani Mask of Death                |  33810 |   2267.4 |   -75.0 |  | plate | n=5000 | ±3.0 | worse
+WSRSTEP | Oct13T5R | Neck | Brooch of Deftness | 33296 | 5000 | -19.01 | 3.07 | P4 | ?
+WSR | Oct13T5R | P4       | ?                  | Neck      | Brooch of Deftness                 |  33296 |   2323.4 |   -19.0 |  |  | n=5000 | ±3.1 | worse
+WSRSTEP | Oct13T5R | Shoulder | Pauldrons of Gruesome Fate | 33514 | 5000 | -1.67 | 3.17 | P4 | ?
+WSRSTEP | Oct13T5R | Wrist | Eternium Rage-shackles | 33513 | 5000 | -4.95 | 3.17 | P4 | ?
+WSR | Oct13T5R | P4       | ?                  | Wrist     | Eternium Rage-shackles             |  33513 |   2337.5 |    -5.0 |  | plate | n=5000 | ±3.2 | worse
+WSRSTEP | Oct13T5R | Wrist | Master Assassin Wristwraps | 33540 | 5000 | 4.22 | 3.10 | P4 | ?
+WSRSTEP | Oct13T5R | Hands | Furious Deathgrips | 33512 | 5000 | -4.83 | 3.10 | P4 | ?
+WSR | Oct13T5R | P4       | ?                  | Hands     | Furious Deathgrips                 |  33512 |   2337.6 |    -4.8 |  | plate | n=5000 | ±3.1 | worse
+WSRSTEP | Oct13T5R | Hands | Trickster's Stickyfingers | 33539 | 5000 | 2.91 | 3.10 | P4 | ?
+WSRSTEP | Oct13T5R | Waist | Chain of Unleashed Rage | 33331 | 5000 | -5.73 | 3.13 | P4 | ?
+WSR | Oct13T5R | P4       | ?                  | Waist     | Chain of Unleashed Rage            |  33331 |   2336.7 |    -5.7 |  | plate | n=5000 | ±3.1 | worse
+WSRSTEP | Oct13T5R | Waist | Waistguard of the Great Beast | 33583 | 5000 | -10.77 | 3.13 | P4 | ?
+WSR | Oct13T5R | P4       | ?                  | Waist     | Waistguard of the Great Beast      |  33583 |   2331.6 |   -10.8 |  | leather | n=5000 | ±3.1 | worse
+WSRSTEP | Oct13T5R | Legs | Bloodthirster's Wargreaves | 33501 | 5000 | -13.80 | 3.16 | P4 | ?
+WSR | Oct13T5R | P4       | ?                  | Legs      | Bloodthirster's Wargreaves         |  33501 |   2328.6 |   -13.8 |  | plate | n=5000 | ±3.2 | worse
+WSRSTEP | Oct13T5R | Legs | Shallow-grave Trousers | 33538 | 5000 | -4.82 | 3.18 | P4 | ?
+WSR | Oct13T5R | P4       | ?                  | Legs      | Shallow-grave Trousers             |  33538 |   2337.6 |    -4.8 |  | leather | n=5000 | ±3.2 | worse
+WSRSTEP | Oct13T5R | Feet | Nyn'jah's Tabi Boots | 33222 | 5000 | 7.04 | 3.05 | P4 | ?
+WSRSTEP | Oct13T5R | Head | Vengeful Gladiator's Plate Helm | 33730 | 5000 | 4.74 | 3.19 | S3 | Arena
+WSRSTEP | Oct13T5R | Shoulder | Vengeful Gladiator's Plate Shoulders | 33732 | 5000 | 5.09 | 3.18 | S3 | Arena
+WSRSTEP | Oct13T5R | Chest | Vengeful Gladiator's Plate Chestpiece | 33728 | 5000 | 17.33 | 3.19 | S3 | Arena
+WSRSTEP | Oct13T5R | Hands | Vengeful Gladiator's Plate Gauntlets | 33729 | 5000 | -1.68 | 3.17 | S3 | Arena
+WSRSTEP | Oct13T5R | Legs | Vengeful Gladiator's Plate Legguards | 33731 | 5000 | 10.68 | 3.19 | S3 | Arena
+WSRSTEP | Oct13T5R | Neck | Vindicator's Pendant of Triumph | 33923 | 5000 | -3.38 | 3.12 | S3 | Honor
+WSR | Oct13T5R | S3       | Honor              | Neck      | Vindicator's Pendant of Triumph    |  33923 |   2339.0 |    -3.4 |  |  | n=5000 | ±3.1 | worse
+WSRSTEP | Oct13T5R | Wrist | Vindicator's Plate Bracers | 33813 | 5000 | -2.75 | 3.14 | S3 | Honor
+WSRSTEP | Oct13T5R | Waist | Vindicator's Plate Belt | 33811 | 5000 | -22.03 | 3.17 | S3 | Honor
+WSR | Oct13T5R | S3       | Honor              | Waist     | Vindicator's Plate Belt            |  33811 |   2320.4 |   -22.0 |  | plate | n=5000 | ±3.2 | worse
+WSRSTEP | Oct13T5R | Feet | Vindicator's Plate Greaves | 33812 | 5000 | -0.64 | 3.12 | S3 | Honor
+WSRSTEP | Oct13T5R | MainHand | Vengeful Gladiator's Cleaver | 33669 | 5000 | 7.38 | 3.02 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Cleaver | 33669 | 5000 | 25.19 | 3.23 | S3 | Arena
+WSRSTEP | Oct13T5R | MainHand | Vengeful Gladiator's Slicer | 33762 | 5000 | -16.63 | 3.08 | S3 | Arena
+WSR | Oct13T5R | S3       | Arena              | MainHand  | Vengeful Gladiator's Slicer        |  33762 |   2325.8 |   -16.6 |  | sword 2.6 | n=5000 | ±3.1 | worse
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Slicer | 33762 | 5000 | 18.95 | 3.19 | S3 | Arena
+WSRSTEP | Oct13T5R | MainHand | Vengeful Gladiator's Pummeler | 33733 | 5000 | -17.17 | 3.08 | S3 | Arena
+WSR | Oct13T5R | S3       | Arena              | MainHand  | Vengeful Gladiator's Pummeler      |  33733 |   2325.2 |   -17.2 |  | mace 2.6 | n=5000 | ±3.1 | worse
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Pummeler | 33733 | 5000 | 19.84 | 3.18 | S3 | Arena
+WSRSTEP | Oct13T5R | MainHand | Vengeful Gladiator's Right Ripper | 33737 | 5000 | -17.17 | 3.08 | S3 | Arena
+WSR | Oct13T5R | S3       | Arena              | MainHand  | Vengeful Gladiator's Right Ripper  |  33737 |   2325.2 |   -17.2 |  | fist 2.6, MH only | n=5000 | ±3.1 | worse
+WSRSTEP | Oct13T5R | MainHand | Vengeful Gladiator's Shanker | 33754 | 5000 | -74.00 | 2.83 | S3 | Arena
+WSR | Oct13T5R | S3       | Arena              | MainHand  | Vengeful Gladiator's Shanker       |  33754 |   2268.4 |   -74.0 |  | dagger 1.8 | n=5000 | ±2.8 | worse
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Shanker | 33754 | 5000 | 13.68 | 3.10 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Hacker | 33689 | 5000 | 45.34 | 3.14 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Quickblade | 33734 | 5000 | 42.66 | 3.13 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Bonecracker | 33662 | 5000 | 42.66 | 3.13 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Left Ripper | 33705 | 5000 | 42.66 | 3.13 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Shiv | 33756 | 5000 | 24.59 | 3.05 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Mutilator | 33801 | 5000 | 13.91 | 3.10 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Chopper | 34015 | 5000 | 25.19 | 3.23 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Left Render | 34016 | 5000 | 19.84 | 3.18 | S3 | Arena
+WSRSTEP | Oct13T5R | Ranged | Vengeful Gladiator's War Edge | 33765 | 5000 | 1.59 | 3.15 | S3 | Arena
+WSRSTEP | Oct13T5R | Ranged | Vengeful Gladiator's Heavy Crossbow | 33006 | 5000 | -15.06 | 3.11 | S3 | Arena
+WSR | Oct13T5R | S3       | Arena              | Ranged    | Vengeful Gladiator's Heavy Crossbow |  33006 |   2327.3 |   -15.1 |  | crossbow | n=5000 | ±3.1 | worse
+WSRSTEP | Oct13T5R | Ranged | Vengeful Gladiator's Longbow | 34529 | 5000 | -15.06 | 3.11 | S3 | Arena
+WSR | Oct13T5R | S3       | Arena              | Ranged    | Vengeful Gladiator's Longbow       |  34529 |   2327.3 |   -15.1 |  | bow | n=5000 | ±3.1 | worse
+WSRSTEP | Oct13T5R | Ranged | Vengeful Gladiator's Rifle | 34530 | 5000 | -15.06 | 3.11 | S3 | Arena
+WSR | Oct13T5R | S3       | Arena              | Ranged    | Vengeful Gladiator's Rifle         |  34530 |   2327.3 |   -15.1 |  | gun | n=5000 | ±3.1 | worse
+WSRROUND | Oct13T5R | round 1 | 5000 iterations each | decided 60 | open 88
+WSRSTEP | Oct13T5R | Wrist | Deadly Cuffs | 30863 | 10000 | 11.62 | 2.26 | Hyjal | Rage Winterchill
+WSRSTEP | Oct13T5R | Wrist | Furious Shackles | 30861 | 10000 | 3.36 | 2.29 | Hyjal | Rage Winterchill
+WSRSTEP | Oct13T5R | Shoulder | Blood-stained Pauldrons | 30866 | 10000 | 9.89 | 2.27 | Hyjal | Rage Winterchill
+WSRSTEP | Oct13T5R | OffHand | Tracker's Blade | 30865 | 10000 | 24.57 | 2.23 | Hyjal | Rage Winterchill
+WSRSTEP | Oct13T5R | Waist | Don Alejandro's Money Belt | 30879 | 10000 | 7.14 | 2.27 | Hyjal | Anetheron
+WSRSTEP | Oct13T5R | Feet | Quickstrider Moccasins | 30880 | 10000 | 8.94 | 2.26 | Hyjal | Anetheron
+WSRSTEP | Oct13T5R | OffHand | Blade of Infamy | 30881 | 10000 | 12.96 | 2.29 | Hyjal | Anetheron
+WSRSTEP | Oct13T5R | Waist | Valestalker Girdle | 30919 | 10000 | -0.48 | 2.28 | Hyjal | Kaz'rogal
+WSRSTEP | Oct13T5R | Legs | Shady Dealer's Pantaloons | 30898 | 10000 | 5.23 | 2.29 | Hyjal | Azgalor
+WSRSTEP | Oct13T5R | Legs | Bow-stitched Leggings | 30900 | 10000 | 20.45 | 2.30 | Hyjal | Azgalor
+WSRSTEP | Oct13T5R | OffHand | Boundless Agony | 30901 | 10000 | 18.55 | 2.26 | Hyjal | Azgalor
+WSRSTEP | Oct13T5R | Hands | Onslaught Gauntlets (T6) | 30969 | 10000 | 16.56 | 2.31 | Hyjal | Azgalor
+WSRSTEP | Oct13T5R | Chest | Midnight Chestguard | 30905 | 10000 | 23.20 | 2.28 | Hyjal | Archimonde
+WSRSTEP | Oct13T5R | Legs | Legguards of Endless Rage | 30903 | 10000 | 21.41 | 2.29 | Hyjal | Archimonde
+WSRSTEP | Oct13T5R | Head | Onslaught Battle-Helm (T6) | 30972 | 10000 | 12.81 | 2.30 | Hyjal | Archimonde
+WSRSTEP | Oct13T5R | Neck | Choker of Serrated Blades | 32591 | 10000 | 4.92 | 2.28 | Hyjal+BT | Trash
+WSRSTEP | Oct13T5R | OffHand | Fist of Molten Fury | 32945 | 10000 | 17.66 | 2.23 | Hyjal | Trash
+WSRSTEP | Oct13T5R | Shoulder | Mantle of Darkness | 32377 | 10000 | 5.22 | 2.29 | BT | Naj'entus
+WSRSTEP | Oct13T5R | Hands | Fists of Mukoa | 32234 | 10000 | 13.13 | 2.31 | BT | Naj'entus
+WSRSTEP | Oct13T5R | OffHand | Rising Tide | 32236 | 10000 | 0.15 | 2.25 | BT | Naj'entus
+WSRSTEP | Oct13T5R | Neck | Choker of Endless Nightmares | 32260 | 10000 | 16.57 | 2.25 | BT | Supremus
+WSRSTEP | Oct13T5R | Wrist | Wraps of Precise Flight | 32251 | 10000 | -1.66 | 2.26 | BT | Supremus
+WSRSTEP | Oct13T5R | OffHand | The Brutalizer | 32254 | 10000 | 10.58 | 2.21 | BT | Supremus
+WSRSTEP | Oct13T5R | Hands | Grips of Silent Justice | 32278 | 10000 | 23.04 | 2.30 | BT | Shade of Akama
+WSRSTEP | Oct13T5R | Shoulder | Shoulders of the Hidden Predator | 32264 | 10000 | 5.30 | 2.27 | BT | Shade of Akama
+WSRSTEP | Oct13T5R | Waist | Shadow-walker's Cord | 32265 | 10000 | -0.73 | 2.28 | BT | Shade of Akama
+WSRSTEP | Oct13T5R | Back | Shadowmoon Destroyer's Drape | 32323 | 10000 | 16.95 | 2.26 | BT | Teron Gorefiend
+WSRSTEP | Oct13T5R | Wrist | Insidious Bands | 32324 | 10000 | 5.08 | 2.25 | BT | Teron Gorefiend
+WSRSTEP | Oct13T5R | Feet | Softstep Boots of Tracking | 32510 | 10000 | 20.45 | 2.27 | BT | Teron Gorefiend
+WSRSTEP | Oct13T5R | Ranged | Twisted Blades of Zarak | 32326 | 10000 | 3.48 | 2.28 | BT | Teron Gorefiend
+WSRSTEP | Oct13T5R | Legs | Leggings of Divine Retribution | 32341 | 10000 | 40.11 | 2.34 | BT | Gurtogg Bloodboil
+WSRSTEP | Oct13T5R | Finger1 | Unstoppable Aggressor's Ring | 32335 | 10000 | 4.03 | 2.27 | BT | Gurtogg Bloodboil
+WSRSTEP | Oct13T5R | Finger2 | Unstoppable Aggressor's Ring | 32335 | 10000 | 10.49 | 2.27 | BT | Gurtogg Bloodboil
+WSRSTEP | Oct13T5R | OffHand | Messenger of Fate | 32269 | 10000 | 8.96 | 2.22 | BT | Gurtogg Bloodboil
+WSRSTEP | Oct13T5R | Feet | Dreadboots of the Legion | 32345 | 10000 | 34.33 | 2.27 | BT | Reliquary of the Lost
+WSRSTEP | Oct13T5R | Hands | Grips of Damnation | 32347 | 10000 | 14.30 | 2.31 | BT | Reliquary of the Lost
+WSRSTEP | Oct13T5R | Waist | Boneweave Girdle | 32346 | 10000 | 6.83 | 2.28 | BT | Reliquary of the Lost
+WSRSTEP | Oct13T5R | Chest | Heartshatter Breastplate | 32365 | 10000 | 5.89 | 2.25 | BT | Mother Shahraz
+WSRSTEP | Oct13T5R | Feet | Shadowmaster's Boots | 32366 | 10000 | 28.29 | 2.29 | BT | Mother Shahraz
+WSRSTEP | Oct13T5R | OffHand | Blade of Savagery | 32369 | 10000 | 40.59 | 2.21 | BT | Mother Shahraz
+WSRSTEP | Oct13T5R | Shoulder | Onslaught Shoulderblades (T6) | 30979 | 10000 | 21.17 | 2.28 | BT | Mother Shahraz
+WSRSTEP | Oct13T5R | Head | Helm of the Illidari Shatterer | 32373 | 10000 | 20.41 | 2.27 | BT | Illidari Council
+WSRSTEP | Oct13T5R | Head | Forest Prowler's Helm | 32376 | 10000 | 2.57 | 2.28 | BT | Illidari Council
+WSRSTEP | Oct13T5R | Legs | Onslaught Greaves (T6) | 30977 | 10000 | 18.08 | 2.30 | BT | Illidari Council
+WSRSTEP | Oct13T5R | Head | Cursed Vision of Sargeras | 32235 | 10000 | 36.46 | 2.29 | BT | Illidan Stormrage
+WSRSTEP | Oct13T5R | Finger1 | Stormrage Signet Ring | 32497 | 10000 | 9.49 | 2.24 | BT | Illidan Stormrage
+WSRSTEP | Oct13T5R | Finger2 | Stormrage Signet Ring | 32497 | 10000 | 12.89 | 2.26 | BT | Illidan Stormrage
+WSRSTEP | Oct13T5R | MainHand | Warglaive of Azzinoth (MH) | 32837 | 10000 | 5.39 | 2.24 | BT | Illidan Stormrage
+WSRSTEP | Oct13T5R | OffHand | Warglaive of Azzinoth (OH) | 32838 | 10000 | 63.54 | 2.25 | BT | Illidan Stormrage
+WSRSTEP | Oct13T5R | Chest | Onslaught Breastplate (T6) | 30975 | 10000 | 15.75 | 2.30 | BT | Illidan Stormrage
+WSRSTEP | Oct13T5R | Finger1 | Band of Devastation | 32526 | 10000 | -1.22 | 2.26 | BT | Trash
+WSRSTEP | Oct13T5R | Finger2 | Band of Devastation | 32526 | 10000 | 3.75 | 2.28 | BT | Trash
+WSRSTEP | Oct13T5R | Hands | Pillager's Gauntlets | 32608 | 10000 | 9.63 | 2.24 | BT | Trash
+WSRSTEP | Oct13T5R | OffHand | Swiftsteel Bludgeon | 32943 | 10000 | 42.24 | 2.23 | BT | Trash
+WSRSTEP | Oct13T5R | OffHand | Akil'zon's Talonblade | 33214 | 10000 | 20.04 | 2.25 | ZA | Akil'zon
+WSRSTEP | Oct13T5R | Feet | Skullshatter Warboots | 33303 | 10000 | 5.83 | 2.28 | ZA | Halazzi
+WSRSTEP | Oct13T5R | OffHand | Prowler's Strikeblade | 33298 | 10000 | 3.36 | 2.23 | ZA | Hex Lord Malacrass
+WSRSTEP | Oct13T5R | OffHand | Dagger of Bad Mojo | 33389 | 10000 | 7.90 | 2.24 | ZA | Hex Lord Malacrass
+WSRSTEP | Oct13T5R | Ranged | Ancient Amani Longbow | 33474 | 10000 | 9.17 | 2.30 | ZA | Zul'jin
+WSRSTEP | Oct13T5R | Finger1 | Signet of Primal Wrath | 33496 | 10000 | 6.82 | 2.28 | ZA | Timed chest
+WSRSTEP | Oct13T5R | Finger2 | Signet of Primal Wrath | 33496 | 10000 | 12.13 | 2.31 | ZA | Timed chest
+WSRSTEP | Oct13T5R | Back | Cloak of Fiends | 33590 | 10000 | 10.12 | 2.28 | ZA | Timed chest
+WSRSTEP | Oct13T5R | Ranged | Tuskbreaker | 33491 | 10000 | 5.07 | 2.27 | ZA | Timed chest
+WSRSTEP | Oct13T5R | Shoulder | Pauldrons of Gruesome Fate | 33514 | 10000 | -2.34 | 2.29 | P4 | ?
+WSR | Oct13T5R | P4       | ?                  | Shoulder  | Pauldrons of Gruesome Fate         |  33514 |   2340.1 |    -2.3 |  | plate | n=10000 | ±2.3 | worse
+WSRSTEP | Oct13T5R | Wrist | Master Assassin Wristwraps | 33540 | 10000 | 5.54 | 2.27 | P4 | ?
+WSRSTEP | Oct13T5R | Hands | Trickster's Stickyfingers | 33539 | 10000 | 1.89 | 2.26 | P4 | ?
+WSRSTEP | Oct13T5R | Feet | Nyn'jah's Tabi Boots | 33222 | 10000 | 7.83 | 2.24 | P4 | ?
+WSRSTEP | Oct13T5R | Head | Vengeful Gladiator's Plate Helm | 33730 | 10000 | 4.19 | 2.29 | S3 | Arena
+WSRSTEP | Oct13T5R | Shoulder | Vengeful Gladiator's Plate Shoulders | 33732 | 10000 | 4.32 | 2.29 | S3 | Arena
+WSRSTEP | Oct13T5R | Chest | Vengeful Gladiator's Plate Chestpiece | 33728 | 10000 | 17.63 | 2.28 | S3 | Arena
+WSRSTEP | Oct13T5R | Hands | Vengeful Gladiator's Plate Gauntlets | 33729 | 10000 | -2.06 | 2.28 | S3 | Arena
+WSRSTEP | Oct13T5R | Legs | Vengeful Gladiator's Plate Legguards | 33731 | 10000 | 10.73 | 2.29 | S3 | Arena
+WSRSTEP | Oct13T5R | Wrist | Vindicator's Plate Bracers | 33813 | 10000 | -3.25 | 2.28 | S3 | Honor
+WSR | Oct13T5R | S3       | Honor              | Wrist     | Vindicator's Plate Bracers         |  33813 |   2339.1 |    -3.3 |  | plate | n=10000 | ±2.3 | worse
+WSRSTEP | Oct13T5R | Feet | Vindicator's Plate Greaves | 33812 | 10000 | 0.20 | 2.28 | S3 | Honor
+WSRSTEP | Oct13T5R | MainHand | Vengeful Gladiator's Cleaver | 33669 | 10000 | 7.74 | 2.18 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Cleaver | 33669 | 10000 | 23.54 | 2.33 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Slicer | 33762 | 10000 | 19.43 | 2.30 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Pummeler | 33733 | 10000 | 20.47 | 2.30 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Shanker | 33754 | 10000 | 13.41 | 2.25 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Hacker | 33689 | 10000 | 44.90 | 2.25 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Quickblade | 33734 | 10000 | 42.31 | 2.26 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Bonecracker | 33662 | 10000 | 42.31 | 2.26 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Left Ripper | 33705 | 10000 | 42.31 | 2.26 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Shiv | 33756 | 10000 | 25.43 | 2.22 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Mutilator | 33801 | 10000 | 13.02 | 2.25 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Chopper | 34015 | 10000 | 23.54 | 2.33 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Left Render | 34016 | 10000 | 20.47 | 2.30 | S3 | Arena
+WSRSTEP | Oct13T5R | Ranged | Vengeful Gladiator's War Edge | 33765 | 10000 | -0.08 | 2.28 | S3 | Arena
+WSRROUND | Oct13T5R | round 2 | 10000 iterations each | decided 62 | open 86
+WSRSTEP | Oct13T5R | Wrist | Deadly Cuffs | 30863 | 15000 | 12.64 | 1.88 | Hyjal | Rage Winterchill
+WSRSTEP | Oct13T5R | Wrist | Furious Shackles | 30861 | 15000 | 4.33 | 1.90 | Hyjal | Rage Winterchill
+WSRSTEP | Oct13T5R | Shoulder | Blood-stained Pauldrons | 30866 | 15000 | 10.47 | 1.88 | Hyjal | Rage Winterchill
+WSRSTEP | Oct13T5R | OffHand | Tracker's Blade | 30865 | 15000 | 24.45 | 1.85 | Hyjal | Rage Winterchill
+WSRSTEP | Oct13T5R | Waist | Don Alejandro's Money Belt | 30879 | 15000 | 7.12 | 1.89 | Hyjal | Anetheron
+WSRSTEP | Oct13T5R | Feet | Quickstrider Moccasins | 30880 | 15000 | 9.97 | 1.88 | Hyjal | Anetheron
+WSRSTEP | Oct13T5R | OffHand | Blade of Infamy | 30881 | 15000 | 12.50 | 1.92 | Hyjal | Anetheron
+WSRSTEP | Oct13T5R | Waist | Valestalker Girdle | 30919 | 15000 | -0.15 | 1.91 | Hyjal | Kaz'rogal
+WSRSTEP | Oct13T5R | Legs | Shady Dealer's Pantaloons | 30898 | 15000 | 6.38 | 1.92 | Hyjal | Azgalor
+WSRSTEP | Oct13T5R | Legs | Bow-stitched Leggings | 30900 | 15000 | 20.22 | 1.93 | Hyjal | Azgalor
+WSRSTEP | Oct13T5R | OffHand | Boundless Agony | 30901 | 15000 | 19.30 | 1.90 | Hyjal | Azgalor
+WSRSTEP | Oct13T5R | Hands | Onslaught Gauntlets (T6) | 30969 | 15000 | 16.88 | 1.91 | Hyjal | Azgalor
+WSRSTEP | Oct13T5R | Chest | Midnight Chestguard | 30905 | 15000 | 23.98 | 1.89 | Hyjal | Archimonde
+WSRSTEP | Oct13T5R | Legs | Legguards of Endless Rage | 30903 | 15000 | 21.34 | 1.91 | Hyjal | Archimonde
+WSRSTEP | Oct13T5R | Head | Onslaught Battle-Helm (T6) | 30972 | 15000 | 13.04 | 1.92 | Hyjal | Archimonde
+WSRSTEP | Oct13T5R | Neck | Choker of Serrated Blades | 32591 | 15000 | 5.40 | 1.91 | Hyjal+BT | Trash
+WSRSTEP | Oct13T5R | OffHand | Fist of Molten Fury | 32945 | 15000 | 18.91 | 1.87 | Hyjal | Trash
+WSRSTEP | Oct13T5R | Shoulder | Mantle of Darkness | 32377 | 15000 | 6.43 | 1.89 | BT | Naj'entus
+WSRSTEP | Oct13T5R | Hands | Fists of Mukoa | 32234 | 15000 | 13.61 | 1.91 | BT | Naj'entus
+WSRSTEP | Oct13T5R | OffHand | Rising Tide | 32236 | 15000 | 0.69 | 1.89 | BT | Naj'entus
+WSRSTEP | Oct13T5R | Neck | Choker of Endless Nightmares | 32260 | 15000 | 16.83 | 1.88 | BT | Supremus
+WSRSTEP | Oct13T5R | Wrist | Wraps of Precise Flight | 32251 | 15000 | -1.23 | 1.89 | BT | Supremus
+WSRSTEP | Oct13T5R | OffHand | The Brutalizer | 32254 | 15000 | 10.80 | 1.84 | BT | Supremus
+WSRSTEP | Oct13T5R | Hands | Grips of Silent Justice | 32278 | 15000 | 24.53 | 1.91 | BT | Shade of Akama
+WSRSTEP | Oct13T5R | Shoulder | Shoulders of the Hidden Predator | 32264 | 15000 | 6.65 | 1.89 | BT | Shade of Akama
+WSRSTEP | Oct13T5R | Waist | Shadow-walker's Cord | 32265 | 15000 | -0.58 | 1.90 | BT | Shade of Akama
+WSRSTEP | Oct13T5R | Back | Shadowmoon Destroyer's Drape | 32323 | 15000 | 17.03 | 1.88 | BT | Teron Gorefiend
+WSRSTEP | Oct13T5R | Wrist | Insidious Bands | 32324 | 15000 | 6.23 | 1.88 | BT | Teron Gorefiend
+WSRSTEP | Oct13T5R | Feet | Softstep Boots of Tracking | 32510 | 15000 | 20.82 | 1.89 | BT | Teron Gorefiend
+WSRSTEP | Oct13T5R | Ranged | Twisted Blades of Zarak | 32326 | 15000 | 4.32 | 1.89 | BT | Teron Gorefiend
+WSRSTEP | Oct13T5R | Legs | Leggings of Divine Retribution | 32341 | 15000 | 40.43 | 1.94 | BT | Gurtogg Bloodboil
+WSRSTEP | Oct13T5R | Finger1 | Unstoppable Aggressor's Ring | 32335 | 15000 | 4.98 | 1.89 | BT | Gurtogg Bloodboil
+WSRSTEP | Oct13T5R | Finger2 | Unstoppable Aggressor's Ring | 32335 | 15000 | 10.85 | 1.89 | BT | Gurtogg Bloodboil
+WSRSTEP | Oct13T5R | OffHand | Messenger of Fate | 32269 | 15000 | 9.26 | 1.85 | BT | Gurtogg Bloodboil
+WSRSTEP | Oct13T5R | Feet | Dreadboots of the Legion | 32345 | 15000 | 34.62 | 1.88 | BT | Reliquary of the Lost
+WSRSTEP | Oct13T5R | Hands | Grips of Damnation | 32347 | 15000 | 14.75 | 1.91 | BT | Reliquary of the Lost
+WSRSTEP | Oct13T5R | Waist | Boneweave Girdle | 32346 | 15000 | 7.70 | 1.89 | BT | Reliquary of the Lost
+WSRSTEP | Oct13T5R | Chest | Heartshatter Breastplate | 32365 | 15000 | 7.18 | 1.87 | BT | Mother Shahraz
+WSRSTEP | Oct13T5R | Feet | Shadowmaster's Boots | 32366 | 15000 | 28.40 | 1.90 | BT | Mother Shahraz
+WSRSTEP | Oct13T5R | OffHand | Blade of Savagery | 32369 | 15000 | 41.51 | 1.85 | BT | Mother Shahraz
+WSRSTEP | Oct13T5R | Shoulder | Onslaught Shoulderblades (T6) | 30979 | 15000 | 21.58 | 1.91 | BT | Mother Shahraz
+WSRSTEP | Oct13T5R | Head | Helm of the Illidari Shatterer | 32373 | 15000 | 20.87 | 1.88 | BT | Illidari Council
+WSRSTEP | Oct13T5R | Head | Forest Prowler's Helm | 32376 | 15000 | 2.87 | 1.91 | BT | Illidari Council
+WSRSTEP | Oct13T5R | Legs | Onslaught Greaves (T6) | 30977 | 15000 | 18.77 | 1.92 | BT | Illidari Council
+WSRSTEP | Oct13T5R | Head | Cursed Vision of Sargeras | 32235 | 15000 | 35.81 | 1.91 | BT | Illidan Stormrage
+WSRSTEP | Oct13T5R | Finger1 | Stormrage Signet Ring | 32497 | 15000 | 9.20 | 1.88 | BT | Illidan Stormrage
+WSRSTEP | Oct13T5R | Finger2 | Stormrage Signet Ring | 32497 | 15000 | 12.96 | 1.89 | BT | Illidan Stormrage
+WSRSTEP | Oct13T5R | MainHand | Warglaive of Azzinoth (MH) | 32837 | 15000 | 5.21 | 1.86 | BT | Illidan Stormrage
+WSRSTEP | Oct13T5R | OffHand | Warglaive of Azzinoth (OH) | 32838 | 15000 | 64.32 | 1.86 | BT | Illidan Stormrage
+WSRSTEP | Oct13T5R | Chest | Onslaught Breastplate (T6) | 30975 | 15000 | 16.99 | 1.92 | BT | Illidan Stormrage
+WSRSTEP | Oct13T5R | Finger1 | Band of Devastation | 32526 | 15000 | -1.10 | 1.88 | BT | Trash
+WSRSTEP | Oct13T5R | Finger2 | Band of Devastation | 32526 | 15000 | 4.27 | 1.91 | BT | Trash
+WSRSTEP | Oct13T5R | Hands | Pillager's Gauntlets | 32608 | 15000 | 8.82 | 1.87 | BT | Trash
+WSRSTEP | Oct13T5R | OffHand | Swiftsteel Bludgeon | 32943 | 15000 | 41.41 | 1.86 | BT | Trash
+WSRSTEP | Oct13T5R | OffHand | Akil'zon's Talonblade | 33214 | 15000 | 19.52 | 1.87 | ZA | Akil'zon
+WSRSTEP | Oct13T5R | Feet | Skullshatter Warboots | 33303 | 15000 | 6.30 | 1.90 | ZA | Halazzi
+WSRSTEP | Oct13T5R | OffHand | Prowler's Strikeblade | 33298 | 15000 | 3.65 | 1.87 | ZA | Hex Lord Malacrass
+WSRSTEP | Oct13T5R | OffHand | Dagger of Bad Mojo | 33389 | 15000 | 8.88 | 1.88 | ZA | Hex Lord Malacrass
+WSRSTEP | Oct13T5R | Ranged | Ancient Amani Longbow | 33474 | 15000 | 9.38 | 1.92 | ZA | Zul'jin
+WSRSTEP | Oct13T5R | Finger1 | Signet of Primal Wrath | 33496 | 15000 | 7.43 | 1.90 | ZA | Timed chest
+WSRSTEP | Oct13T5R | Finger2 | Signet of Primal Wrath | 33496 | 15000 | 12.38 | 1.92 | ZA | Timed chest
+WSRSTEP | Oct13T5R | Back | Cloak of Fiends | 33590 | 15000 | 9.93 | 1.89 | ZA | Timed chest
+WSRSTEP | Oct13T5R | Ranged | Tuskbreaker | 33491 | 15000 | 4.91 | 1.90 | ZA | Timed chest
+WSRSTEP | Oct13T5R | Wrist | Master Assassin Wristwraps | 33540 | 15000 | 6.11 | 1.89 | P4 | ?
+WSRSTEP | Oct13T5R | Hands | Trickster's Stickyfingers | 33539 | 15000 | 1.36 | 1.88 | P4 | ?
+WSRSTEP | Oct13T5R | Feet | Nyn'jah's Tabi Boots | 33222 | 15000 | 8.65 | 1.87 | P4 | ?
+WSRSTEP | Oct13T5R | Head | Vengeful Gladiator's Plate Helm | 33730 | 15000 | 4.84 | 1.91 | S3 | Arena
+WSRSTEP | Oct13T5R | Shoulder | Vengeful Gladiator's Plate Shoulders | 33732 | 15000 | 4.86 | 1.91 | S3 | Arena
+WSRSTEP | Oct13T5R | Chest | Vengeful Gladiator's Plate Chestpiece | 33728 | 15000 | 17.36 | 1.91 | S3 | Arena
+WSRSTEP | Oct13T5R | Hands | Vengeful Gladiator's Plate Gauntlets | 33729 | 15000 | -1.06 | 1.90 | S3 | Arena
+WSRSTEP | Oct13T5R | Legs | Vengeful Gladiator's Plate Legguards | 33731 | 15000 | 10.82 | 1.91 | S3 | Arena
+WSRSTEP | Oct13T5R | Feet | Vindicator's Plate Greaves | 33812 | 15000 | 0.43 | 1.90 | S3 | Honor
+WSRSTEP | Oct13T5R | MainHand | Vengeful Gladiator's Cleaver | 33669 | 15000 | 8.11 | 1.83 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Cleaver | 33669 | 15000 | 24.09 | 1.93 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Slicer | 33762 | 15000 | 19.42 | 1.91 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Pummeler | 33733 | 15000 | 19.45 | 1.91 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Shanker | 33754 | 15000 | 13.94 | 1.88 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Hacker | 33689 | 15000 | 45.09 | 1.87 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Quickblade | 33734 | 15000 | 42.59 | 1.88 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Bonecracker | 33662 | 15000 | 42.59 | 1.88 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Left Ripper | 33705 | 15000 | 42.59 | 1.88 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Shiv | 33756 | 15000 | 27.03 | 1.85 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Mutilator | 33801 | 15000 | 13.72 | 1.88 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Chopper | 34015 | 15000 | 24.09 | 1.93 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Left Render | 34016 | 15000 | 19.45 | 1.91 | S3 | Arena
+WSRSTEP | Oct13T5R | Ranged | Vengeful Gladiator's War Edge | 33765 | 15000 | 0.95 | 1.89 | S3 | Arena
+WSRROUND | Oct13T5R | round 3 | 15000 iterations each | decided 62 | open 86
+WSRSTEP | Oct13T5R | Wrist | Deadly Cuffs | 30863 | 20000 | 12.54 | 1.67 | Hyjal | Rage Winterchill
+WSRSTEP | Oct13T5R | Wrist | Furious Shackles | 30861 | 20000 | 4.53 | 1.69 | Hyjal | Rage Winterchill
+WSRSTEP | Oct13T5R | Shoulder | Blood-stained Pauldrons | 30866 | 20000 | 10.51 | 1.67 | Hyjal | Rage Winterchill
+WSRSTEP | Oct13T5R | OffHand | Tracker's Blade | 30865 | 20000 | 23.94 | 1.64 | Hyjal | Rage Winterchill
+WSRSTEP | Oct13T5R | Waist | Don Alejandro's Money Belt | 30879 | 20000 | 6.69 | 1.68 | Hyjal | Anetheron
+WSRSTEP | Oct13T5R | Feet | Quickstrider Moccasins | 30880 | 20000 | 9.19 | 1.67 | Hyjal | Anetheron
+WSRSTEP | Oct13T5R | OffHand | Blade of Infamy | 30881 | 20000 | 11.94 | 1.70 | Hyjal | Anetheron
+WSRSTEP | Oct13T5R | Waist | Valestalker Girdle | 30919 | 20000 | -0.69 | 1.68 | Hyjal | Kaz'rogal
+WSRSTEP | Oct13T5R | Legs | Shady Dealer's Pantaloons | 30898 | 20000 | 5.65 | 1.70 | Hyjal | Azgalor
+WSRSTEP | Oct13T5R | Legs | Bow-stitched Leggings | 30900 | 20000 | 20.17 | 1.71 | Hyjal | Azgalor
+WSRSTEP | Oct13T5R | OffHand | Boundless Agony | 30901 | 20000 | 19.12 | 1.67 | Hyjal | Azgalor
+WSRSTEP | Oct13T5R | Hands | Onslaught Gauntlets (T6) | 30969 | 20000 | 17.02 | 1.69 | Hyjal | Azgalor
+WSRSTEP | Oct13T5R | Chest | Midnight Chestguard | 30905 | 20000 | 23.70 | 1.68 | Hyjal | Archimonde
+WSRSTEP | Oct13T5R | Legs | Legguards of Endless Rage | 30903 | 20000 | 21.04 | 1.69 | Hyjal | Archimonde
+WSRSTEP | Oct13T5R | Head | Onslaught Battle-Helm (T6) | 30972 | 20000 | 13.07 | 1.70 | Hyjal | Archimonde
+WSRSTEP | Oct13T5R | Neck | Choker of Serrated Blades | 32591 | 20000 | 5.88 | 1.69 | Hyjal+BT | Trash
+WSRSTEP | Oct13T5R | OffHand | Fist of Molten Fury | 32945 | 20000 | 18.58 | 1.65 | Hyjal | Trash
+WSRSTEP | Oct13T5R | Shoulder | Mantle of Darkness | 32377 | 20000 | 6.54 | 1.68 | BT | Naj'entus
+WSRSTEP | Oct13T5R | Hands | Fists of Mukoa | 32234 | 20000 | 13.39 | 1.68 | BT | Naj'entus
+WSRSTEP | Oct13T5R | OffHand | Rising Tide | 32236 | 20000 | 1.30 | 1.67 | BT | Naj'entus
+WSRSTEP | Oct13T5R | Neck | Choker of Endless Nightmares | 32260 | 20000 | 17.40 | 1.67 | BT | Supremus
+WSRSTEP | Oct13T5R | Wrist | Wraps of Precise Flight | 32251 | 20000 | -1.54 | 1.67 | BT | Supremus
+WSRSTEP | Oct13T5R | OffHand | The Brutalizer | 32254 | 20000 | 10.89 | 1.63 | BT | Supremus
+WSRSTEP | Oct13T5R | Hands | Grips of Silent Justice | 32278 | 20000 | 24.58 | 1.69 | BT | Shade of Akama
+WSRSTEP | Oct13T5R | Shoulder | Shoulders of the Hidden Predator | 32264 | 20000 | 6.28 | 1.68 | BT | Shade of Akama
+WSRSTEP | Oct13T5R | Waist | Shadow-walker's Cord | 32265 | 20000 | -0.29 | 1.67 | BT | Shade of Akama
+WSRSTEP | Oct13T5R | Back | Shadowmoon Destroyer's Drape | 32323 | 20000 | 16.90 | 1.67 | BT | Teron Gorefiend
+WSRSTEP | Oct13T5R | Wrist | Insidious Bands | 32324 | 20000 | 6.41 | 1.67 | BT | Teron Gorefiend
+WSRSTEP | Oct13T5R | Feet | Softstep Boots of Tracking | 32510 | 20000 | 20.51 | 1.67 | BT | Teron Gorefiend
+WSRSTEP | Oct13T5R | Ranged | Twisted Blades of Zarak | 32326 | 20000 | 4.21 | 1.68 | BT | Teron Gorefiend
+WSRSTEP | Oct13T5R | Legs | Leggings of Divine Retribution | 32341 | 20000 | 40.49 | 1.72 | BT | Gurtogg Bloodboil
+WSRSTEP | Oct13T5R | Finger1 | Unstoppable Aggressor's Ring | 32335 | 20000 | 5.14 | 1.67 | BT | Gurtogg Bloodboil
+WSRSTEP | Oct13T5R | Finger2 | Unstoppable Aggressor's Ring | 32335 | 20000 | 10.72 | 1.68 | BT | Gurtogg Bloodboil
+WSRSTEP | Oct13T5R | OffHand | Messenger of Fate | 32269 | 20000 | 8.50 | 1.64 | BT | Gurtogg Bloodboil
+WSRSTEP | Oct13T5R | Feet | Dreadboots of the Legion | 32345 | 20000 | 33.74 | 1.67 | BT | Reliquary of the Lost
+WSRSTEP | Oct13T5R | Hands | Grips of Damnation | 32347 | 20000 | 14.69 | 1.68 | BT | Reliquary of the Lost
+WSRSTEP | Oct13T5R | Waist | Boneweave Girdle | 32346 | 20000 | 7.92 | 1.67 | BT | Reliquary of the Lost
+WSRSTEP | Oct13T5R | Chest | Heartshatter Breastplate | 32365 | 20000 | 7.29 | 1.66 | BT | Mother Shahraz
+WSRSTEP | Oct13T5R | Feet | Shadowmaster's Boots | 32366 | 20000 | 28.61 | 1.69 | BT | Mother Shahraz
+WSRSTEP | Oct13T5R | OffHand | Blade of Savagery | 32369 | 20000 | 40.64 | 1.64 | BT | Mother Shahraz
+WSRSTEP | Oct13T5R | Shoulder | Onslaught Shoulderblades (T6) | 30979 | 20000 | 21.15 | 1.70 | BT | Mother Shahraz
+WSRSTEP | Oct13T5R | Head | Helm of the Illidari Shatterer | 32373 | 20000 | 20.22 | 1.67 | BT | Illidari Council
+WSRSTEP | Oct13T5R | Head | Forest Prowler's Helm | 32376 | 20000 | 2.61 | 1.69 | BT | Illidari Council
+WSRSTEP | Oct13T5R | Legs | Onslaught Greaves (T6) | 30977 | 20000 | 18.81 | 1.70 | BT | Illidari Council
+WSRSTEP | Oct13T5R | Head | Cursed Vision of Sargeras | 32235 | 20000 | 36.02 | 1.69 | BT | Illidan Stormrage
+WSRSTEP | Oct13T5R | Finger1 | Stormrage Signet Ring | 32497 | 20000 | 8.45 | 1.67 | BT | Illidan Stormrage
+WSRSTEP | Oct13T5R | Finger2 | Stormrage Signet Ring | 32497 | 20000 | 12.91 | 1.67 | BT | Illidan Stormrage
+WSRSTEP | Oct13T5R | MainHand | Warglaive of Azzinoth (MH) | 32837 | 20000 | 4.95 | 1.64 | BT | Illidan Stormrage
+WSRSTEP | Oct13T5R | OffHand | Warglaive of Azzinoth (OH) | 32838 | 20000 | 64.12 | 1.66 | BT | Illidan Stormrage
+WSRSTEP | Oct13T5R | Chest | Onslaught Breastplate (T6) | 30975 | 20000 | 16.97 | 1.69 | BT | Illidan Stormrage
+WSRSTEP | Oct13T5R | Finger1 | Band of Devastation | 32526 | 20000 | -1.37 | 1.67 | BT | Trash
+WSRSTEP | Oct13T5R | Finger2 | Band of Devastation | 32526 | 20000 | 3.93 | 1.69 | BT | Trash
+WSRSTEP | Oct13T5R | Hands | Pillager's Gauntlets | 32608 | 20000 | 8.74 | 1.66 | BT | Trash
+WSRSTEP | Oct13T5R | OffHand | Swiftsteel Bludgeon | 32943 | 20000 | 40.97 | 1.65 | BT | Trash
+WSRSTEP | Oct13T5R | OffHand | Akil'zon's Talonblade | 33214 | 20000 | 20.14 | 1.66 | ZA | Akil'zon
+WSRSTEP | Oct13T5R | Feet | Skullshatter Warboots | 33303 | 20000 | 6.32 | 1.68 | ZA | Halazzi
+WSRSTEP | Oct13T5R | OffHand | Prowler's Strikeblade | 33298 | 20000 | 3.67 | 1.65 | ZA | Hex Lord Malacrass
+WSRSTEP | Oct13T5R | OffHand | Dagger of Bad Mojo | 33389 | 20000 | 9.03 | 1.66 | ZA | Hex Lord Malacrass
+WSRSTEP | Oct13T5R | Ranged | Ancient Amani Longbow | 33474 | 20000 | 9.60 | 1.69 | ZA | Zul'jin
+WSRSTEP | Oct13T5R | Finger1 | Signet of Primal Wrath | 33496 | 20000 | 7.15 | 1.68 | ZA | Timed chest
+WSRSTEP | Oct13T5R | Finger2 | Signet of Primal Wrath | 33496 | 20000 | 12.36 | 1.69 | ZA | Timed chest
+WSRSTEP | Oct13T5R | Back | Cloak of Fiends | 33590 | 20000 | 10.14 | 1.68 | ZA | Timed chest
+WSRSTEP | Oct13T5R | Ranged | Tuskbreaker | 33491 | 20000 | 4.78 | 1.68 | ZA | Timed chest
+WSRSTEP | Oct13T5R | Wrist | Master Assassin Wristwraps | 33540 | 20000 | 5.97 | 1.67 | P4 | ?
+WSRSTEP | Oct13T5R | Hands | Trickster's Stickyfingers | 33539 | 20000 | 1.82 | 1.67 | P4 | ?
+WSRSTEP | Oct13T5R | Feet | Nyn'jah's Tabi Boots | 33222 | 20000 | 8.77 | 1.66 | P4 | ?
+WSRSTEP | Oct13T5R | Head | Vengeful Gladiator's Plate Helm | 33730 | 20000 | 5.21 | 1.69 | S3 | Arena
+WSRSTEP | Oct13T5R | Shoulder | Vengeful Gladiator's Plate Shoulders | 33732 | 20000 | 4.55 | 1.69 | S3 | Arena
+WSRSTEP | Oct13T5R | Chest | Vengeful Gladiator's Plate Chestpiece | 33728 | 20000 | 17.39 | 1.69 | S3 | Arena
+WSRSTEP | Oct13T5R | Hands | Vengeful Gladiator's Plate Gauntlets | 33729 | 20000 | -1.19 | 1.69 | S3 | Arena
+WSRSTEP | Oct13T5R | Legs | Vengeful Gladiator's Plate Legguards | 33731 | 20000 | 11.11 | 1.69 | S3 | Arena
+WSRSTEP | Oct13T5R | Feet | Vindicator's Plate Greaves | 33812 | 20000 | 0.27 | 1.68 | S3 | Honor
+WSRSTEP | Oct13T5R | MainHand | Vengeful Gladiator's Cleaver | 33669 | 20000 | 7.21 | 1.62 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Cleaver | 33669 | 20000 | 24.26 | 1.70 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Slicer | 33762 | 20000 | 18.83 | 1.69 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Pummeler | 33733 | 20000 | 18.72 | 1.69 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Shanker | 33754 | 20000 | 13.98 | 1.66 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Hacker | 33689 | 20000 | 45.19 | 1.66 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Quickblade | 33734 | 20000 | 42.31 | 1.66 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Bonecracker | 33662 | 20000 | 42.31 | 1.66 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Left Ripper | 33705 | 20000 | 42.31 | 1.66 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Shiv | 33756 | 20000 | 26.39 | 1.64 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Mutilator | 33801 | 20000 | 13.97 | 1.66 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Chopper | 34015 | 20000 | 24.26 | 1.70 | S3 | Arena
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Left Render | 34016 | 20000 | 18.72 | 1.69 | S3 | Arena
+WSRSTEP | Oct13T5R | Ranged | Vengeful Gladiator's War Edge | 33765 | 20000 | 0.99 | 1.68 | S3 | Arena
+WSRROUND | Oct13T5R | round 4 | 20000 iterations each | decided 62 | open 86
+WSRSTEP | Oct13T5R | Wrist | Deadly Cuffs | 30863 | 25000 | 12.74 | 1.52 | Hyjal | Rage Winterchill
+WSR | Oct13T5R | Hyjal    | Rage Winterchill   | Wrist     | Deadly Cuffs                       |  30863 |   2355.1 |   +12.7 |  | leather | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Wrist | Furious Shackles | 30861 | 25000 | 4.88 | 1.54 | Hyjal | Rage Winterchill
+WSR | Oct13T5R | Hyjal    | Rage Winterchill   | Wrist     | Furious Shackles                   |  30861 |   2347.3 |    +4.9 |  | plate | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Shoulder | Blood-stained Pauldrons | 30866 | 25000 | 10.71 | 1.53 | Hyjal | Rage Winterchill
+WSR | Oct13T5R | Hyjal    | Rage Winterchill   | Shoulder  | Blood-stained Pauldrons            |  30866 |   2353.1 |   +10.7 |  | plate | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | OffHand | Tracker's Blade | 30865 | 25000 | 24.09 | 1.49 | Hyjal | Rage Winterchill
+WSR | Oct13T5R | Hyjal    | Rage Winterchill   | OffHand   | Tracker's Blade                    |  30865 |   2366.5 |   +24.1 |  | dagger 1.5 | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Waist | Don Alejandro's Money Belt | 30879 | 25000 | 6.76 | 1.53 | Hyjal | Anetheron
+WSR | Oct13T5R | Hyjal    | Anetheron          | Waist     | Don Alejandro's Money Belt         |  30879 |   2349.2 |    +6.8 |  | leather | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Feet | Quickstrider Moccasins | 30880 | 25000 | 8.96 | 1.53 | Hyjal | Anetheron
+WSR | Oct13T5R | Hyjal    | Anetheron          | Feet      | Quickstrider Moccasins             |  30880 |   2351.4 |    +9.0 |  | mail | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | OffHand | Blade of Infamy | 30881 | 25000 | 11.74 | 1.55 | Hyjal | Anetheron
+WSR | Oct13T5R | Hyjal    | Anetheron          | OffHand   | Blade of Infamy                    |  30881 |   2354.1 |   +11.7 |  | sword 2.6 | n=25000 | ±1.6 | better
+WSRSTEP | Oct13T5R | Waist | Valestalker Girdle | 30919 | 25000 | -0.77 | 1.54 | Hyjal | Kaz'rogal
+WSR | Oct13T5R | Hyjal    | Kaz'rogal          | Waist     | Valestalker Girdle                 |  30919 |   2341.6 |    -0.8 |  | mail | n=25000 | ±1.5 | inconclusive
+WSRSTEP | Oct13T5R | Legs | Shady Dealer's Pantaloons | 30898 | 25000 | 5.92 | 1.55 | Hyjal | Azgalor
+WSR | Oct13T5R | Hyjal    | Azgalor            | Legs      | Shady Dealer's Pantaloons          |  30898 |   2348.3 |    +5.9 |  | leather | n=25000 | ±1.6 | better
+WSRSTEP | Oct13T5R | Legs | Bow-stitched Leggings | 30900 | 25000 | 20.37 | 1.55 | Hyjal | Azgalor
+WSR | Oct13T5R | Hyjal    | Azgalor            | Legs      | Bow-stitched Leggings              |  30900 |   2362.8 |   +20.4 |  | mail | n=25000 | ±1.6 | better
+WSRSTEP | Oct13T5R | OffHand | Boundless Agony | 30901 | 25000 | 18.78 | 1.53 | Hyjal | Azgalor
+WSR | Oct13T5R | Hyjal    | Azgalor            | OffHand   | Boundless Agony                    |  30901 |   2361.2 |   +18.8 |  | dagger 1.8 | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Hands | Onslaught Gauntlets (T6) | 30969 | 25000 | 17.39 | 1.54 | Hyjal | Azgalor
+WSR | Oct13T5R | Hyjal    | Azgalor            | Hands     | Onslaught Gauntlets (T6)           |  30969 |   2359.8 |   +17.4 | Gloves of the Forgotten Protector | token 31094 | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Chest | Midnight Chestguard | 30905 | 25000 | 24.23 | 1.54 | Hyjal | Archimonde
+WSR | Oct13T5R | Hyjal    | Archimonde         | Chest     | Midnight Chestguard                |  30905 |   2366.6 |   +24.2 |  | leather | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Legs | Legguards of Endless Rage | 30903 | 25000 | 20.93 | 1.55 | Hyjal | Archimonde
+WSR | Oct13T5R | Hyjal    | Archimonde         | Legs      | Legguards of Endless Rage          |  30903 |   2363.3 |   +20.9 |  | plate | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Head | Onslaught Battle-Helm (T6) | 30972 | 25000 | 13.01 | 1.55 | Hyjal | Archimonde
+WSR | Oct13T5R | Hyjal    | Archimonde         | Head      | Onslaught Battle-Helm (T6)         |  30972 |   2355.4 |   +13.0 | Helm of the Forgotten Protector | token 31095 | n=25000 | ±1.6 | better
+WSRSTEP | Oct13T5R | Neck | Choker of Serrated Blades | 32591 | 25000 | 5.71 | 1.54 | Hyjal+BT | Trash
+WSR | Oct13T5R | Hyjal+BT | Trash              | Neck      | Choker of Serrated Blades          |  32591 |   2348.1 |    +5.7 |  |  | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | OffHand | Fist of Molten Fury | 32945 | 25000 | 17.93 | 1.51 | Hyjal | Trash
+WSR | Oct13T5R | Hyjal    | Trash              | OffHand   | Fist of Molten Fury                |  32945 |   2360.3 |   +17.9 |  | fist 1.5, OH only | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Shoulder | Mantle of Darkness | 32377 | 25000 | 6.80 | 1.53 | BT | Naj'entus
+WSR | Oct13T5R | BT       | Naj'entus          | Shoulder  | Mantle of Darkness                 |  32377 |   2349.2 |    +6.8 |  | leather | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Hands | Fists of Mukoa | 32234 | 25000 | 13.21 | 1.54 | BT | Naj'entus
+WSR | Oct13T5R | BT       | Naj'entus          | Hands     | Fists of Mukoa                     |  32234 |   2355.6 |   +13.2 |  | mail | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | OffHand | Rising Tide | 32236 | 25000 | 1.01 | 1.52 | BT | Naj'entus
+WSR | Oct13T5R | BT       | Naj'entus          | OffHand   | Rising Tide                        |  32236 |   2343.4 |    +1.0 |  | axe 2.6 | n=25000 | ±1.5 | inconclusive
+WSRSTEP | Oct13T5R | Neck | Choker of Endless Nightmares | 32260 | 25000 | 17.57 | 1.53 | BT | Supremus
+WSR | Oct13T5R | BT       | Supremus           | Neck      | Choker of Endless Nightmares       |  32260 |   2360.0 |   +17.6 |  |  | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Wrist | Wraps of Precise Flight | 32251 | 25000 | -1.32 | 1.53 | BT | Supremus
+WSR | Oct13T5R | BT       | Supremus           | Wrist     | Wraps of Precise Flight            |  32251 |   2341.1 |    -1.3 |  | mail | n=25000 | ±1.5 | inconclusive
+WSRSTEP | Oct13T5R | OffHand | The Brutalizer | 32254 | 25000 | 11.21 | 1.49 | BT | Supremus
+WSR | Oct13T5R | BT       | Supremus           | OffHand   | The Brutalizer                     |  32254 |   2353.6 |   +11.2 |  | axe 1.6, tank | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Hands | Grips of Silent Justice | 32278 | 25000 | 24.32 | 1.55 | BT | Shade of Akama
+WSR | Oct13T5R | BT       | Shade of Akama     | Hands     | Grips of Silent Justice            |  32278 |   2366.7 |   +24.3 |  | plate | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Shoulder | Shoulders of the Hidden Predator | 32264 | 25000 | 6.68 | 1.53 | BT | Shade of Akama
+WSR | Oct13T5R | BT       | Shade of Akama     | Shoulder  | Shoulders of the Hidden Predator   |  32264 |   2349.1 |    +6.7 |  | mail | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Waist | Shadow-walker's Cord | 32265 | 25000 | 0.30 | 1.53 | BT | Shade of Akama
+WSR | Oct13T5R | BT       | Shade of Akama     | Waist     | Shadow-walker's Cord               |  32265 |   2342.7 |    +0.3 |  | leather | n=25000 | ±1.5 | inconclusive
+WSRSTEP | Oct13T5R | Back | Shadowmoon Destroyer's Drape | 32323 | 25000 | 17.26 | 1.54 | BT | Teron Gorefiend
+WSR | Oct13T5R | BT       | Teron Gorefiend    | Back      | Shadowmoon Destroyer's Drape       |  32323 |   2359.7 |   +17.3 |  |  | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Wrist | Insidious Bands | 32324 | 25000 | 6.52 | 1.53 | BT | Teron Gorefiend
+WSR | Oct13T5R | BT       | Teron Gorefiend    | Wrist     | Insidious Bands                    |  32324 |   2348.9 |    +6.5 |  | leather | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Feet | Softstep Boots of Tracking | 32510 | 25000 | 20.11 | 1.52 | BT | Teron Gorefiend
+WSR | Oct13T5R | BT       | Teron Gorefiend    | Feet      | Softstep Boots of Tracking         |  32510 |   2362.5 |   +20.1 |  | mail | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Ranged | Twisted Blades of Zarak | 32326 | 25000 | 3.95 | 1.54 | BT | Teron Gorefiend
+WSR | Oct13T5R | BT       | Teron Gorefiend    | Ranged    | Twisted Blades of Zarak            |  32326 |   2346.4 |    +3.9 |  | thrown | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Legs | Leggings of Divine Retribution | 32341 | 25000 | 40.89 | 1.57 | BT | Gurtogg Bloodboil
+WSR | Oct13T5R | BT       | Gurtogg Bloodboil  | Legs      | Leggings of Divine Retribution     |  32341 |   2383.3 |   +40.9 |  | plate | n=25000 | ±1.6 | better
+WSRSTEP | Oct13T5R | Finger1 | Unstoppable Aggressor's Ring | 32335 | 25000 | 5.46 | 1.53 | BT | Gurtogg Bloodboil
+WSR | Oct13T5R | BT       | Gurtogg Bloodboil  | Finger1   | Unstoppable Aggressor's Ring       |  32335 |   2347.9 |    +5.5 |  |  | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Finger2 | Unstoppable Aggressor's Ring | 32335 | 25000 | 10.99 | 1.54 | BT | Gurtogg Bloodboil
+WSR | Oct13T5R | BT       | Gurtogg Bloodboil  | Finger2   | Unstoppable Aggressor's Ring       |  32335 |   2353.4 |   +11.0 |  |  | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | OffHand | Messenger of Fate | 32269 | 25000 | 8.86 | 1.50 | BT | Gurtogg Bloodboil
+WSR | Oct13T5R | BT       | Gurtogg Bloodboil  | OffHand   | Messenger of Fate                  |  32269 |   2351.3 |    +8.9 |  | dagger 1.4 | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Feet | Dreadboots of the Legion | 32345 | 25000 | 34.01 | 1.53 | BT | Reliquary of the Lost
+WSR | Oct13T5R | BT       | Reliquary of the Lost | Feet      | Dreadboots of the Legion           |  32345 |   2376.4 |   +34.0 |  | plate | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Hands | Grips of Damnation | 32347 | 25000 | 14.61 | 1.54 | BT | Reliquary of the Lost
+WSR | Oct13T5R | BT       | Reliquary of the Lost | Hands     | Grips of Damnation                 |  32347 |   2357.0 |   +14.6 |  | leather | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Waist | Boneweave Girdle | 32346 | 25000 | 8.04 | 1.53 | BT | Reliquary of the Lost
+WSR | Oct13T5R | BT       | Reliquary of the Lost | Waist     | Boneweave Girdle                   |  32346 |   2350.4 |    +8.0 |  | mail | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Chest | Heartshatter Breastplate | 32365 | 25000 | 7.03 | 1.52 | BT | Mother Shahraz
+WSR | Oct13T5R | BT       | Mother Shahraz     | Chest     | Heartshatter Breastplate           |  32365 |   2349.4 |    +7.0 |  | plate | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Feet | Shadowmaster's Boots | 32366 | 25000 | 28.33 | 1.54 | BT | Mother Shahraz
+WSR | Oct13T5R | BT       | Mother Shahraz     | Feet      | Shadowmaster's Boots               |  32366 |   2370.7 |   +28.3 |  | leather | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | OffHand | Blade of Savagery | 32369 | 25000 | 41.39 | 1.50 | BT | Mother Shahraz
+WSR | Oct13T5R | BT       | Mother Shahraz     | OffHand   | Blade of Savagery                  |  32369 |   2383.8 |   +41.4 |  | sword 1.4 | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Shoulder | Onslaught Shoulderblades (T6) | 30979 | 25000 | 20.74 | 1.56 | BT | Mother Shahraz
+WSR | Oct13T5R | BT       | Mother Shahraz     | Shoulder  | Onslaught Shoulderblades (T6)      |  30979 |   2363.1 |   +20.7 | Pauldrons of the Forgotten Protector | token 31103 | n=25000 | ±1.6 | better
+WSRSTEP | Oct13T5R | Head | Helm of the Illidari Shatterer | 32373 | 25000 | 20.46 | 1.53 | BT | Illidari Council
+WSR | Oct13T5R | BT       | Illidari Council   | Head      | Helm of the Illidari Shatterer     |  32373 |   2362.9 |   +20.5 |  | plate | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Head | Forest Prowler's Helm | 32376 | 25000 | 2.92 | 1.55 | BT | Illidari Council
+WSR | Oct13T5R | BT       | Illidari Council   | Head      | Forest Prowler's Helm              |  32376 |   2345.3 |    +2.9 |  | mail | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Legs | Onslaught Greaves (T6) | 30977 | 25000 | 19.26 | 1.55 | BT | Illidari Council
+WSR | Oct13T5R | BT       | Illidari Council   | Legs      | Onslaught Greaves (T6)             |  30977 |   2361.7 |   +19.3 | Leggings of the Forgotten Protector | token 31100 | n=25000 | ±1.6 | better
+WSRSTEP | Oct13T5R | Head | Cursed Vision of Sargeras | 32235 | 25000 | 36.03 | 1.54 | BT | Illidan Stormrage
+WSR | Oct13T5R | BT       | Illidan Stormrage  | Head      | Cursed Vision of Sargeras          |  32235 |   2378.4 |   +36.0 |  | leather | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Finger1 | Stormrage Signet Ring | 32497 | 25000 | 8.59 | 1.53 | BT | Illidan Stormrage
+WSR | Oct13T5R | BT       | Illidan Stormrage  | Finger1   | Stormrage Signet Ring              |  32497 |   2351.0 |    +8.6 |  |  | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Finger2 | Stormrage Signet Ring | 32497 | 25000 | 12.88 | 1.53 | BT | Illidan Stormrage
+WSR | Oct13T5R | BT       | Illidan Stormrage  | Finger2   | Stormrage Signet Ring              |  32497 |   2355.3 |   +12.9 |  |  | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | MainHand | Warglaive of Azzinoth (MH) | 32837 | 25000 | 5.19 | 1.50 | BT | Illidan Stormrage
+WSR | Oct13T5R | BT       | Illidan Stormrage  | MainHand  | Warglaive of Azzinoth (MH)         |  32837 |   2347.6 |    +5.2 |  | legendary, MH only | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | OffHand | Warglaive of Azzinoth (OH) | 32838 | 25000 | 64.37 | 1.52 | BT | Illidan Stormrage
+WSR | Oct13T5R | BT       | Illidan Stormrage  | OffHand   | Warglaive of Azzinoth (OH)         |  32838 |   2406.8 |   +64.4 |  | legendary, OH only | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Chest | Onslaught Breastplate (T6) | 30975 | 25000 | 17.13 | 1.54 | BT | Illidan Stormrage
+WSR | Oct13T5R | BT       | Illidan Stormrage  | Chest     | Onslaught Breastplate (T6)         |  30975 |   2359.5 |   +17.1 | Chestguard of the Forgotten Protector | token 31091 | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Finger1 | Band of Devastation | 32526 | 25000 | -0.86 | 1.53 | BT | Trash
+WSR | Oct13T5R | BT       | Trash              | Finger1   | Band of Devastation                |  32526 |   2341.5 |    -0.9 |  |  | n=25000 | ±1.5 | inconclusive
+WSRSTEP | Oct13T5R | Finger2 | Band of Devastation | 32526 | 25000 | 4.59 | 1.55 | BT | Trash
+WSR | Oct13T5R | BT       | Trash              | Finger2   | Band of Devastation                |  32526 |   2347.0 |    +4.6 |  |  | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Hands | Pillager's Gauntlets | 32608 | 25000 | 8.85 | 1.52 | BT | Trash
+WSRSTEP | Oct13T5R | OffHand | Swiftsteel Bludgeon | 32943 | 25000 | 41.02 | 1.50 | BT | Trash
+WSR | Oct13T5R | BT       | Trash              | OffHand   | Swiftsteel Bludgeon                |  32943 |   2383.4 |   +41.0 |  | mace 1.5 | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | OffHand | Akil'zon's Talonblade | 33214 | 25000 | 19.50 | 1.51 | ZA | Akil'zon
+WSR | Oct13T5R | ZA       | Akil'zon           | OffHand   | Akil'zon's Talonblade              |  33214 |   2361.9 |   +19.5 |  | sword 1.5 | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Feet | Skullshatter Warboots | 33303 | 25000 | 6.29 | 1.53 | ZA | Halazzi
+WSR | Oct13T5R | ZA       | Halazzi            | Feet      | Skullshatter Warboots              |  33303 |   2348.7 |    +6.3 |  | plate | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | OffHand | Prowler's Strikeblade | 33298 | 25000 | 3.46 | 1.51 | ZA | Hex Lord Malacrass
+WSR | Oct13T5R | ZA       | Hex Lord Malacrass | OffHand   | Prowler's Strikeblade              |  33298 |   2345.9 |    +3.5 |  | dagger 1.5 | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | OffHand | Dagger of Bad Mojo | 33389 | 25000 | 8.99 | 1.52 | ZA | Hex Lord Malacrass
+WSR | Oct13T5R | ZA       | Hex Lord Malacrass | OffHand   | Dagger of Bad Mojo                 |  33389 |   2351.4 |    +9.0 |  | dagger 1.8 | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Ranged | Ancient Amani Longbow | 33474 | 25000 | 9.38 | 1.55 | ZA | Zul'jin
+WSR | Oct13T5R | ZA       | Zul'jin            | Ranged    | Ancient Amani Longbow              |  33474 |   2351.8 |    +9.4 |  | bow | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Finger1 | Signet of Primal Wrath | 33496 | 25000 | 7.10 | 1.54 | ZA | Timed chest
+WSR | Oct13T5R | ZA       | Timed chest        | Finger1   | Signet of Primal Wrath             |  33496 |   2349.5 |    +7.1 |  |  | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Finger2 | Signet of Primal Wrath | 33496 | 25000 | 13.27 | 1.55 | ZA | Timed chest
+WSR | Oct13T5R | ZA       | Timed chest        | Finger2   | Signet of Primal Wrath             |  33496 |   2355.7 |   +13.3 |  |  | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Back | Cloak of Fiends | 33590 | 25000 | 10.00 | 1.54 | ZA | Timed chest
+WSR | Oct13T5R | ZA       | Timed chest        | Back      | Cloak of Fiends                    |  33590 |   2352.4 |   +10.0 |  |  | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Ranged | Tuskbreaker | 33491 | 25000 | 4.32 | 1.53 | ZA | Timed chest
+WSR | Oct13T5R | ZA       | Timed chest        | Ranged    | Tuskbreaker                        |  33491 |   2346.7 |    +4.3 |  | gun | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Wrist | Master Assassin Wristwraps | 33540 | 25000 | 6.11 | 1.53 | P4 | ?
+WSR | Oct13T5R | P4       | ?                  | Wrist     | Master Assassin Wristwraps         |  33540 |   2348.5 |    +6.1 |  | leather | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Hands | Trickster's Stickyfingers | 33539 | 25000 | 1.66 | 1.53 | P4 | ?
+WSR | Oct13T5R | P4       | ?                  | Hands     | Trickster's Stickyfingers          |  33539 |   2344.1 |    +1.7 |  | leather | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Feet | Nyn'jah's Tabi Boots | 33222 | 25000 | 8.68 | 1.52 | P4 | ?
+WSR | Oct13T5R | P4       | ?                  | Feet      | Nyn'jah's Tabi Boots               |  33222 |   2351.1 |    +8.7 |  | leather | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Head | Vengeful Gladiator's Plate Helm | 33730 | 25000 | 5.49 | 1.55 | S3 | Arena
+WSR | Oct13T5R | S3       | Arena              | Head      | Vengeful Gladiator's Plate Helm    |  33730 |   2347.9 |    +5.5 |  | plate, PvP set | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Shoulder | Vengeful Gladiator's Plate Shoulders | 33732 | 25000 | 4.65 | 1.54 | S3 | Arena
+WSR | Oct13T5R | S3       | Arena              | Shoulder  | Vengeful Gladiator's Plate Shoulders |  33732 |   2347.1 |    +4.7 |  | plate, PvP set | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Chest | Vengeful Gladiator's Plate Chestpiece | 33728 | 25000 | 17.12 | 1.55 | S3 | Arena
+WSR | Oct13T5R | S3       | Arena              | Chest     | Vengeful Gladiator's Plate Chestpiece |  33728 |   2359.5 |   +17.1 |  | plate, PvP set | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Hands | Vengeful Gladiator's Plate Gauntlets | 33729 | 25000 | -1.39 | 1.54 | S3 | Arena
+WSR | Oct13T5R | S3       | Arena              | Hands     | Vengeful Gladiator's Plate Gauntlets |  33729 |   2341.0 |    -1.4 |  | plate, PvP set | n=25000 | ±1.5 | inconclusive
+WSRSTEP | Oct13T5R | Legs | Vengeful Gladiator's Plate Legguards | 33731 | 25000 | 11.49 | 1.55 | S3 | Arena
+WSR | Oct13T5R | S3       | Arena              | Legs      | Vengeful Gladiator's Plate Legguards |  33731 |   2353.9 |   +11.5 |  | plate, PvP set | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Feet | Vindicator's Plate Greaves | 33812 | 25000 | 0.19 | 1.54 | S3 | Honor
+WSR | Oct13T5R | S3       | Honor              | Feet      | Vindicator's Plate Greaves         |  33812 |   2342.6 |    +0.2 |  | plate | n=25000 | ±1.5 | inconclusive
+WSRSTEP | Oct13T5R | MainHand | Vengeful Gladiator's Cleaver | 33669 | 25000 | 7.35 | 1.48 | S3 | Arena
+WSR | Oct13T5R | S3       | Arena              | MainHand  | Vengeful Gladiator's Cleaver       |  33669 |   2349.7 |    +7.3 |  | axe 2.6 | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Cleaver | 33669 | 25000 | 24.02 | 1.55 | S3 | Arena
+WSR | Oct13T5R | S3       | Arena              | OffHand   | Vengeful Gladiator's Cleaver       |  33669 |   2366.4 |   +24.0 |  | axe 2.6 | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Slicer | 33762 | 25000 | 18.72 | 1.55 | S3 | Arena
+WSR | Oct13T5R | S3       | Arena              | OffHand   | Vengeful Gladiator's Slicer        |  33762 |   2361.1 |   +18.7 |  | sword 2.6 | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Pummeler | 33733 | 25000 | 18.75 | 1.54 | S3 | Arena
+WSR | Oct13T5R | S3       | Arena              | OffHand   | Vengeful Gladiator's Pummeler      |  33733 |   2361.2 |   +18.8 |  | mace 2.6 | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Shanker | 33754 | 25000 | 13.18 | 1.52 | S3 | Arena
+WSR | Oct13T5R | S3       | Arena              | OffHand   | Vengeful Gladiator's Shanker       |  33754 |   2355.6 |   +13.2 |  | dagger 1.8 | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Hacker | 33689 | 25000 | 44.89 | 1.51 | S3 | Arena
+WSR | Oct13T5R | S3       | Arena              | OffHand   | Vengeful Gladiator's Hacker        |  33689 |   2387.3 |   +44.9 |  | axe 1.5, OH only | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Quickblade | 33734 | 25000 | 41.71 | 1.52 | S3 | Arena
+WSR | Oct13T5R | S3       | Arena              | OffHand   | Vengeful Gladiator's Quickblade    |  33734 |   2384.1 |   +41.7 |  | sword 1.5, OH only | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Bonecracker | 33662 | 25000 | 41.71 | 1.52 | S3 | Arena
+WSR | Oct13T5R | S3       | Arena              | OffHand   | Vengeful Gladiator's Bonecracker   |  33662 |   2384.1 |   +41.7 |  | mace 1.5, OH only | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Left Ripper | 33705 | 25000 | 41.71 | 1.52 | S3 | Arena
+WSR | Oct13T5R | S3       | Arena              | OffHand   | Vengeful Gladiator's Left Ripper   |  33705 |   2384.1 |   +41.7 |  | fist 1.5, OH only | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Shiv | 33756 | 25000 | 27.33 | 1.50 | S3 | Arena
+WSR | Oct13T5R | S3       | Arena              | OffHand   | Vengeful Gladiator's Shiv          |  33756 |   2369.7 |   +27.3 |  | dagger 1.4, OH only | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Mutilator | 33801 | 25000 | 13.04 | 1.52 | S3 | Arena
+WSR | Oct13T5R | S3       | Arena              | OffHand   | Vengeful Gladiator's Mutilator     |  33801 |   2355.4 |   +13.0 |  | dagger 1.8, OH only | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Chopper | 34015 | 25000 | 24.02 | 1.55 | S3 | Arena
+WSR | Oct13T5R | S3       | Arena              | OffHand   | Vengeful Gladiator's Chopper       |  34015 |   2366.4 |   +24.0 |  | axe 2.6, OH only | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | OffHand | Vengeful Gladiator's Left Render | 34016 | 25000 | 18.75 | 1.54 | S3 | Arena
+WSR | Oct13T5R | S3       | Arena              | OffHand   | Vengeful Gladiator's Left Render   |  34016 |   2361.2 |   +18.8 |  | fist 2.6, OH only | n=25000 | ±1.5 | better
+WSRSTEP | Oct13T5R | Ranged | Vengeful Gladiator's War Edge | 33765 | 25000 | 1.17 | 1.53 | S3 | Arena
+WSR | Oct13T5R | S3       | Arena              | Ranged    | Vengeful Gladiator's War Edge      |  33765 |   2343.6 |    +1.2 |  | thrown | n=25000 | ±1.5 | inconclusive
+WSRROUND | Oct13T5R | round 5 | 25000 iterations each | decided 147 | open 1
+WSRSTEP | Oct13T5R | Hands | Pillager's Gauntlets | 32608 | 30000 | 8.90 | 1.42 | BT | Trash
+WSRROUND | Oct13T5R | round 6 | 30000 iterations each | decided 147 | open 1
+WSRSTEP | Oct13T5R | Hands | Pillager's Gauntlets | 32608 | 35000 | 8.75 | 1.34 | BT | Trash
+WSRROUND | Oct13T5R | round 7 | 35000 iterations each | decided 147 | open 1
+WSRSTEP | Oct13T5R | Hands | Pillager's Gauntlets | 32608 | 40000 | 8.52 | 1.27 | BT | Trash
+WSRROUND | Oct13T5R | round 8 | 40000 iterations each | decided 147 | open 1
+WSRSTEP | Oct13T5R | Hands | Pillager's Gauntlets | 32608 | 45000 | 8.73 | 1.22 | BT | Trash
+WSRROUND | Oct13T5R | round 9 | 45000 iterations each | decided 147 | open 1
+WSRSTEP | Oct13T5R | Hands | Pillager's Gauntlets | 32608 | 50000 | 8.89 | 1.18 | BT | Trash
+WSRROUND | Oct13T5R | round 10 | 50000 iterations each | decided 147 | open 1
+WSRSTEP | Oct13T5R | Hands | Pillager's Gauntlets | 32608 | 55000 | 8.93 | 1.14 | BT | Trash
+WSRROUND | Oct13T5R | round 11 | 55000 iterations each | decided 147 | open 1
+WSRSTEP | Oct13T5R | Hands | Pillager's Gauntlets | 32608 | 60000 | 9.07 | 1.11 | BT | Trash
+WSRROUND | Oct13T5R | round 12 | 60000 iterations each | decided 147 | open 1
+WSRSTEP | Oct13T5R | Hands | Pillager's Gauntlets | 32608 | 65000 | 9.11 | 1.09 | BT | Trash
+WSRROUND | Oct13T5R | round 13 | 65000 iterations each | decided 147 | open 1
+WSRSTEP | Oct13T5R | Hands | Pillager's Gauntlets | 32608 | 70000 | 9.08 | 1.06 | BT | Trash
+WSRROUND | Oct13T5R | round 14 | 70000 iterations each | decided 147 | open 1
+WSRSTEP | Oct13T5R | Hands | Pillager's Gauntlets | 32608 | 75000 | 9.02 | 1.04 | BT | Trash
+WSRROUND | Oct13T5R | round 15 | 75000 iterations each | decided 147 | open 1
+WSRSTEP | Oct13T5R | Hands | Pillager's Gauntlets | 32608 | 80000 | 9.20 | 1.02 | BT | Trash
+WSRROUND | Oct13T5R | round 16 | 80000 iterations each | decided 147 | open 1
+WSRSTEP | Oct13T5R | Hands | Pillager's Gauntlets | 32608 | 85000 | 9.23 | 1.01 | BT | Trash
+WSRROUND | Oct13T5R | round 17 | 85000 iterations each | decided 147 | open 1
+WSRSTEP | Oct13T5R | Hands | Pillager's Gauntlets | 32608 | 90000 | 9.16 | 0.99 | BT | Trash
+WSRROUND | Oct13T5R | round 18 | 90000 iterations each | decided 147 | open 1
+WSRSTEP | Oct13T5R | Hands | Pillager's Gauntlets | 32608 | 95000 | 9.13 | 0.98 | BT | Trash
+WSRROUND | Oct13T5R | round 19 | 95000 iterations each | decided 147 | open 1
+WSRSTEP | Oct13T5R | Hands | Pillager's Gauntlets | 32608 | 100000 | 9.20 | 0.97 | BT | Trash
+WSR | Oct13T5R | BT       | Trash              | Hands     | Pillager's Gauntlets               |  32608 |   2351.6 |    +9.2 |  | plate | n=100000 | ±1.0 | better (fixed)
+WSRROUND | Oct13T5R | round 20 | 100000 iterations each | decided 148 | open 0
+WSRSUMMARY | Oct13T5R | 148 candidates | better 77 | worse 62 | inconclusive 8 | 2545000 iterations
+--- PASS: TestWarriorHyjalBTSRAdaptive (769.46s)
+PASS
+ok  	github.com/wowsims/tbc/sim	770.139s
