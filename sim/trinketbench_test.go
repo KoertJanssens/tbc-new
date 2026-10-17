@@ -129,8 +129,8 @@ func benchSpecs() []benchSpecConfig {
 			spec: warriorOptions, talents: "3500501130201-05050005505012050115",
 			consumables: warriorConsumables, profession1: proto.Profession_Engineering, profession2: proto.Profession_Blacksmithing,
 			distance: 25,
-			gearDir:  "../ui/warrior/dps/gear_sets", gearFile: "p3_fury",
-			rotationDir: "../ui/warrior/dps/apls", rotationFile: "fury",
+			gearDir:  "../ui/specs/warrior/dps/gear_sets", gearFile: "p3_fury",
+			rotationDir: "../ui/specs/warrior/dps/apls", rotationFile: "fury",
 			weaponMH: itemVengefulGladiatorsCleaver, weaponOH: itemVengefulGladiatorsChopper,
 		},
 		{
@@ -138,8 +138,8 @@ func benchSpecs() []benchSpecConfig {
 			spec: warriorOptions, talents: "3500501130201-05050005505012050115",
 			consumables: warriorConsumables, profession1: proto.Profession_Engineering, profession2: proto.Profession_Blacksmithing,
 			distance: 25,
-			gearDir:  "../ui/warrior/dps/gear_sets", gearFile: "p3_fury",
-			rotationDir: "../ui/warrior/dps/apls", rotationFile: "fury",
+			gearDir:  "../ui/specs/warrior/dps/gear_sets", gearFile: "p3_fury",
+			rotationDir: "../ui/specs/warrior/dps/apls", rotationFile: "fury",
 			// Standard P3 BiS gear already equips Warglaives - no weapon override.
 		},
 		{
@@ -147,8 +147,8 @@ func benchSpecs() []benchSpecConfig {
 			spec: warriorOptions, talents: "32005011352010500221-0550000500521203",
 			consumables: warriorConsumables, profession1: proto.Profession_Engineering, profession2: proto.Profession_Blacksmithing,
 			distance: 25,
-			gearDir:  "../ui/warrior/dps/gear_sets", gearFile: "p3_arms",
-			rotationDir: "../ui/warrior/dps/apls", rotationFile: "arms",
+			gearDir:  "../ui/specs/warrior/dps/gear_sets", gearFile: "p3_arms",
+			rotationDir: "../ui/specs/warrior/dps/apls", rotationFile: "arms",
 		},
 		{
 			name: "Warrior Arms (Glaives)", class: proto.Class_ClassWarrior, race: proto.Race_RaceOrc,
@@ -157,8 +157,8 @@ func benchSpecs() []benchSpecConfig {
 			spec: warriorOptions, talents: "34005021302010510321-0550000520501203",
 			consumables: warriorConsumables, profession1: proto.Profession_Engineering, profession2: proto.Profession_Blacksmithing,
 			distance: 25,
-			gearDir:  "../ui/warrior/dps/gear_sets", gearFile: "p3_arms",
-			rotationDir: "../ui/warrior/dps/apls", rotationFile: "arms",
+			gearDir:  "../ui/specs/warrior/dps/gear_sets", gearFile: "p3_arms",
+			rotationDir: "../ui/specs/warrior/dps/apls", rotationFile: "arms",
 			weaponMH: itemWarglaiveMH, weaponOH: itemWarglaiveOH,
 		},
 		{
@@ -168,8 +168,8 @@ func benchSpecs() []benchSpecConfig {
 			spec: warriorOptions, talents: "34005021302010510321-0550000520501203",
 			consumables: warriorConsumables, profession1: proto.Profession_Engineering, profession2: proto.Profession_Blacksmithing,
 			distance: 25,
-			gearDir:  "../ui/warrior/dps/gear_sets", gearFile: "p3_arms",
-			rotationDir: "../ui/warrior/dps/apls", rotationFile: "arms",
+			gearDir:  "../ui/specs/warrior/dps/gear_sets", gearFile: "p3_arms",
+			rotationDir: "../ui/specs/warrior/dps/apls", rotationFile: "arms",
 			weaponMH: itemVengefulGladiatorsSlicer, weaponOH: itemBladeOfSavagery,
 		},
 		{
@@ -179,8 +179,8 @@ func benchSpecs() []benchSpecConfig {
 			consumables: &proto.ConsumesSpec{
 				FlaskId: 22854, FoodId: 33872, PotId: 22838, ConjuredId: 7676, OhImbueId: 27186,
 			},
-			gearDir: "../ui/rogue/dps/gear_sets", gearFile: "p3",
-			rotationDir: "../ui/rogue/dps/apls", rotationFile: "swords",
+			gearDir: "../ui/specs/rogue/dps/gear_sets", gearFile: "p3",
+			rotationDir: "../ui/specs/rogue/dps/apls", rotationFile: "swords",
 			weaponMH: itemVengefulGladiatorsSlicer, weaponOH: itemBladeOfSavagery,
 			trinket1: itemWarpSpringCoil,
 		},
@@ -191,8 +191,8 @@ func benchSpecs() []benchSpecConfig {
 			consumables: &proto.ConsumesSpec{
 				FlaskId: 22854, FoodId: 33872, PotId: 22838, ConjuredId: 7676, OhImbueId: 27186,
 			},
-			gearDir: "../ui/rogue/dps/gear_sets", gearFile: "p3",
-			rotationDir: "../ui/rogue/dps/apls", rotationFile: "swords",
+			gearDir: "../ui/specs/rogue/dps/gear_sets", gearFile: "p3",
+			rotationDir: "../ui/specs/rogue/dps/apls", rotationFile: "swords",
 			trinket1: itemWarpSpringCoil,
 			// Standard P3 BiS gear already equips Warglaives - no weapon override.
 		},
@@ -201,8 +201,8 @@ func benchSpecs() []benchSpecConfig {
 			spec: hunterOptions, talents: "512002005250122431051-0505201205",
 			consumables: hunterConsumables, profession1: proto.Profession_Engineering, profession2: proto.Profession_Blacksmithing,
 			distance: 30,
-			gearDir:  "../ui/hunter/dps/gear_sets/phase_3/bm", gearFile: "2h_6p",
-			rotationDir: "../ui/hunter/dps/apls", rotationFile: "default",
+			gearDir:  "../ui/specs/hunter/dps/gear_sets/phase_3/bm", gearFile: "2h_6p",
+			rotationDir: "../ui/specs/hunter/dps/apls", rotationFile: "default",
 			meleeWeave: "false",
 		},
 		{
@@ -210,8 +210,8 @@ func benchSpecs() []benchSpecConfig {
 			spec: hunterOptions, talents: "512002005250122431051-0505201205",
 			consumables: hunterConsumables, profession1: proto.Profession_Engineering, profession2: proto.Profession_Blacksmithing,
 			distance: 30,
-			gearDir:  "../ui/hunter/dps/gear_sets/phase_3/bm", gearFile: "2h_6p",
-			rotationDir: "../ui/hunter/dps/apls", rotationFile: "default",
+			gearDir:  "../ui/specs/hunter/dps/gear_sets/phase_3/bm", gearFile: "2h_6p",
+			rotationDir: "../ui/specs/hunter/dps/apls", rotationFile: "default",
 			meleeWeave: "true",
 		},
 		{
@@ -219,8 +219,8 @@ func benchSpecs() []benchSpecConfig {
 			spec: hunterOptions, talents: "502-0550201205-333200022003223005103",
 			consumables: hunterConsumables, profession1: proto.Profession_Engineering, profession2: proto.Profession_Blacksmithing,
 			distance: 30,
-			gearDir:  "../ui/hunter/dps/gear_sets/phase_3/sv", gearFile: "2h_6p",
-			rotationDir: "../ui/hunter/dps/apls", rotationFile: "default",
+			gearDir:  "../ui/specs/hunter/dps/gear_sets/phase_3/sv", gearFile: "2h_6p",
+			rotationDir: "../ui/specs/hunter/dps/apls", rotationFile: "default",
 			meleeWeave: "false",
 		},
 		{
@@ -228,8 +228,8 @@ func benchSpecs() []benchSpecConfig {
 			spec: hunterOptions, talents: "502-0550201205-333200022003223005103",
 			consumables: hunterConsumables, profession1: proto.Profession_Engineering, profession2: proto.Profession_Blacksmithing,
 			distance: 30,
-			gearDir:  "../ui/hunter/dps/gear_sets/phase_3/sv", gearFile: "2h_6p",
-			rotationDir: "../ui/hunter/dps/apls", rotationFile: "default",
+			gearDir:  "../ui/specs/hunter/dps/gear_sets/phase_3/sv", gearFile: "2h_6p",
+			rotationDir: "../ui/specs/hunter/dps/apls", rotationFile: "default",
 			meleeWeave: "true",
 		},
 		{
@@ -253,8 +253,8 @@ func benchSpecs() []benchSpecConfig {
 				PotId: 22838, FlaskId: 22854, FoodId: 27658, ConjuredId: 22788, ExplosiveId: 30217,
 				SuperSapper: true, GoblinSapper: true, ScrollAgi: true, ScrollStr: true,
 			},
-			gearDir: "../ui/shaman/enhancement/gear_sets", gearFile: "p3",
-			rotationDir: "../ui/shaman/enhancement/apls", rotationFile: "default",
+			gearDir: "../ui/specs/shaman/enhancement/gear_sets", gearFile: "p3",
+			rotationDir: "../ui/specs/shaman/enhancement/apls", rotationFile: "default",
 		},
 		{
 			name: "Feral Druid", class: proto.Class_ClassDruid, race: proto.Race_RaceNightElf,
@@ -278,7 +278,7 @@ func benchSpecs() []benchSpecConfig {
 				ScrollAgi: true, ScrollStr: true,
 			},
 			profession1: proto.Profession_Engineering, profession2: proto.Profession_Enchanting,
-			gearDir: "../ui/druid/feralcat/gear_sets", gearFile: "p3_6p",
+			gearDir: "../ui/specs/druid/feralcat/gear_sets", gearFile: "p3_6p",
 			catRotation: &proto.FeralCatDruid_Rotation{
 				FinishingMove:      proto.FeralCatDruid_Rotation_Rip,
 				Biteweave:          true,
@@ -301,8 +301,8 @@ func benchSpecs() []benchSpecConfig {
 				SuperSapper: true, GoblinSapper: true, ScrollAgi: true, ScrollStr: true,
 			},
 			profession1: proto.Profession_Engineering, profession2: proto.Profession_Blacksmithing,
-			gearDir: "../ui/paladin/retribution/gear_sets", gearFile: "p3",
-			rotationDir: "../ui/paladin/retribution/apls", rotationFile: "default",
+			gearDir: "../ui/specs/paladin/retribution/gear_sets", gearFile: "p3",
+			rotationDir: "../ui/specs/paladin/retribution/apls", rotationFile: "default",
 		},
 	}
 }
