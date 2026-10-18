@@ -281,3 +281,26 @@ func runHallowsPlayer(t *testing.T, player *proto.Player, encounter *proto.Encou
 	}
 	return simResult{dps: result.RaidMetrics.Dps.Avg, stdev: result.RaidMetrics.Dps.Stdev}
 }
+
+// Koerry's main hand: the Horseman's Blade against the Blacksmithing
+// main-hand weapons he can craft, all with Mongoose. All are 2.7 speed and
+// main-hand only; Dragonstrike and Dragonmaw are maces with a haste proc.
+func TestHallowsEndKoerryBlacksmith(t *testing.T) {
+	RegisterAll()
+	iterations := hallowsIterationCount()
+	encounter := core.MakeSingleTargetEncounter(5)
+	fmt.Printf("ITERATIONS %d\n", iterations)
+
+	warriorBaseGear = warriorCurrentGear
+	run := func(gear *proto.EquipmentSpec) simResult {
+		return runWarrior(t, gear, talentsFuryStandard, "fury", encounter, iterations)
+	}
+	weapons := []hallowsTry{
+		hallowsBlade,
+		{"Dragonstrike", 28439, []int{slotMainHand}},
+		{"Dragonmaw", 28438, []int{slotMainHand}},
+		{"Wicked Edge of the Planes", 28433, []int{slotMainHand}},
+	}
+	hallowsReport("Koerry 4/5 T5 (goggles)", warriorCurrentGear(), run, weapons)
+	hallowsReport("Koerry 5/5 T5 (Destroyer helm)", warriorT5Gear(), run, weapons)
+}

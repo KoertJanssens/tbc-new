@@ -45,3 +45,15 @@ The Helm has no meta socket, so taking it means losing Relentless Earthstorm.
 
 Witches Band (healing ring) is not simmed. The Helm's laugh and the Blade's
 Pumpkin Soldiers on-use are not implemented, so both count as stats only.
+
+## Koerry: Horseman's Blade vs Blacksmithing main hands
+
+20,000 iterations, standard Fury talents, Mongoose on every weapon, replacing
+Talon of Azshara (raw log: `result_hallows_end_blacksmith.raw.txt`).
+
+| Main hand | 4/5 T5 | 5/5 T5 |
+|---|---|---|
+| **Dragonstrike** (mace, haste proc) | **+35.4 (+1.59%)** | **+35.4 (+1.59%)** |
+| Wicked Edge of the Planes (axe) | +29.0 (+1.30%) | +28.1 (+1.26%) |
+| Dragonmaw (mace, haste proc) | +16.9 (+0.76%) | +17.5 (+0.79%) |
+| The Horseman's Blade (sword) | +10.4 (+0.47%) | +9.9 (+0.45%) |

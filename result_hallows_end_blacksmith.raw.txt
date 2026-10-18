@@ -1,0 +1,12 @@
+ITERATIONS 20000
+HALLOWBASE | Koerry 4/5 T5 (goggles)            | DPS   2222.3 (stdev 101.7)
+HALLOW | Koerry 4/5 T5 (goggles)            | The Horseman's Blade       | replaces Talon of Azshara                 |   2232.7 |   +10.4 (+0.47%)
+HALLOW | Koerry 4/5 T5 (goggles)            | Dragonstrike               | replaces Talon of Azshara                 |   2257.8 |   +35.4 (+1.59%)
+HALLOW | Koerry 4/5 T5 (goggles)            | Dragonmaw                  | replaces Talon of Azshara                 |   2239.2 |   +16.9 (+0.76%)
+HALLOW | Koerry 4/5 T5 (goggles)            | Wicked Edge of the Planes  | replaces Talon of Azshara                 |   2251.3 |   +29.0 (+1.30%)
+HALLOWBASE | Koerry 5/5 T5 (Destroyer helm)     | DPS   2224.7 (stdev 100.9)
+HALLOW | Koerry 5/5 T5 (Destroyer helm)     | The Horseman's Blade       | replaces Talon of Azshara                 |   2234.6 |    +9.9 (+0.45%)
+HALLOW | Koerry 5/5 T5 (Destroyer helm)     | Dragonstrike               | replaces Talon of Azshara                 |   2260.1 |   +35.4 (+1.59%)
+HALLOW | Koerry 5/5 T5 (Destroyer helm)     | Dragonmaw                  | replaces Talon of Azshara                 |   2242.1 |   +17.5 (+0.79%)
+HALLOW | Koerry 5/5 T5 (Destroyer helm)     | Wicked Edge of the Planes  | replaces Talon of Azshara                 |   2252.8 |   +28.1 (+1.26%)
+ok  	github.com/wowsims/tbc/sim	167.395s
