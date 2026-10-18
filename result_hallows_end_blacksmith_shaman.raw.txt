@@ -1,0 +1,7 @@
+ITERATIONS 20000
+HALLOWBASE | Koerrii (Enhancement)              | DPS   2237.6 (stdev 79.3)
+HALLOW | Koerrii (Enhancement)              | Dragonstrike               | replaces Merciless Gladiator's Cleaver    |   2209.2 |   -28.4 (-1.27%)
+HALLOW | Koerrii (Enhancement)              | Dragonmaw                  | replaces Merciless Gladiator's Cleaver    |   2189.3 |   -48.3 (-2.16%)
+HALLOW | Koerrii (Enhancement)              | Wicked Edge of the Planes  | replaces Merciless Gladiator's Cleaver    |   2211.6 |   -25.9 (-1.16%)
+HALLOW | Koerrii (Enhancement)              | Vengeful Gladiator's Cleaver | replaces Merciless Gladiator's Cleaver    |   2262.7 |   +25.1 (+1.12%)
+ok  	github.com/wowsims/tbc/sim	125.516s

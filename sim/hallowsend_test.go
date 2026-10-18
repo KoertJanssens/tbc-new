@@ -304,3 +304,27 @@ func TestHallowsEndKoerryBlacksmith(t *testing.T) {
 	hallowsReport("Koerry 4/5 T5 (goggles)", warriorCurrentGear(), run, weapons)
 	hallowsReport("Koerry 5/5 T5 (Destroyer helm)", warriorT5Gear(), run, weapons)
 }
+
+// Koerrii can't use the Horseman's Blade (shamans can't wield swords), so this
+// compares the Blacksmithing main hands instead, against the current
+// Merciless Gladiator's Cleaver. They need Blacksmithing to equip, which is
+// assumed here. Vengeful Gladiator's Cleaver is the known arena upgrade, as a
+// reference. Koerrii is an Orc, so the axes get Axe Specialization.
+func TestHallowsEndKoerriiBlacksmith(t *testing.T) {
+	RegisterAll()
+	iterations := hallowsIterationCount()
+	encounter := core.MakeSingleTargetEncounter(5)
+	fmt.Printf("ITERATIONS %d\n", iterations)
+
+	run := func(gear *proto.EquipmentSpec) simResult {
+		player := shamanPlayer(gear, talentsKoerriiPvE)
+		player.Profession1 = proto.Profession_Blacksmithing
+		return runHallowsPlayer(t, player, encounter, iterations)
+	}
+	hallowsReport("Koerrii (Enhancement)", currentGear(), run, []hallowsTry{
+		{"Dragonstrike", 28439, []int{slotMainHand}},
+		{"Dragonmaw", 28438, []int{slotMainHand}},
+		{"Wicked Edge of the Planes", 28433, []int{slotMainHand}},
+		{"Vengeful Gladiator's Cleaver", 33669, []int{slotMainHand}},
+	})
+}

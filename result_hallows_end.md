@@ -57,3 +57,17 @@ Talon of Azshara (raw log: `result_hallows_end_blacksmith.raw.txt`).
 | Wicked Edge of the Planes (axe) | +29.0 (+1.30%) | +28.1 (+1.26%) |
 | Dragonmaw (mace, haste proc) | +16.9 (+0.76%) | +17.5 (+0.79%) |
 | The Horseman's Blade (sword) | +10.4 (+0.47%) | +9.9 (+0.45%) |
+
+## Koerrii: Blacksmithing main hands
+
+Shamans can't use the Horseman's Blade (sword). 20,000 iterations, Mongoose on
+every weapon, replacing the main-hand Merciless Gladiator's Cleaver, with
+Blacksmithing assumed so the crafted weapons can be equipped (raw log:
+`result_hallows_end_blacksmith_shaman.raw.txt`).
+
+| Main hand | DPS change |
+|---|---|
+| Vengeful Gladiator's Cleaver (reference) | **+25.1 (+1.12%)** |
+| Wicked Edge of the Planes (axe) | -25.9 (-1.16%) |
+| Dragonstrike (mace, haste proc) | -28.4 (-1.27%) |
+| Dragonmaw (mace, haste proc) | -48.3 (-2.16%) |
