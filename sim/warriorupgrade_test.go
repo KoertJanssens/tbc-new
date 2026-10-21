@@ -237,6 +237,11 @@ const (
 	talentsFurySwordSpec = "350050113020105-0505000550501205011"
 )
 
+// warriorBonusHit is flat hit rating added to every player built by warriorPlayer,
+// standing in for the regemming a hit-short gear set would get (see the T6R
+// baseline in warriorhyjalbtsr_test.go). Zero for all the original reports.
+var warriorBonusHit float64
+
 func warriorPlayer(gear *proto.EquipmentSpec, talents string, rotationFile string) *proto.Player {
 	player := &proto.Player{
 		Class:     proto.Class_ClassWarrior,
@@ -259,6 +264,9 @@ func warriorPlayer(gear *proto.EquipmentSpec, talents string, rotationFile strin
 		DistanceFromTarget: 25,
 		Rotation:           core.GetAplRotation("../ui/specs/warrior/dps/apls", rotationFile).Rotation,
 		Buffs:              core.FullIndividualBuffs,
+	}
+	if warriorBonusHit != 0 {
+		player.BonusStats = &proto.UnitStats{Stats: stats.Stats{stats.MeleeHitRating: warriorBonusHit}.ToProtoArray()}
 	}
 	core.WithSpec(player, &proto.Player_DpsWarrior{
 		DpsWarrior: &proto.DpsWarrior{

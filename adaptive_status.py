@@ -71,7 +71,7 @@ def main():
 
     print(meta.get("WSRBASE", "(baseline not finished)"))
     print(meta.get("WSRSUMMARY") or (rounds[-1] if rounds else "(round 1 in progress)"))
-    print(f"Destroyer set bonus {set_value:.1f}; tier slots {', '.join(sorted(tier))}")
+    print(f"Tier set bonus {set_value:.1f}; tier slots {', '.join(sorted(tier))}")
 
     # "vs today" adjustments from owned items.
     adjust_slot, adjust_tier = {}, 0.0

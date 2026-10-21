@@ -19,6 +19,7 @@ import (
 // could plausibly want is simmed as a single-slot swap.
 //
 // Baselines (pick with WARRIOR_SR_BASELINES, comma-separated; default all):
+//   - "T6R": Oct13T5R with all five Onslaught Battlegear (T6) pieces.
 //   - "Oct13T5R": Oct13T5 plus Band of the Eternal Champion (exalted Scale of
 //     the Sands) in place of Mithril Band of the Unscarred.
 //   - "Oct13T5": the Oct13 gear with Destroyer Gauntlets back on the hands, for
@@ -275,6 +276,17 @@ func warriorArmoryOct13T5RingGear() *proto.EquipmentSpec {
 	return g
 }
 
+// Oct13T5R with all five Onslaught Battlegear (T6) pieces: 4pc +5% Bloodthirst
+// damage, 2pc -3 rage Execute. Slot enchants carry over; gems are the usual
+// colour-matched P3 epics.
+func warriorArmoryT6RingGear() *proto.EquipmentSpec {
+	g := warriorArmoryOct13T5RingGear()
+	for slot, id := range map[int]int32{slotHead: 30972, slotShoulder: 30979, slotChest: 30975, slotHands: 30969, slotLegs: 30977} {
+		g.Items[slot] = itemSpec(id, g.Items[slot].Enchant, bestGemsFor(id)...)
+	}
+	return g
+}
+
 // Two-item sets whose bonus a single-slot swap cannot see.
 type warriorPair struct {
 	zone, boss, label string
@@ -286,16 +298,33 @@ var warriorHyjalBTPairs = []warriorPair{
 	{"Hyjal", "Trash", "Claw + Fist of Molten Fury (pair)", 32946, 32945},
 }
 
-// setless returns gear in which every Destroyer Battlegear piece is replaced by
+// mainTierSet is the item set the gear wears the most pieces of (at least two),
+// or "" - Destroyer Battlegear on the T5 baselines, Onslaught on T6R.
+func mainTierSet(e *proto.EquipmentSpec) string {
+	count := map[string]int{}
+	best := ""
+	for _, it := range e.Items {
+		if item := core.GetItemByID(it.Id); item != nil && item.SetName != "" {
+			count[item.SetName]++
+			if count[item.SetName] >= 2 && count[item.SetName] > count[best] {
+				best = item.SetName
+			}
+		}
+	}
+	return best
+}
+
+// setless returns gear in which every piece of the main tier set is replaced by
 // a stat-identical copy that belongs to no set, so the sim applies no 2pc/4pc.
 // Set membership is read from Item.SetName at equip time (getSetBonuses in
 // sim/core/item_sets.go), so a copy under a spare id is enough.
 func setless(e *proto.EquipmentSpec) *proto.EquipmentSpec {
 	const fakeIDBase = 900000
+	set := mainTierSet(e)
 	g := cloneGear(e)
 	for _, it := range g.Items {
 		orig := core.GetItemByID(it.Id)
-		if orig == nil || orig.SetName != "Destroyer Battlegear" {
+		if orig == nil || set == "" || orig.SetName != set {
 			continue
 		}
 		fakeID := fakeIDBase + orig.ID
@@ -322,19 +351,25 @@ func setless(e *proto.EquipmentSpec) *proto.EquipmentSpec {
 }
 
 type warriorSRBaseline struct {
-	key   string
-	gear  func() *proto.EquipmentSpec
-	label string
+	key      string
+	gear     func() *proto.EquipmentSpec
+	label    string
+	bonusHit float64 // flat hit rating for every run on this baseline (warriorBonusHit)
 }
 
 // The baselines selected by WARRIOR_SR_BASELINES (comma-separated keys), or all.
 func warriorSRBaselines() []warriorSRBaseline {
 	all := []warriorSRBaseline{
-		{"Oct13T5R", warriorArmoryOct13T5RingGear, "Oct13T5 + Band of the Eternal Champion"},
-		{"Oct13T5", warriorArmoryOct13T5Gear, "armory 2026-10-13 + Destroyer Gauntlets, 5/5 Destroyer"},
-		{"Oct13", warriorArmoryOct13Gear, "armory 2026-10-13, 4/5 Destroyer, Empty Mug"},
-		{"T5", warriorT5Gear, "5/5 Destroyer (T5 helm)"},
-		{"4/5", warriorCurrentGear, "4/5 Destroyer (Furious Gizmatic Goggles)"},
+		// Full T6 drops gear hit to 80 rating. +35 = 15 to reach the 95-rating cap
+		// (6% + 3% Improved Faerie Fire) plus 20, the most hit on any one baseline
+		// item (Talon of Azshara), so no single swap falls under the cap either:
+		// hit on a candidate is not overvalued, and losing it is not overpunished.
+		{"T6R", warriorArmoryT6RingGear, "Oct13T5R with 5/5 Onslaught (T6), +35 hit (cap + 20)", 35},
+		{"Oct13T5R", warriorArmoryOct13T5RingGear, "Oct13T5 + Band of the Eternal Champion", 0},
+		{"Oct13T5", warriorArmoryOct13T5Gear, "armory 2026-10-13 + Destroyer Gauntlets, 5/5 Destroyer", 0},
+		{"Oct13", warriorArmoryOct13Gear, "armory 2026-10-13, 4/5 Destroyer, Empty Mug", 0},
+		{"T5", warriorT5Gear, "5/5 Destroyer (T5 helm)", 0},
+		{"4/5", warriorCurrentGear, "4/5 Destroyer (Furious Gizmatic Goggles)", 0},
 	}
 	wanted := map[string]bool{}
 	for _, k := range strings.Split(os.Getenv("WARRIOR_SR_BASELINES"), ",") {
@@ -351,11 +386,12 @@ func warriorSRBaselines() []warriorSRBaseline {
 	return out
 }
 
-// tierSlotsWorn lists the slots holding a Destroyer piece.
+// tierSlotsWorn lists the slots holding a piece of the main tier set.
 func tierSlotsWorn(e *proto.EquipmentSpec) []string {
+	set := mainTierSet(e)
 	slots := []string{}
 	for i, it := range e.Items {
-		if item := core.GetItemByID(it.Id); item != nil && item.SetName == "Destroyer Battlegear" {
+		if item := core.GetItemByID(it.Id); item != nil && set != "" && item.SetName == set {
 			slots = append(slots, warriorSlotNames[i])
 		}
 	}
@@ -371,6 +407,7 @@ func TestWarriorHyjalBTSR(t *testing.T) {
 	for _, b := range warriorSRBaselines() {
 		// applyWarrior inherits enchants from warriorBaseGear.
 		warriorBaseGear = b.gear
+		warriorBonusHit = b.bonusHit
 		run := func(gear *proto.EquipmentSpec) simResult {
 			return runWarrior(t, gear, talentsFuryStandard, "fury", encounter, iterations)
 		}
@@ -379,7 +416,7 @@ func TestWarriorHyjalBTSR(t *testing.T) {
 		noSet := run(setless(b.gear()))
 		fmt.Printf("WSRBASE | %s | %s | DPS %.1f (stdev %.1f) | AP %.0f hit %.0f crit %.0f exp %.0f\n",
 			b.key, b.label, base.dps, base.stdev, base.ap, base.hit, base.crit, base.exp)
-		fmt.Printf("WSRSET | %s | Destroyer set bonuses removed | DPS %.1f | %+.1f\n", b.key, noSet.dps, noSet.dps-base.dps)
+		fmt.Printf("WSRSET | %s | %s set bonuses removed | DPS %.1f | %+.1f\n", b.key, mainTierSet(b.gear()), noSet.dps, noSet.dps-base.dps)
 		tierSlots := tierSlotsWorn(b.gear())
 		fmt.Printf("WSRTIER | %s | %d | %s\n", b.key, len(tierSlots), strings.Join(tierSlots, ","))
 
@@ -535,6 +572,7 @@ func TestWarriorHyjalBTSRAdaptive(t *testing.T) {
 			b.label = fmt.Sprintf("%s, %d targets", b.label, targets)
 		}
 		warriorBaseGear = b.gear // applyWarrior inherits enchants from it
+		warriorBonusHit = b.bonusHit
 		stats := runWarrior(t, b.gear(), talentsFuryStandard, "fury", encounter, 1)
 
 		var base, noSet dpsSample
@@ -544,7 +582,7 @@ func TestWarriorHyjalBTSRAdaptive(t *testing.T) {
 		noSet.add(baseIters, m, sd)
 		fmt.Printf("WSRBASE | %s | %s | DPS %.1f (se %.2f, %d iterations) | AP %.0f hit %.0f crit %.0f exp %.0f\n",
 			b.key, b.label, base.mean(), base.stdErr(), baseIters, stats.ap, stats.hit, stats.crit, stats.exp)
-		fmt.Printf("WSRSET | %s | Destroyer set bonuses removed | DPS %.1f | %+.1f\n", b.key, noSet.mean(), noSet.mean()-base.mean())
+		fmt.Printf("WSRSET | %s | %s set bonuses removed | DPS %.1f | %+.1f\n", b.key, mainTierSet(b.gear()), noSet.mean(), noSet.mean()-base.mean())
 		tierSlots := tierSlotsWorn(b.gear())
 		fmt.Printf("WSRTIER | %s | %d | %s\n", b.key, len(tierSlots), strings.Join(tierSlots, ","))
 
@@ -646,6 +684,7 @@ func TestWarriorSetups(t *testing.T) {
 	iters := int32(envInt("WARRIOR_SETUP_ITERATIONS", 50000))
 	b := warriorSRBaselines()[0]
 	warriorBaseGear = b.gear
+	warriorBonusHit = b.bonusHit
 	slotIndex := map[string]int{}
 	for i, n := range warriorSlotNames {
 		slotIndex[n] = i
